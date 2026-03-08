@@ -15,6 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('localisation')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('goal')->nullable();
+            $table->boolean('isBanned');
+            $table->string('city');
+            $table->boolean('hasBadge');
+            $table->decimal('reputation_rate');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
