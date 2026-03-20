@@ -19,11 +19,6 @@ return new class extends Migration
             $table->foreignId('role_id')->constrained('roles');
             $table->string('localisation')->nullable();
             $table->string('avatar')->nullable();
-            $table->string('goal')->nullable();
-            $table->boolean('isBanned');
-            $table->string('city');
-            $table->boolean('hasBadge');
-            $table->decimal('reputation_rate');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
