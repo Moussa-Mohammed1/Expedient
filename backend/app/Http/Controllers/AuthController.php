@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginUserRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
-    public function login(LoginUserRequest $request)
+    public function login(LoginUserRequest $request): JsonResponse
     {
         $validated = $request->validated();
         $remember = (bool) ($validated['remember'] ?? false);
@@ -23,12 +23,18 @@ class AuthController extends Controller
         ], $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            return response()->json([
+                'message' => 'Login successful.',
+                'user' => $request->user(),
+            ]);
         }
-        return redirect()->back();
+
+        return response()->json([
+            'message' => 'Invalid credentials.',
+        ], 401);
     }
 
-    public function register(RegisterUserRequest $request): RedirectResponse
+    public function register(RegisterUserRequest $request): JsonResponse
     {
         $validated = $request->validated();
         $roleId = $validated['role_id'] ?? DB::table('roles')->value('id');
@@ -45,16 +51,21 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect('/')->with('status', 'registered successfully.');
+        return response()->json([
+            'message' => 'Registered successfully.',
+            'user' => $request->user(),
+        ], 201);
     }
 
-    public function logout(Request $request): RedirectResponse
+    public function logout(Request $request): JsonResponse
     {
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('status', 'Deconnexion reussie.');
+        return response()->json([
+            'message' => 'Logged out successfully.',
+        ]);
     }
 }

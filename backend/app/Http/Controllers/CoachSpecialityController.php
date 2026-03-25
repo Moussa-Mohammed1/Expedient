@@ -28,7 +28,7 @@ class CoachSpecialityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
