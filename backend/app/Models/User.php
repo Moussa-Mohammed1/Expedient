@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -53,41 +52,27 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * The role assigned to this user.
-     */
+   
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Posts authored by this user.
-     */
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
 
-    /**
-     * Comments authored by this user.
-     */
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    /**
-     * Likes made by this user.
-     */
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
-    /**
-     * Community memberships for this user.
-     */
     public function memberships(): HasMany
     {
         return $this->hasMany(Membership::class);
