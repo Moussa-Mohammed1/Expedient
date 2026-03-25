@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('role')->default('member');
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('community_id')->constrained('communites');
+            $table->foreignId('community_id')->constrained('communities');
             $table->timestamp('left_at')->nullable();
             $table->timestamps();
         });
