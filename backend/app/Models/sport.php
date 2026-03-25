@@ -2,9 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class sport extends Model
 {
-    //
+    use HasFactory;
+    protected $fillable = [
+        'title',
+        'icon',
+    ];
+
+    public function salles(): HasMany
+    {
+        return $this->hasMany(Salle::class);
+    }
 }
