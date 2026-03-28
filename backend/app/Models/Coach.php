@@ -48,6 +48,10 @@ class Coach extends Model
     {
         return $this->hasMany(CoachSpeciality::class);
     }
+    public function hasBadge(): bool
+    {
+        return $this->hasBadge;
+    }
 
     /**
      * Specialities linked to this coach.

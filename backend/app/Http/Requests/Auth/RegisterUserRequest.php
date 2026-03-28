@@ -29,6 +29,7 @@ class RegisterUserRequest extends FormRequest
             'role_id' => ['nullable', 'integer', 'exists:roles,id'],
             'localisation' => ['nullable', 'string', 'max:255'],
             'avatar' => ['nullable', 'string', 'max:255'],
+            'isCoach' => ['nullable', 'boolean'],
         ];
     }
 }

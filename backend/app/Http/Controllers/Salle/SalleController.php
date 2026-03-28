@@ -1,62 +1,62 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Salle;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Salle\StoreSalleRequest;
 use App\Http\Requests\Salle\UpdateSalleRequest;
 use App\Models\Salle;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class SalleController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
-        return response()->json([
-            'message' => 'Salles fetched successfully.',
+        return view('salles.index', [
             'salles' => Salle::with(['coach', 'sport'])->latest()->get(),
         ]);
     }
 
-    public function store(StoreSalleRequest $request): JsonResponse
+    public function create(): View
     {
-        $salle = Salle::create($request->validated());
-
-        return response()->json([
-            'message' => 'Salle created successfully.',
-            'salle' => $salle->load(['coach', 'sport']),
-        ], 201);
+        return view('salles.create');
     }
 
-    public function show(Salle $salle): JsonResponse
+    public function store(StoreSalleRequest $request): RedirectResponse
     {
-        return response()->json([
-            'message' => 'Salle fetched successfully.',
-            'salle' => $salle->load(['coach', 'sport']),
-        ]);
+        Salle::create($request->validated());
+
+        return redirect()->route('salles.index')->with('success', 'Salle created successfully.');
     }
 
-    public function update(UpdateSalleRequest $request, Salle $salle): JsonResponse
+    public function show(Salle $salle): View
+    {
+        $salle->load(['coach', 'sport']);
+        return view('salles.show', compact('salle'));
+    }
+
+    public function edit(Salle $salle): View
+    {
+        $salle->load(['coach', 'sport']);
+        return view('salles.edit', compact('salle'));
+    }
+
+    public function update(UpdateSalleRequest $request, Salle $salle): RedirectResponse
     {
         $salle->update($request->validated());
 
-        return response()->json([
-            'message' => 'Salle updated successfully.',
-            'salle' => $salle->load(['coach', 'sport']),
-        ]);
+        return redirect()->route('salles.index')->with('success', 'Salle updated successfully.');
     }
 
-    public function destroy(Salle $salle): JsonResponse
+    public function destroy(Salle $salle): RedirectResponse
     {
         if ($salle->galleries()->exists()) {
-            return response()->json([
-                'message' => 'Salle cannot be deleted because it has galleries.',
-            ], 422);
+            return redirect()->route('salles.index')->with('error', 'Salle cannot be deleted because it has galleries.');
         }
 
         $salle->delete();
 
-        return response()->json([
-            'message' => 'Salle deleted successfully.',
-        ]);
+        return redirect()->route('salles.index')->with('success', 'Salle deleted successfully.');
     }
 }

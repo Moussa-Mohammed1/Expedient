@@ -1,64 +1,59 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Sport;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Sport\StoreSportRequest;
 use App\Http\Requests\Sport\UpdateSportRequest;
 use App\Models\sport;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class SportController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
-        return response()->json([
-            'message' => 'Sports fetched successfully.',
+        return view('sports.index', [
             'sports' => sport::latest()->get(),
         ]);
     }
 
-    public function store(StoreSportRequest $request): JsonResponse
+    public function create(): View
     {
-        $sport = sport::create($request->validated());
-
-        return response()->json([
-            'message' => 'Sport created successfully.',
-            'sport' => $sport,
-        ], 201);
+        return view('sports.create');
     }
 
-    public function show(sport $sport): JsonResponse
+    public function store(StoreSportRequest $request): RedirectResponse
     {
-        return response()->json([
-            'message' => 'Sport fetched successfully.',
-            'sport' => $sport,
-        ]);
+        sport::create($request->validated());
+        return redirect()->route('sports.index')->with('success', 'Sport created successfully.');
     }
 
-    public function update(UpdateSportRequest $request, sport $sport): JsonResponse
+    public function show(sport $sport): View
+    {
+        return view('sports.show', compact('sport'));
+    }
+
+    public function edit(sport $sport): View
+    {
+        return view('sports.edit', compact('sport'));
+    }
+
+    public function update(UpdateSportRequest $request, sport $sport): RedirectResponse
     {
         $sport->update($request->validated());
-
-        return response()->json([
-            'message' => 'Sport updated successfully.',
-            'sport' => $sport,
-        ]);
+        return redirect()->route('sports.index')->with('success', 'Sport updated successfully.');
     }
 
-    public function destroy(sport $sport): JsonResponse
+    public function destroy(sport $sport): RedirectResponse
     {
         if ($sport->salles()->exists()) {
-            return response()->json([
-                'message' => 'Sport cannot be deleted because it is assigned to salles.',
-            ], 422);
+            return redirect()->route('sports.index')->with('error', 'Sport cannot be deleted because it is assigned to salles.');
         }
 
         $sport->delete();
-
-        return response()->json([
-            'message' => 'Sport deleted successfully.',
-        ]);
+        return redirect()->route('sports.index')->with('success', 'Sport deleted successfully.');
     }
 }

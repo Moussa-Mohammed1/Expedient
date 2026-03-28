@@ -63,6 +63,14 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function coach(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Coach::class);
+    }
+    public function trainee(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Trainee::class);
+    }
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);

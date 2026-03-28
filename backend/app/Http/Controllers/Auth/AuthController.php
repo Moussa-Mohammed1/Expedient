@@ -9,77 +9,75 @@ use App\Models\Coach;
 use App\Models\Role;
 use App\Models\Trainee;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(LoginUserRequest $request): JsonResponse
+    public function showLogin(): View
     {
-        $validated = $request->validated();
-        $user = User::where('email', $validated['email'])->first();
-
-        if ($user && Hash::check($validated['password'], $user->password)) {
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Login successful.',
-                'user' => $user,
-                'token' => $token,
-                'token_type' => 'Bearer',
-            ]);
-        }
-
-        return response()->json([
-            'message' => 'Invalid credentials.',
-        ], 401);
+        return view('auth.login');
     }
 
-    public function register(RegisterUserRequest $request): JsonResponse
+    public function login(LoginUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $roleId = $validated['role_id'] ?? Role::where('title', 'trainee')->value('id');
-        $user = new User();
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->phone = $validated['phone'] ?? null;
-        $user->role_id = $roleId;
-        $user->localisation = $validated['localisation'] ?? null;
-        $user->avatar = $validated['avatar'] ?? null;
-        $user->password = $validated['password'];
-        $user->save();
+
+        if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
+            $request->session()->regenerate();
+            return redirect()->intended('/');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+
+    public function showRegister(): View
+    {
+        return view('auth.register');
+    }
+
+    public function register(RegisterUserRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        if ($request->boolean('isCoach')) {
+            $roleId = Role::where('title', 'coach')->value('id');
+        } else {
+            $roleId = $validated['role_id'] ?? Role::where('title', 'trainee')->value('id');
+        }
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'role_id' => $roleId,
+            'localisation' => $validated['localisation'] ?? null,
+            'avatar' => $validated['avatar'] ?? null,
+            'password' => $validated['password'],
+        ]);
+
         match ($user->role?->title) {
             'trainee' => Trainee::create(['user_id' => $user->id]),
-            'coach'=> Coach::create(['user_id' => $user->id]),
+            'coach' => Coach::create(['user_id' => $user->id]),
             'admin' => null,
+            default => null,
         };
-        $token = $user->createToken('expedient-token')->plainTextToken;
 
-        return response()->json([
-            'message' => 'Registered successfully.',
-            'user' => $user,
-            'token' => $token,
-            'token_type' => 'Bearer',
-        ], 201);
+        Auth::login($user);
+
+        return redirect('/');
     }
-    
-    public function logout(Request $request): JsonResponse
+
+    public function logout(Request $request): RedirectResponse
     {
-        if ($request->user()?->currentAccessToken()) {
-            $request->user()->currentAccessToken()->delete();
-        }
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        if (Auth::check()) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
-
-        return response()->json([
-            'message' => 'Logged out successfully.',
-        ]);
+        return redirect('/');
     }
 }

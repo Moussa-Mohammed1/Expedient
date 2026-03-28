@@ -1,68 +1,61 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Community;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\StoreCommunityRequest;
 use App\Http\Requests\Community\UpdateCommunityRequest;
 use App\Models\Community;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class CommunityController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
-        return response()->json([
-            'message' => 'Communities fetched successfully.',
+        return view('communities.index', [
             'communities' => Community::latest()->get(),
         ]);
     }
 
-    public function store(StoreCommunityRequest $request): JsonResponse
+    public function create(): View
     {
-        $community = Community::create($request->validated());
-
-        return response()->json([
-            'message' => 'Community created successfully.',
-            'community' => $community,
-        ], 201);
+        return view('communities.create');
     }
 
-    public function show(Community $community): JsonResponse
+    public function store(StoreCommunityRequest $request): RedirectResponse
     {
-        return response()->json([
-            'message' => 'Community fetched successfully.',
-            'community' => $community,
-        ]);
+        Community::create($request->validated());
+        return redirect()->route('communities.index')->with('success', 'Community created successfully.');
     }
 
-    public function update(UpdateCommunityRequest $request, Community $community): JsonResponse
+    public function show(Community $community): View
+    {
+        return view('communities.show', compact('community'));
+    }
+
+    public function edit(Community $community): View
+    {
+        return view('communities.edit', compact('community'));
+    }
+
+    public function update(UpdateCommunityRequest $request, Community $community): RedirectResponse
     {
         $community->update($request->validated());
-
-        return response()->json([
-            'message' => 'Community updated successfully.',
-            'community' => $community,
-        ]);
+        return redirect()->route('communities.index')->with('success', 'Community updated successfully.');
     }
 
-    public function destroy(Community $community): JsonResponse
+    public function destroy(Community $community): RedirectResponse
     {
         if ($community->memberships()->exists()) {
-            return response()->json([
-                'message' => 'Community cannot be deleted because it has active memberships.',
-            ], 422);
+            return redirect()->route('communities.index')->with('error', 'Community cannot be deleted because it has active memberships.');
         }
 
         if ($community->posts()->exists()) {
-            return response()->json([
-                'message' => 'Community cannot be deleted because it has posts.',
-            ], 422);
+            return redirect()->route('communities.index')->with('error', 'Community cannot be deleted because it has posts.');
         }
 
         $community->delete();
-
-        return response()->json([
-            'message' => 'Community deleted successfully.',
-        ]);
+        return redirect()->route('communities.index')->with('success', 'Community deleted successfully.');
     }
 }

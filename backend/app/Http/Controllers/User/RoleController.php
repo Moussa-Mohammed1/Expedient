@@ -1,75 +1,73 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Models\Role;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class RoleController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): View
     {
-        return response()->json([
-            'message' => 'Roles fetched successfully.',
+        return view('roles.index', [
             'roles' => Role::latest()->get(),
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function create(): View
+    {
+        return view('roles.create');
+    }
+
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255', 'unique:roles,title'],
         ]);
 
-        $role = Role::create($validated);
+        Role::create($validated);
 
-        return response()->json([
-            'message' => 'Role created successfully.',
-            'role' => $role,
-        ], 201);
+        return redirect()->route('roles.index')->with('success', 'Role created successfully.');
     }
 
-    public function show(Role $role): JsonResponse
+    public function show(Role $role): View
     {
-        return response()->json([
-            'message' => 'Role fetched successfully.',
-            'role' => $role,
-        ]);
+        return view('roles.show', compact('role'));
     }
 
-    public function update(Request $request, Role $role): JsonResponse
+    public function edit(Role $role): View
+    {
+        return view('roles.edit', compact('role'));
+    }
+
+    public function update(Request $request, Role $role): RedirectResponse
     {
         $validated = $request->validate([
             'title' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:roles,title',
+                Rule::unique('roles')->ignore($role->id),
             ],
         ]);
 
         $role->update($validated);
 
-        return response()->json([
-            'message' => 'Role updated successfully.',
-            'role' => $role,
-        ]);
+        return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }
 
-    public function destroy(Role $role): JsonResponse
+    public function destroy(Role $role): RedirectResponse
     {
         if ($role->users()->exists()) {
-            return response()->json([
-                'message' => 'Role cannot be deleted because it is assigned to users.',
-            ], 422);
+            return redirect()->route('roles.index')->with('error', 'Role cannot be deleted because it is assigned to users.');
         }
 
         $role->delete();
 
-        return response()->json([
-            'message' => 'Role deleted successfully.',
-        ]);
+        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
     }
 }
