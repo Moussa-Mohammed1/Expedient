@@ -46,4 +46,9 @@ class Membership extends Model
     {
         return $this->belongsTo(Community::class);
     }
+
+    public function isActive(): bool
+    {
+        return $this->left_at === null;
+    }
 }
