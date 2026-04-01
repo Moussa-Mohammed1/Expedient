@@ -42,6 +42,10 @@
                                         <p class="text-xs text-red-600 font-semibold">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <div className="flex items-center gap-2">
+                        <input id="show-password" type="checkbox" className="h-4 w-4 rounded border-gray-300" />
+                        <label htmlFor="show-password" className="text-sm text-gray-500">Show Password</label>
+                    </div>
                                 <div class="mt-4 flex justify-center">
                                     <button type="submit"
                                         class="text-white bg-black cursor-pointer  rounded-xl px-4 py-2 w-full inline-flex items-center justify-center gap-2">
