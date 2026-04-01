@@ -75,7 +75,7 @@
                         <div class="flex items-center h-4">
                             <input 
                                 id="is-coach-checkbox" 
-                                name="is_coach"
+                                name="isCoach"
                                 value="1"
                                 type="checkbox" 
                                 class="w-4 h-4 text-black bg-white border-gray-300 rounded focus:ring-black cursor-pointer peer" />
@@ -106,12 +106,12 @@
         </div>
 
         <div class="hidden md:block md:w-1/2 relative h-full overflow-hidden bg-gray-200">
-            <div class="absolute inset-0 bg-cover bg-center" >
+            <div class="absolute inset-0 bg-cover bg-center" style="background: url('https://i.pinimg.com/736x/0e/e6/23/0ee62381051e0f0be8a2cec01e6baf39.jpg') no-repeat center center; background-size: cover;">
                 <div class="absolute inset-0 bg-linear-to-br from-black/20 to-black/60"></div>
             </div>
 
             <div class="absolute top-10 right-10">
-                <p class="text-white font-black text-4l tracking-widest uppercase drop-shadow-md"
+                <p class="text-white font-black pl-6 text-xl tracking-widest uppercase drop-shadow-md"
                     style="font-family:'Barlow Condensed', sans-serif;">
                     SHARP. FAST. That's what expedient meant for
                 </p>
