@@ -9,13 +9,17 @@
 </head>
 
 <body>
-    <div class="h-screen w-full overflow-hidden bg-black text-gray-900 flex  p-0">
-        <div class=" w-full h-full m-0 flex justify-center overflow-hidden">
+    <div class="min-h-screen w-full bg-black text-gray-900 text-sm flex items-center justify-center p-4 sm:p-6">
+        <div class="w-full max-w-sm sm:max-w-md">
+            <a href="{{ route('welcome') }}">
+                <x-app-logo/>
+            </a>
+            
             <div
-                class="w-full h-full overflow-y-scroll bg-white [scrollbar-width:none]  p-5 sm:p-8 lg:w-3/6 xl:w-5/12 lg:rounded-lg lg:shadow-yellow-400 lg:shadow-2xl flex items-center justify-center">
-                <div class="w-full max-w-md">
-                    <div class="text-black font-bold">
-                        Login
+                class="w-full bg-white p-5 sm:p-8 rounded-lg shadow-yellow-400 shadow-2xl flex items-center justify-center">
+                <div class="w-full">
+                    <div class="text-black font-bold text-center">
+                        Login 
                     </div>
                     <div class="mt-6 flex flex-col items-center">
                         <div class="w-full flex-1">
@@ -42,10 +46,10 @@
                                         <p class="text-xs text-red-600 font-semibold">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div className="flex items-center gap-2">
-                        <input id="show-password" type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <label htmlFor="show-password" className="text-sm text-gray-500">Show Password</label>
-                    </div>
+                                <div class="mt-4 flex items-center gap-2">
+                                    <input id="show-password" type="checkbox" class="h-4 w-4 rounded border-gray-300" />
+                                    <label for="show-password" class="text-sm text-gray-500">Show Password</label>
+                                </div>
                                 <div class="mt-4 flex justify-center">
                                     <button type="submit"
                                         class="text-white bg-black cursor-pointer  rounded-xl px-4 py-2 w-full inline-flex items-center justify-center gap-2">
@@ -63,7 +67,6 @@
                 </div>
             </div>
         </div>
-        <div></div>
     </div>
 </body>
 
