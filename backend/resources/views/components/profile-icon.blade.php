@@ -1,0 +1,67 @@
+<div>
+    @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
+        <button
+            class="flex border-2 border-yellow-500 cursor-pointer h-12 px-3.5 w-fit items-center justify-center rounded-full bg-[#333333] text-white transition-colors hover:bg-[#444444]">
+            <span class="text-sm px-1.5">Request badge</span>
+        </button>
+    @endif
+    <div class="relative inline-block text-left group">
+        <button
+            class="flex items-center justify-center h-10 w-10 rounded-full overflow-hidden border  cursor-pointer focus:outline-none">
+
+            <img src="{{ auth()->user()->avatar
+    ? asset('/storage/users/profiles/' . auth()->user()->avatar)
+    : asset('assets/images/profile.jpeg') }}" alt="User Avatar"
+                class="h-full w-full object-cover">
+        </button>
+
+        <div
+            class="absolute right-0 mt-2 w-60 bg-[#1c1c1c] rounded-md shadow-xl border border-gray-700 opacity-0 invisible group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 z-50 overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-400">Signed in as</p>
+                    <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-gray-500 mt-0.5 capitalize">
+                        {{ auth()->user()->role->title ?? 'User' }}
+                    </p>
+                </div>
+                <img src="{{ auth()->user()->avatar ? asset('/storage/users/profiles/' . auth()->user()->avatar) : asset('assets/images/profile.jpeg') }}"
+                    alt="User Avatar" class="h-10 w-10 rounded-full object-cover border border-gray-600">
+            </div>
+            <div class="py-1 border-b border-gray-700">
+                <a href="{{ url('/profile') }}"
+                    class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    <i class="fa-regular fa-user w-5 text-center mr-1"></i>Profile
+                </a>
+                <a href="{{ url('/salles') }}"
+                    class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    <i class="fa-regular fa-building w-5 text-center mr-1"></i>Salles
+                </a>
+
+                <a href="{{ url('/communities') }}"
+                    class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    <i class="fa-regular fa-users w-5 text-center mr-1"></i> Communities
+                </a>
+                @if (auth()->user()->role->title === "admin")
+                    <a href="{{ url('/communities') }}"
+                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                        <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Admin
+                    </a>
+                @elseif(auth()->user()->role->title === "coach")
+                    <a href="{{ url('/communities') }}"
+                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                        <i class="fa-regular fa-medal w-5 text-center mr-1"></i> Coaching
+                    </a>
+                @endif
+
+            </div>
+            <form action="{{ route('logout') ?? url('/logout') }}" method="POST" class="py-1">
+                @csrf
+                <button type="submit"
+                    class="w-full text-left px-4 cursor-pointer py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center mr-1"></i> Sign out
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
