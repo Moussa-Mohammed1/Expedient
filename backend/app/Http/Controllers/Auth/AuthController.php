@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
@@ -69,7 +69,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/login');
+        return redirect()->route('home');
     }
 
     public function logout(Request $request): RedirectResponse
@@ -77,7 +77,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }
