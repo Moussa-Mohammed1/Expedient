@@ -14,7 +14,7 @@ class CommunityController extends Controller
     public function index(): View
     {
         return view('communities.index', [
-            'communities' => Community::latest()->get(),
+            'communities' => Community::latest()->paginate(10)
         ]);
     }
 
@@ -31,7 +31,8 @@ class CommunityController extends Controller
 
     public function show(Community $community): View
     {
-        return view('communities.show', compact('community'));
+        $community->load('posts', 'posts.comments', 'posts.likes', 'members');
+        return view('trainee.communities.show', compact('community'));
     }
 
     public function edit(Community $community): View
