@@ -68,15 +68,23 @@ class AuthController extends Controller
         };
 
         Auth::login($user);
-
         return redirect()->route('home');
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
+        $wasAuthenticated = Auth::check();
+
+        if ($wasAuthenticated) {
+            Auth::logout();
+        }
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+
+        return redirect()->route('login.show')->with(
+            'error',
+            $wasAuthenticated ? 'You have been logged out.' : 'Session expired, please login again.'
+        );
     }
 }
