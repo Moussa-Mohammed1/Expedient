@@ -43,20 +43,16 @@
                     <i class="fa-regular fa-users w-5 text-center mr-1"></i> Communities
                 </a>
                 @if (auth()->user()->role->title === "admin")
-                    <a href="{{ url('/communities') }}"
+                    <a href="{{ url('/dashboard') }}"
                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
                         <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Admin
                     </a>
-                @elseif(auth()->user()->role->title === "coach")
-                    <a href="{{ url('/communities') }}"
-                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
-                        <i class="fa-regular fa-medal w-5 text-center mr-1"></i> Coaching
-                    </a>
                 @endif
+            
+               
 
             </div>
-            <form action="{{ route('logout') ?? url('/logout') }}" method="POST" class="py-1">
-                @csrf
+            <form action="{{ route('logout') ?? url('/logout') }}" method="GET" class="py-1">
                 <button type="submit"
                     class="w-full text-left px-4 cursor-pointer py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
                     <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center mr-1"></i> Sign out
