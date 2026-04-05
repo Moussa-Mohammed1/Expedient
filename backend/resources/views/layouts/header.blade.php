@@ -3,6 +3,7 @@
         ['name' => 'Home', 'path' => 'home'],
         ['name' => 'Explore', 'path' => 'explore'],
         ['name' => 'Coaches', 'path' => 'coaches'],
+        ['name' => 'Salles', 'path' => 'salles'],
         ['name' => 'Communities', 'path' => 'communities'],
         ['name' => 'About', 'path' => 'about']
     ];
@@ -17,15 +18,18 @@
         </div>
 
         <nav
-            class="hidden lg:flex absolute w-auto min-w-[50%] hover:shadow-sm left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition">
+            class="hidden lg:flex fixed w-auto min-w-[50%] hover:shadow-sm left-1/2 top-5 -translate-x-1/2 items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition z-50">
             <ul class="flex items-center justify-around gap-8 text-sm font-medium tracking-wide">
                 @foreach($navLinks as $link)
+                    @php
+                        $isActive = request()->is($link['path']) || request()->is($link['path'] . '/*');
+                    @endphp
                     <li class="relative">
                         <a href="{{ url('/' . $link['path']) }}"
-                            class="text-white hover:text-gray-300 transition-colors {{ request()->is($link['path']) ? 'font-bold' : '' }}">
+                            class="text-white hover:text-gray-300 transition-colors {{ $isActive ? 'font-bold' : '' }}">
                             {{ $link['name'] }}
                         </a>
-                        @if(request()->is($link['path']))
+                        @if($isActive)
                             <span
                                 class="absolute -bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#ff5520]"></span>
                         @endif
@@ -35,7 +39,7 @@
         </nav>
         <div class="hidden lg:flex items-center gap-3 z-10">
             @auth
-                   <x-profile-icon/>
+                <x-profile-icon />
             @endauth
         </div>
 
@@ -50,8 +54,11 @@
         <div class="px-6 py-4 flex flex-col gap-4">
             <ul class="flex flex-col gap-4 text-white text-base">
                 @foreach($navLinks as $link)
+                    @php
+                        $isActive = request()->is($link['path']) || request()->is($link['path'] . '/*');
+                    @endphp
                     <li><a href="{{ url('/' . $link['path']) }}"
-                            class="{{ request()->is($link['path']) ? 'text-[#ff5520] font-bold' : '' }}">{{ $link['name'] }}</a>
+                            class="{{ $isActive ? 'text-[#ff5520] font-bold' : '' }}">{{ $link['name'] }}</a>
                     </li>
                 @endforeach
                 @auth
@@ -85,6 +92,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <script>
