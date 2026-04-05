@@ -14,7 +14,7 @@
             <a href="{{ route('welcome') }}">
                 <x-app-logo/>
             </a>
-            
+            <x-notification-popup/>
             <div
                 class="w-full bg-white p-5 sm:p-8 rounded-lg shadow-yellow-400 shadow-2xl flex items-center justify-center">
                 <div class="w-full">
