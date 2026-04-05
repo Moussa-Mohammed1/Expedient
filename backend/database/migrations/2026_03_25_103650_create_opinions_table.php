@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('coach_id')->constrained('coaches');
             $table->decimal('rate')->default(0);
             $table->string('content')->nullable();
-            $table->boolean('isAllowed')->default(true);
+            $table->boolean('isApproved')->default(true);
             $table->timestamps();
         });
     }
