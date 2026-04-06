@@ -34,7 +34,7 @@ class Salle extends Model
 
     public function sport(): BelongsTo
     {
-        return $this->belongsTo(sport::class);
+        return $this->belongsTo(Sport::class);
     }
 
     public function galleries(): HasMany
