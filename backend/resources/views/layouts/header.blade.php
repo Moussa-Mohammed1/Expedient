@@ -18,7 +18,7 @@
         </div>
 
         <nav
-            class="hidden lg:flex fixed w-auto min-w-[50%] hover:shadow-sm left-1/2 top-5 -translate-x-1/2 items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition z-50">
+            class="hidden lg:flex  w-auto min-w-[50%] hover:shadow-sm left-1/2 top-5  items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition">
             <ul class="flex items-center justify-around gap-8 text-sm font-medium tracking-wide">
                 @foreach($navLinks as $link)
                     @php
@@ -37,13 +37,19 @@
                 @endforeach
             </ul>
         </nav>
-        <div class="hidden lg:flex items-center gap-3 z-10">
+        
+        <div class="hidden lg:flex items-center  px-3 justify-center rounded-full gap-3 box-border z-10">
+            @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
+              <x-coach-badge :coach="auth()->user()->coach"/>
+            @endif
             @auth
                 <x-profile-icon />
             @endauth
         </div>
 
         <div class="flex lg:hidden z-10">
+              <x-coach-badge :coach="auth()->user()->coach"/>
+
             <button id="mobile-menu-btn" class="text-white hover:text-gray-300 focus:outline-none p-2">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -74,9 +80,7 @@
                     <div class="text-white font-medium">Hello, {{ auth()->user()->name }}</div>
 
                     @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
-                        <button class="w-full border-2 border-yellow-500 py-2 rounded-full bg-[#333333] text-white">
-                            Request badge
-                        </button>
+                                      <x-coach-badge :coach="auth()->user()->coach"/>
                     @endif
 
                     <button type="submit" class="w-full bg-yellow-500 text-white py-2 rounded-xl text-center">
