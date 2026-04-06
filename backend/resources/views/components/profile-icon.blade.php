@@ -1,10 +1,4 @@
 <div>
-    @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
-        <button
-            class="flex border-2 border-yellow-500 cursor-pointer h-12 px-3.5 w-fit items-center justify-center rounded-full bg-[#333333] text-white transition-colors hover:bg-[#444444]">
-            <span class="text-sm px-1.5">Request badge</span>
-        </button>
-    @endif
     <div class="relative inline-block text-left group">
         <button
             class="flex items-center justify-center h-10 w-10 rounded-full overflow-hidden border  cursor-pointer focus:outline-none">
