@@ -109,7 +109,7 @@
             </div>
         </div>
     </section>
-    <section class="py-12 bg-black relative z-10 w-full border-b border-zinc-800">
+    <section class="py-12 bg-black relative w-full border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
             <div class="flex items-end justify-between mb-8">
