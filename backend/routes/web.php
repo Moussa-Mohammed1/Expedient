@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Coach\CoachController;
+use App\Http\Controllers\Coach\CoachVerificationController;
+use App\Http\Controllers\ExploreController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\User\RoleController;
@@ -12,35 +17,24 @@ use App\Models\Coach;
 use App\Models\Salle;
 use App\Models\Opinion;
 
-Route::get('/', function () {
+Route::get('/', [WelcomeController::class, 'index'])->middleware(\App\Http\Middleware\isGuest::class)->name('welcome');
 
-    $activeAthletes = Trainee::where('isBanned', false)->count();
-    $verifiedCoaches = Coach::where('hasBadge', true)->count();
-    $gymsCount = Salle::count();
-    $citiesCount = Salle::distinct('city')->count('city');
-    $avgRatingDb = Opinion::avg('rate');
-    $averageRating = $avgRatingDb ? number_format($avgRatingDb, 1) : "0.0";
-
-    return view('welcome', compact('activeAthletes', 'verifiedCoaches', 'gymsCount', 'citiesCount', 'averageRating'));
-})->middleware(\App\Http\Middleware\isGuest::class);
+// Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register.show');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-// Auth
-
-
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth')
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
-Route::middleware(['auth', 'isGuest'])->group(function () {
+    
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
+    Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
+    Route::post('/coach-verifications', [CoachVerificationController::class, 'store'])->name('coach-verifications.store');
     Route::resource('communities', CommunityController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('sports', SportController::class);
     Route::resource('salles', SalleController::class);
+    Route::resource('coaches', CoachController::class);
 });
-
-Route::get('/home', function () {
-    return view('trainee.home');
-})->middleware('auth');
