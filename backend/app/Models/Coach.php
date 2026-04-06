@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Coach extends Model
 {
@@ -48,6 +49,12 @@ class Coach extends Model
     {
         return $this->hasMany(CoachSpeciality::class);
     }
+
+    public function opinions(): HasMany
+    {
+        return $this->hasMany(Opinion::class);
+    }
+
     public function hasBadge(): bool
     {
         return $this->hasBadge;
@@ -61,5 +68,31 @@ class Coach extends Model
         return $this->belongsToMany(Speciality::class, 'coach_specialities')
             ->withPivot(['level', 'experienceYears'])
             ->withTimestamps();
+    }
+
+    public function verifications()
+    {
+        return $this->hasMany(CoachVerification::class);
+    }
+
+    public function latestVerification(): HasOne
+    {
+        return $this->hasOne(CoachVerification::class)->latestOfMany('requested_at');
+    }
+
+    public function scopeTop($query)
+    {
+        return $query->whereHas('user')
+            ->with([
+                'user:id,name,avatar',
+                'specialities:id,title',
+            ])
+            ->withCount([
+                'opinions as reviews_count' => function ($query) {
+                    $query->where('isApproved', true);
+                },
+            ])
+            ->orderByDesc('hasBadge')
+            ->orderByDesc('reputation_rate');
     }
 }
