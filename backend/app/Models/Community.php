@@ -29,11 +29,7 @@ class Community extends Model
     {
         return $this->hasMany(Membership::class);
     }
-
-    public function members()
-    {
-        
-    }
+    
     /**
      * Posts published in this community.
      */
