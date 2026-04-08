@@ -13,6 +13,8 @@
 <body>
     @include('layouts.header')
 
+    <!-- Available sports And recent added Salles in the user locatlisation  -->
+     
     <section class="py-6 bg-black relative w-full border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -29,10 +31,11 @@
 
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-1">
+                    <div
+                        class="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 snap-x snap-mandatory">
                         @forelse($sports as $sport)
                             <a href=""
-                                class="group relative flex flex-col items-center justify-center p-3 md:p-4 bg-[#322e2e] rounded-lg border border-zinc-800/80 hover:border-yellow-500/50 duration-300 overflow-hidden cursor-pointer">
+                                class="group relative min-w-[calc(50%-0.375rem)] md:min-w-0 flex flex-col items-center justify-center p-3 md:p-4 bg-[#322e2e] rounded-lg border border-zinc-800/80 hover:border-yellow-500/50 duration-300 overflow-hidden cursor-pointer snap-start">
 
                                 <div
                                     class="absolute inset-0 bg-linar-to-b from-transparent to-zinc-900/50 opacity-0  transition-opacity duration-300">
@@ -60,55 +63,77 @@
                     </div>
                 </div>
                 <div class="lg:col-span-4">
-
-                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-5">
-                        <div>
-                            <h2 class="text-sm md:text-lg font-extrabold text-white">
-                                Recent added <span class="text-[#FBBF24]">Salles in your localisation</span>
-                            </h2>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 bg-gray-900 p-4 rounded-lg ">
-                        @forelse($recentSalles as $salle)
-                            <a href="{{ url('/salles/' . $salle['id']) }}"
-                                class="group relative h-30 flex flex-col justify-end rounded-2xl overflow-hidden border border-zinc-800 hover:border-yellow-500 transition-colors duration-200 cursor-pointer shadow-lg bg-[#111111]">
-                                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
-                                    class="absolute inset-0 w-full h-full object-cover" alt="{{ $salle['name'] }}">
-
-                                <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent">
-                                </div>
-
-                                <div class="relative p-6 w-full">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs text-zinc-400 font-medium">
-                                            {{ optional($salle->created_at)->diffForHumans() }}
-                                        </span>
-                                    </div>
-                                    <h3
-                                        class="text-white text-sm md:text-lg font-bold tracking-wide group-hover:text-yellow-400 transition-colors duration-200">
-                                        {{ $salle['name'] }}
-                                    </h3>
-                                </div>
-                            </a>
-                        @empty
-                            <div class="rounded-2xl border border-zinc-800 bg-[#111111] p-6 text-center">
-                                <p class="text-sm text-zinc-400">No salles yet in your localisation. <span
-                                        class="text-yellow-500 text-2xl italic font-bold uppercase">(Empty)</span> </p>
+                    @if(blank(auth()->user()?->localisation))
+                        <section class="bg-[#1c1c1c] rounded-2xl py-10 px-6">
+                            <div class="mb-8">
+                                <h2 class="text-xl md:text-2xl font-bold text-white mb-2">
+                                    Recent added <span class="text-[#FBBF24]">Salles in your localisation</span>
+                                </h2>
+                                <p class="text-gray-400 text-sm">
+                                    Discover the latest gyms around your area.
+                                </p>
                             </div>
-                        @endforelse
-                    </div>
-                    <div class="mt-8 text-center md:hidden">
-                        <a href="{{ url('/salles') }}"
-                            class="inline-flex items-center gap-2 text-sm font-bold text-white hover:text-yellow-400 transition-colors group">
-                            Browse all salles
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                    </div>
+                            <div class="text-center">
+                                <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Localisation Required</h2>
+                                <p class="text-gray-300">
+                                    You havent entered your localisation yet, go to your profile and enter it.
+                                </p>
+                            </div>
+                        </section>
+                    @else
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-5">
+                            <div>
+                                <h2 class="text-sm md:text-lg font-extrabold text-white">
+                                    Recent added <span class="text-[#FBBF24]">Salles in your localisation</span>
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 bg-gray-900 p-4 rounded-lg ">
+                            @forelse($recentSalles as $salle)
+                                <a href="{{ url('/salles/' . $salle['id']) }}"
+                                    class="group relative h-30 flex flex-col justify-end rounded-2xl overflow-hidden border border-zinc-800 hover:border-yellow-500 transition-colors duration-200 cursor-pointer shadow-lg bg-[#111111]">
+                                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
+                                        class="absolute inset-0 w-full h-full object-cover" alt="{{ $salle['name'] }}">
+
+                                    <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent">
+                                    </div>
+
+                                    <div class="relative p-6 w-full">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="text-xs text-zinc-400 font-medium">
+                                                {{ optional($salle->created_at)->diffForHumans() }}
+                                            </span>
+                                        </div>
+                                        <h3
+                                            class="text-white text-sm md:text-lg font-bold tracking-wide group-hover:text-yellow-400 transition-colors duration-200">
+                                            {{ $salle['name'] }}
+                                        </h3>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="rounded-2xl border border-zinc-800 bg-[#111111] p-6 text-center">
+                                    <p class="text-sm text-zinc-400">No salles yet in your localisation. <span
+                                            class="text-yellow-500 text-2xl italic font-bold uppercase">(Empty)</span> </p>
+                                </div>
+                            @endforelse
+                        </div>
+                        <div class="mt-8 text-center md:hidden">
+                            <a href="{{ url('/salles') }}"
+                                class="inline-flex items-center gap-2 text-sm font-bold text-white hover:text-yellow-400 transition-colors group">
+                                Browse all salles
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Active communities section -->
+
+
     <section class="py-12 bg-black relative w-full border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
 
