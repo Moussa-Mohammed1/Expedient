@@ -39,16 +39,22 @@
         </nav>
         
         <div class="hidden lg:flex items-center  px-3 justify-center rounded-full gap-3 box-border z-10">
-            @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
-              <x-coach-badge :coach="auth()->user()->coach"/>
-            @endif
+            @auth
+                @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
+                    <x-coach-badge :coach="auth()->user()->coach"/>
+                @endif
+            @endauth
             @auth
                 <x-profile-icon />
             @endauth
         </div>
 
         <div class="flex lg:hidden z-10">
-              <x-coach-badge :coach="auth()->user()->coach"/>
+            @auth
+                @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
+                    <x-coach-badge :coach="auth()->user()->coach"/>
+                @endif
+            @endauth
 
             <button id="mobile-menu-btn" class="text-white hover:text-gray-300 focus:outline-none p-2">
                 <i class="fa-solid fa-bars"></i>
