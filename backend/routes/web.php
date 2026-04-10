@@ -5,6 +5,7 @@ use App\Http\Controllers\Coach\CoachController;
 use App\Http\Controllers\Coach\CoachVerificationController;
 use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Community\CommunityController;
@@ -37,4 +38,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('sports', SportController::class);
     Route::resource('salles', SalleController::class);
     Route::resource('coaches', CoachController::class);
+    Route::resource('profile', ProfileController::class);
 });
