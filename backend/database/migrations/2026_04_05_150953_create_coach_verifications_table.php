@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('coach_id')->constrained('coaches');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('proof_document');
-            $table->string('document_description');
             $table->text('rejection_cause')->nullable();
             $table->timestamp('requested_at')->useCurrent();
             $table->timestamp('reviewed_at')->nullable();
