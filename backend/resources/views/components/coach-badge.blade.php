@@ -2,10 +2,12 @@
     // Fetch the latest verification request.
     $verification = $coach->latestVerification;
 
-    $dropdownId = 'badge-details-' . $coach->id;
+    $instanceId = (string) \Illuminate\Support\Str::ulid();
+    $dropdownId = 'badge-details-' . $instanceId;
+    $modalId = 'badge-modal-' . $instanceId;
 @endphp
 
-<div class="relative  text-left font-sans coach-badge-container">
+<div class="relative z-50 text-left font-sans coach-badge-container">
     <button type="button" onclick="document.getElementById('{{ $dropdownId }}').classList.toggle('hidden')"
         class="px-4 py-2  text-white text-sm font-medium flex justify-center items-center rounded-lg p-2 mr-2 bg-[#1c1c1c] cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition focus:outline-none transition-colors">
         <i class="fa-solid fa-id-card text-yellow-500 text-xl pr-2"></i>Badge
@@ -16,7 +18,7 @@
         @if (!$verification)
             <div class="text-sm">
                 <p class="mb-3 text-white">You are not verified yet.</p>
-                <button onclick="openRequestModal()"
+                <button onclick="openRequestModal('{{ $modalId }}')"
                     class=" cursor-pointer font-semibold px-4 py-2 text-black bg-yellow-500 rounded-md hover:bg-yellow-700 transition-colors">
                     Request Verification Badge
                 </button>
@@ -46,7 +48,7 @@
 
                 <div class="mt-4">
                     <button 
-                        onclick="openRequestModal()"
+                        onclick="openRequestModal('{{ $modalId }}')"
                         class=" px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors">
                         Request Verification Again
 </button>
@@ -74,11 +76,11 @@
         @endif
     </div>
 </div>
-<div id="badgeModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+<div id="{{ $modalId }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm">
     <div class="w-full max-w-md p-6 mx-4  bg-[#1c1c1c] border border-gray-800 shadow-2xl">
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-xl font-bold text-white">Request Verification</h3>
-            <button onclick="closeRequestModal()" class="text-gray-400 hover:text-white cursor-pointer text-lg transition-colors">
+            <button onclick="closeRequestModal('{{ $modalId }}')" class="text-gray-400 hover:text-white cursor-pointer text-lg transition-colors">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -103,7 +105,7 @@
             </div>
 
             <div class="flex gap-3 pt-2">
-                <button type="button" onclick="closeRequestModal()"
+                <button type="button" onclick="closeRequestModal('{{ $modalId }}')"
                     class="flex-1 px-4 py-2 cursor-pointer font-semibold text-gray-300 bg-gray-800 rounded-md hover:bg-gray-700 transition-colors">
                     Cancel
                 </button>
@@ -130,23 +132,23 @@
         });
     });
 
-    function openRequestModal() {
-        const modal = document.getElementById('badgeModal');
+    function openRequestModal(modalId) {
+        const modal = document.getElementById(modalId);
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeRequestModal() {
-        const modal = document.getElementById('badgeModal');
+    function closeRequestModal(modalId) {
+        const modal = document.getElementById(modalId);
         modal.classList.add('hidden');
         modal.classList.remove('flex');
         document.body.style.overflow = 'auto';
     }
     window.onclick = function (event) {
-        const modal = document.getElementById('badgeModal');
+        const modal = document.getElementById('{{ $modalId }}');
         if (event.target == modal) {
-            closeRequestModal();
+            closeRequestModal('{{ $modalId }}');
         }
     }
 </script>

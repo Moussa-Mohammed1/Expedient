@@ -25,11 +25,15 @@
             <div class="py-1 border-b border-gray-700">
                 <a href="{{ url('/home') }}"
                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
-                    <i class="fa-regular fa-house w-5 text-center mr-1"></i>Home
+                    <i class="fa-solid fa-house w-5 text-center mr-1"></i>Home
                 </a>
                 <a href="{{ route('profile.show', auth()->id()) }}"
                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
                     <i class="fa-regular fa-user w-5 text-center mr-1"></i>Profile
+                </a>
+                <a href="{{ url('/explore') }}"
+                    class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    <i class="fa-regular fa-compass w-5 text-center mr-1"></i>Explore
                 </a>
                 <a href="{{ url('/salles') }}"
                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
@@ -38,7 +42,7 @@
 
                 <a href="{{ url('/communities') }}"
                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
-                    <i class="fa-regular fa-users w-5 text-center mr-1"></i> Communities
+                    <i class="fa-brands fa-stack-exchange w-5 text-center mr-1"></i> Communities
                 </a>
                 @if (auth()->user()->role->title === "admin")
                     <a href="{{ url('/dashboard') }}"
