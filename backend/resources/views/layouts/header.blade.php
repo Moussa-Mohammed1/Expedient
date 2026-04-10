@@ -37,11 +37,11 @@
                 @endforeach
             </ul>
         </nav>
-        
+
         <div class="hidden lg:flex items-center  px-3 justify-center rounded-full gap-3 box-border z-10">
             @auth
                 @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
-                    <x-coach-badge :coach="auth()->user()->coach"/>
+                    <x-coach-badge :coach="auth()->user()->coach" />
                 @endif
             @endauth
             @auth
@@ -52,7 +52,7 @@
         <div class="flex lg:hidden z-10">
             @auth
                 @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
-                    <x-coach-badge :coach="auth()->user()->coach"/>
+                    <x-coach-badge :coach="auth()->user()->coach" />
                 @endif
             @endauth
 
@@ -83,16 +83,10 @@
 
             <div class="border-t border-white/10 pt-4 flex flex-col gap-4">
                 @auth
-                    <div class="text-white font-medium">Hello, {{ auth()->user()->name }}</div>
-
-                    @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
-                                      <x-coach-badge :coach="auth()->user()->coach"/>
-                    @endif
-
-                    <button type="submit" class="w-full bg-yellow-500 text-white py-2 rounded-xl text-center">
+                    <a href="{{ route('profile.show', auth()->id()) }}"
+                        class="w-full bg-yellow-500 text-white py-2 rounded-xl text-center">
                         Profile
-                    </button>
-
+                    </a>
                 @else
                     <a href="{{ route('login') ?? url('/login') }}"
                         class="w-full bg-[#ff5520] text-white py-2 rounded-xl text-center">
