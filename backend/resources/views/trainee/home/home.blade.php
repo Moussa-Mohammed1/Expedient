@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expedient - home</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
@@ -14,7 +16,7 @@
     @include('layouts.header')
 
     <!-- Available sports And recent added Salles in the user locatlisation  -->
-     
+
     <section class="py-6 bg-black relative w-full border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -47,7 +49,9 @@
                                         class="fa-solid {{ $sport['icon'] }} text-[10px] md:text-xs text-zinc-500  transition-colors duration-300"></i>
                                 </div>
                                 <div class="relative text-center w-full">
-                                    <h3 class="text-white font-bold text-sm md:text-base w-full max-w-24 md:max-w-36 mx-auto truncate">{{ $sport['title'] }}</h3>
+                                    <h3
+                                        class="text-white font-bold text-sm md:text-base w-full max-w-24 md:max-w-36 mx-auto truncate">
+                                        {{ $sport['title'] }}</h3>
                                     <p class="mt-1 text-xs md:text-sm text-zinc-500 font-medium transition-colors">
                                         {{ isset($sport['salles']) ? 0 : $sport['salles']}} Salles
                                     </p>
@@ -190,9 +194,8 @@
 
                 </div>
             @else
-                <div
-                    class=" rounded-xl  bg-[#111111] p-10 flex flex-col items-center justify-center text-center">
-                    
+                <div class=" rounded-xl  bg-[#111111] p-10 flex flex-col items-center justify-center text-center">
+
                     <h3 class="text-white font-bold text-lg">No Active Community</h3>
                     <p class="text-zinc-500 text-sm mt-2 max-w-md">You haven't joined a training group yet. Explore local
                         communities to connect with other athletes.</p>
