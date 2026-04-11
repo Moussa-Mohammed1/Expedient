@@ -1,8 +1,7 @@
 FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libonig-dev libxml2-dev \
-    libpq-dev \
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev libpq-dev \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -13,10 +12,10 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN php artisan config:clear || true
-RUN php artisan cache:clear || true
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
 
-RUN mkdir -p storage bootstrap/cache && \
-    chmod -R 775 storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
+
+RUN php artisan storage:link || true
 
 CMD php artisan serve --host=0.0.0.0 --port=$PORT
