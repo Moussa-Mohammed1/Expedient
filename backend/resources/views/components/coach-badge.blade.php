@@ -8,9 +8,9 @@
 @endphp
 
 <div class="relative z-50 text-left font-sans coach-badge-container">
-    <button type="button" onclick="document.getElementById('{{ $dropdownId }}').classList.toggle('hidden')"
-        class="px-4 py-2  text-white text-sm font-medium flex justify-center items-center rounded-lg p-2 mr-2 bg-[#1c1c1c] cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition focus:outline-none transition-colors">
-        <i class="fa-solid fa-id-card text-yellow-500 text-xl pr-2"></i>Badge
+    <button title="Badge" type="button" onclick="document.getElementById('{{ $dropdownId }}').classList.toggle('hidden')"
+        class=" text-white text-sm font-medium flex justify-center items-center rounded-sm p-2 mr-2 bg-[#2f2e2e] cursor-pointer transition focus:outline-none">
+        <i class="fa-solid fa-id-card text-yellow-500 text-xl"></i>
     </button>
 
     <div id="{{ $dropdownId }}"
