@@ -111,7 +111,7 @@
                                     @foreach ($user->coach->specialities as $speciality)
                                         <span
                                             class="inline-flex items-center rounded-md bg-yellow-500/10 px-2 py-0.5 text-[11px] font-medium text-[#FBBF24] ring-1 ring-inset ring-yellow-500/20">
-                                            {{ $speciality->title }} + {{ $speciality->experienceYears }}
+                                            {{ $speciality->title }} + {{ $speciality->pivot->experienceYears ?? 0 }} years
                                         </span>
                                     @endforeach
                                 </div>
