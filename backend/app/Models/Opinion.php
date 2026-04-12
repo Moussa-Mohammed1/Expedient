@@ -15,12 +15,12 @@ class Opinion extends Model
         'author_id',
         'rate',
         'content',
-        'isAllowed',
+        'isApproved',
     ];
 
     protected $casts = [
         'rate' => 'decimal:2',
-        'isAllowed' => 'boolean',
+        'isApproved' => 'boolean',
     ];
 
     public function coach(): BelongsTo
