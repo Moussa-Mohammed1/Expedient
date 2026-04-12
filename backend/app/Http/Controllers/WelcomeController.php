@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Coach;
 use App\Models\Opinion;
 use App\Models\Salle;
-use App\Models\sport;
+use App\Models\Sport;
 use App\Models\Trainee;
-use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
