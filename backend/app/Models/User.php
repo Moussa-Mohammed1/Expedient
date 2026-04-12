@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPStan\Rules\PhpDoc\FunctionConditionalReturnTypeRule;
 
 class User extends Authenticatable
 {
@@ -84,5 +85,15 @@ class User extends Authenticatable
     public function memberships(): HasMany
     {
         return $this->hasMany(Membership::class);
+    }
+
+    public function isAdmin() : bool
+    {
+        return $this->role->title === "admin";
+    }
+
+    public function isCoach() 
+    {
+        return $this->coach;
     }
 }
