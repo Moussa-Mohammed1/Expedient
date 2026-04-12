@@ -17,13 +17,11 @@ class HomeController extends Controller
             ->with('community:id,title,description,backgroundImage,localisation')
             ->first()?->community;
 
-        $sports = class_exists(Sport::class)
-            ? Sport::query()
+        $sports = Sport::query()
                 ->select(['id', 'title', 'icon'])
                 ->withCount('salles')
                 ->orderBy('title')
-                ->get()
-            : collect();
+                ->get();
 
         $recentSalles = Salle::query()
             ->when(
