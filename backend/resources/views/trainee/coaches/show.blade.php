@@ -64,7 +64,7 @@
                             @forelse($specialities as $speciality)
                                 <span
                                     class="inline-flex items-center rounded-md bg-yellow-500/10 px-2 py-1 text-[11px] font-medium text-[#FBBF24] ring-1 ring-inset ring-yellow-500/20">
-                                    {{ $speciality->title }}
+                                    {{ $speciality->title }} ({{ $speciality->pivot->experienceYears ?? 0 }} years)
                                 </span>
                             @empty
                                 <span class="text-xs text-zinc-500">No speciality assigned yet.</span>
