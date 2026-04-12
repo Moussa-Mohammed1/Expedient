@@ -12,7 +12,7 @@
 <div>
     <header
         class="fixed top-0 left-0 right-0 lg:relative flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-5 font-sans antialiased z-50">
-        <button id="mobile-menu-btn" class="text-white hover:text-gray-300 focus:outline-none p-2">
+        <button id="mobile-menu-btn" class="text-white md:hidden hover:text-gray-300 focus:outline-none p-2">
             <i class="fa-solid fa-bars"></i>
         </button>
         <div class="z-10">
