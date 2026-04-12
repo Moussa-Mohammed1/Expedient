@@ -15,19 +15,7 @@
 </head>
 
 <body class="bg-black text-white font-sans pt-20">
-    <header
-        class="fixed top-0 left-0 right-0 w-full bg-[#111111] px-6 lg:px-8 py-4 flex items-center justify-between z-50">
-        <div>
-            <x-app-logo />
-        </div>
-        <div class="absolute not-lg:hidden left-1/2 transform -translate-x-1/2">
-            <h2 class="text-base font-bold text-white">Make best your profile</h2>
-        </div>
-        <div>
-            <x-profile-icon />
-        </div>
-    </header>
-
+    @include('layouts.header')
     @php
         $user = $profileUser ?? auth()->user();
         $avatarUrl = $user->avatar
