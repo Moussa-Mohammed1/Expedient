@@ -131,19 +131,33 @@
                 </div>
 
                 <div class="bg-[#111111] border border-zinc-800/80 rounded-lg p-4 shadow-sm">
-                    <form action="#" method="POST">
+                    @if(session('success'))
+                        <div class="mb-3 rounded-md border border-emerald-500/20 bg-emerald-900/20 px-3 py-2 text-xs text-emerald-300">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="mb-3 rounded-md border border-red-500/20 bg-red-900/20 px-3 py-2 text-xs text-red-300">
+                            {{ $errors->first() }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('opinions.store', $coach->id) }}" method="POST">
+                        @csrf
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-3">
                             <h3 class="text-white font-semibold text-sm">Add a Review</h3>
 
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-zinc-500 font-medium">Rate:</span>
-                                <div
+                                <input type="hidden" name="rate" id="opinion-rate" value="5">
+                                <div id="opinion-star-rating"
                                     class="star-rating flex flex-row-reverse justify-end gap-1 text-lg text-zinc-600 cursor-pointer">
-                                    <i class="fa-solid fa-star transition-colors"></i>
-                                    <i class="fa-solid fa-star transition-colors"></i>
-                                    <i class="fa-solid fa-star transition-colors"></i>
-                                    <i class="fa-solid fa-star transition-colors"></i>
-                                    <i class="fa-solid fa-star transition-colors"></i>
+                                    @for($i = 5; $i >= 1; $i--)
+                                        <button type="button" data-rate="{{ $i }}" class="rating-star" aria-label="Rate {{ $i }} stars">
+                                            <i class="fa-solid fa-star transition-colors"></i>
+                                        </button>
+                                    @endfor
                                 </div>
                             </div>
                         </div>
@@ -171,8 +185,8 @@
 
                 <div class="space-y-4">
                     @forelse($reviews as $review)
-                        <div
-                            class="bg-[#111111] border border-zinc-800/60 rounded-lg p-4 hover:border-zinc-700 transition-colors">
+                        <div id="review-{{ $review->id }}"
+                            class="group bg-[#111111] border border-zinc-800/60 rounded-lg p-4 hover:border-zinc-700 transition-colors">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <img src="{{ $review->author?->avatar ? asset('/storage/users/profiles/' . $review->author->avatar) : asset('assets/images/profile.jpeg') }}"
@@ -182,6 +196,30 @@
                                             {{ $review->author?->name ?? 'Anonymous' }}</h4>
                                         <span
                                             class="text-[11px] text-zinc-500">{{ optional($review->created_at)->diffForHumans() }}</span>
+                                    </div>
+                                </div>
+
+                                @php
+                                    $isOwner = (int) auth()->id() === (int) $review->author_id;
+                                @endphp
+                                <div class="relative {{ $isOwner ? 'visible' : 'invisible' }}">
+                                    <button type="button" data-menu-toggle="review-menu-{{ $review->id }}"
+                                        class="h-8 w-8 rounded-md border border-zinc-700 bg-[#1c1c1c] text-zinc-300 hover:text-white hover:border-zinc-600">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+
+                                    <div id="review-menu-{{ $review->id }}"
+                                        class="hidden absolute right-0 mt-2 w-36 rounded-md border border-zinc-700 bg-[#171717] p-1 z-10">
+                                        <a href="{{ route('opinions.show', $review->id) }}"
+                                            class="block rounded px-3 py-2 text-xs text-zinc-200 hover:bg-zinc-800">Show</a>
+                                        <button type="button" data-edit-toggle="review-edit-{{ $review->id }}"
+                                            class="block w-full text-left rounded px-3 py-2 text-xs text-zinc-200 hover:bg-zinc-800">Update</button>
+                                        <form action="{{ route('opinions.destroy', $review->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="block w-full text-left rounded px-3 py-2 text-xs text-red-300 hover:bg-zinc-800">Delete</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -199,6 +237,36 @@
                             <p class="text-zinc-300 text-xs leading-relaxed">
                                 {{ $review->content ?: 'No comment provided.' }}
                             </p>
+
+                            @if((int) auth()->id() === (int) $review->author_id)
+                                <form id="review-edit-{{ $review->id }}" action="{{ route('opinions.update', $review->id) }}" method="POST"
+                                    class="hidden mt-3 border-t border-zinc-800 pt-3">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                                        <div class="sm:col-span-1">
+                                            <label class="text-[11px] text-zinc-500">Rate</label>
+                                            <select name="rate"
+                                                class="mt-1 w-full bg-[#1c1c1c] border border-zinc-700 rounded-md p-2 text-xs text-zinc-100">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <option value="{{ $i }}" @selected((int) round((float) $review->rate) === $i)>{{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="sm:col-span-3">
+                                            <label class="text-[11px] text-zinc-500">Content</label>
+                                            <textarea name="content" rows="2"
+                                                class="mt-1 w-full bg-[#1c1c1c] border border-zinc-700 rounded-md p-2 text-xs text-zinc-100 resize-none">{{ $review->content }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 flex justify-end gap-2">
+                                        <button type="button" data-edit-cancel="review-edit-{{ $review->id }}"
+                                            class="px-3 py-1.5 text-xs rounded-md border border-zinc-700 text-zinc-300 hover:bg-zinc-800">Cancel</button>
+                                        <button type="submit"
+                                            class="px-3 py-1.5 text-xs rounded-md bg-[#d1fa48] text-black font-semibold hover:bg-[#b4d83d]">Save</button>
+                                    </div>
+                                </form>
+                            @endif
                         </div>
                     @empty
                         <div class="bg-[#111111] border border-zinc-800/60 rounded-lg p-5 text-center">
@@ -213,6 +281,108 @@
             </div>
         </div>
     </div>
+
+    <script>
+        (function () {
+            const ratingInput = document.getElementById('opinion-rate');
+            const ratingRoot = document.getElementById('opinion-star-rating');
+
+            if (ratingInput && ratingRoot) {
+                const stars = Array.from(ratingRoot.querySelectorAll('.rating-star'));
+                const paintStars = (selectedRate) => {
+                    stars.forEach((button) => {
+                        const rate = Number(button.dataset.rate || 0);
+                        const icon = button.querySelector('i');
+                        if (!icon) {
+                            return;
+                        }
+
+                        if (rate <= selectedRate) {
+                            icon.classList.add('text-[#FBBF24]');
+                            icon.classList.remove('text-zinc-600');
+                        } else {
+                            icon.classList.remove('text-[#FBBF24]');
+                            icon.classList.add('text-zinc-600');
+                        }
+                    });
+                };
+
+                paintStars(Number(ratingInput.value));
+
+                stars.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const selectedRate = Number(button.dataset.rate || 5);
+                        ratingInput.value = String(selectedRate);
+                        paintStars(selectedRate);
+                    });
+                });
+            }
+
+            document.querySelectorAll('[data-menu-toggle]').forEach((toggleButton) => {
+                toggleButton.addEventListener('click', () => {
+                    const menuId = toggleButton.getAttribute('data-menu-toggle');
+                    if (!menuId) {
+                        return;
+                    }
+
+                    const menu = document.getElementById(menuId);
+                    if (!menu) {
+                        return;
+                    }
+
+                    document.querySelectorAll('[id^="review-menu-"]').forEach((node) => {
+                        if (node !== menu) {
+                            node.classList.add('hidden');
+                        }
+                    });
+
+                    menu.classList.toggle('hidden');
+                });
+            });
+
+            document.querySelectorAll('[data-edit-toggle]').forEach((editButton) => {
+                editButton.addEventListener('click', () => {
+                    const formId = editButton.getAttribute('data-edit-toggle');
+                    if (!formId) {
+                        return;
+                    }
+
+                    const form = document.getElementById(formId);
+                    if (form) {
+                        form.classList.toggle('hidden');
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-edit-cancel]').forEach((cancelButton) => {
+                cancelButton.addEventListener('click', () => {
+                    const formId = cancelButton.getAttribute('data-edit-cancel');
+                    if (!formId) {
+                        return;
+                    }
+
+                    const form = document.getElementById(formId);
+                    if (form) {
+                        form.classList.add('hidden');
+                    }
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!(event.target instanceof Element)) {
+                    return;
+                }
+
+                if (event.target.closest('[data-menu-toggle]') || event.target.closest('[id^="review-menu-"]')) {
+                    return;
+                }
+
+                document.querySelectorAll('[id^="review-menu-"]').forEach((node) => {
+                    node.classList.add('hidden');
+                });
+            });
+        })();
+    </script>
 
 </body>
 
