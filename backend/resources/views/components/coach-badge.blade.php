@@ -14,7 +14,7 @@
     </button>
 
     <div id="{{ $dropdownId }}"
-        class="hidden absolute -left-30 z-50 w-64 mt-2 p-4 bg-[#322e2e] border border-black rounded-lg shadow-lg">
+        class="hidden absolute -left-50 z-50 w-64 mt-2 p-4 bg-[#322e2e] border border-black rounded-lg shadow-lg">
         @if (!$verification)
             <div class="text-sm">
                 <p class="mb-3 text-white">You are not verified yet.</p>
