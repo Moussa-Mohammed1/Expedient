@@ -51,7 +51,7 @@
                                         class="text-white font-bold text-sm md:text-base w-full max-w-24 md:max-w-36 mx-auto truncate">
                                         {{ $sport['title'] }}</h3>
                                     <p class="mt-1 text-xs md:text-sm text-zinc-500 font-medium transition-colors">
-                                        {{ isset($sport['salles']) ? 0 : $sport['salles']}} Salles
+                                        {{ isset($sport['salles']) ? $sport['salles'] : 0 }} Salles
                                     </p>
                                 </div>
                             </a>
