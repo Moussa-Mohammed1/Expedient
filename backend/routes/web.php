@@ -12,6 +12,7 @@ use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\Sport\SportController;
 use App\Http\Controllers\Salle\SalleController;
+use App\Http\Controllers\OpinionController;
 
 use App\Models\Trainee;
 use App\Models\Coach;
@@ -38,5 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('sports', SportController::class);
     Route::resource('salles', SalleController::class);
     Route::resource('coaches', CoachController::class);
+    Route::post('/coaches/{coach}/opinions', [OpinionController::class, 'store'])->name('opinions.store');
+    Route::get('/opinions/{opinion}', [OpinionController::class, 'show'])->name('opinions.show');
+    Route::put('/opinions/{opinion}', [OpinionController::class, 'update'])->name('opinions.update');
+    Route::delete('/opinions/{opinion}', [OpinionController::class, 'destroy'])->name('opinions.destroy');
     Route::resource('profile', ProfileController::class);
 });
