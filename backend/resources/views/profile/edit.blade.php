@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expedient User Profile</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('layouts.assets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
@@ -33,6 +33,10 @@
         $avatarUrl = $user->avatar
             ? asset('/storage/users/profiles/' . $user->avatar)
             : asset('assets/images/profile.jpeg');
+
+        $selectedSpecialityIds = collect(old('speciality_ids', $user->isCoach() ? $user->coach->specialities->pluck('id')->all() : []))
+            ->map(fn($id) => (int) $id)
+            ->all();
     @endphp
 
     <div class="max-w-4xl mx-auto px-4">
@@ -131,6 +135,37 @@
                         @enderror
                     </div>
                 </div>
+
+                @if ($user->isCoach())
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 hover:bg-zinc-700/30 transition-colors">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-300 mb-2">Coach Specialities</label>
+                            <p class="text-xs text-gray-400">Select one or more specialities. Unchecked items are removed when you save.</p>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                @forelse (($allSpecialities ?? collect()) as $speciality)
+                                    <label
+                                        class="flex items-center gap-2 rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white cursor-pointer hover:border-[#ff5520]">
+                                        <input type="checkbox" name="speciality_ids[]" value="{{ $speciality->id }}"
+                                            @checked(in_array($speciality->id, $selectedSpecialityIds, true))
+                                            class="h-4 w-4 rounded border-zinc-600 bg-zinc-900 text-[#ff5520] focus:ring-[#ff5520]">
+                                        <span>{{ $speciality->title }}</span>
+                                    </label>
+                                @empty
+                                    <p class="text-xs text-gray-400">No specialities are available yet.</p>
+                                @endforelse
+                            </div>
+
+                            @error('speciality_ids')
+                                <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
+                            @enderror
+                            @error('speciality_ids.*')
+                                <p class="mt-2 text-xs text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                @endif
 
                 <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 hover:bg-zinc-700/30 transition-colors">
                     <div>

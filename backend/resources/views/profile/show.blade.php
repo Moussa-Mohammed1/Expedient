@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expedient - Profile </title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('layouts.assets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
@@ -100,6 +100,26 @@
                         <dt class="text-xs md:text-sm font-medium text-zinc-400 flex items-center">Localisation</dt>
                         <dd class="mt-1 text-xs md:text-sm text-white sm:col-span-2 sm:mt-0">
                             {{ $user->localisation ?: 'Not specified yet' }}
+                        </dd>
+                    </div>
+
+                    <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-[#1c1c1c] transition-colors">
+                        <dt class="text-xs md:text-sm font-medium text-zinc-400 flex items-center">Coach Specialities</dt>
+                        <dd class="mt-1 text-xs md:text-sm text-white sm:col-span-2 sm:mt-0">
+                            @if ($user->coach && $user->coach->specialities->isNotEmpty())
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach ($user->coach->specialities as $speciality)
+                                        <span
+                                            class="inline-flex items-center rounded-md bg-yellow-500/10 px-2 py-0.5 text-[11px] font-medium text-[#FBBF24] ring-1 ring-inset ring-yellow-500/20">
+                                            {{ $speciality->title }} + {{ $speciality->experienceYears }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @elseif($user->coach)
+                                <span class="text-zinc-400">No speciality assigned yet.</span>
+                            @else
+                                <span class="text-zinc-500">This user is not registered as a coach.</span>
+                            @endif
                         </dd>
                     </div>
 
