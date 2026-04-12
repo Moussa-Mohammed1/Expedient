@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expedient - home</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('layouts.assets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
@@ -43,8 +43,8 @@
                 <div class="flex flex-col bg-[#111111] cursor-pointer border border-zinc-800 rounded-xl p-5  duration-300 group">
                     <div class="flex justify-center mb-4 relative">
                         <img 
-                            src="{{ $coach->avatar ? asset('/storage/users/profiles/' . $coach->avatar) : asset('assets/images/profile.jpeg')}}" 
-                            alt="{{ $coach->name }}" 
+                            src="{{ $coach->user?->avatar ? asset('/storage/users/profiles/' . $coach->user->avatar) : asset('assets/images/profile.jpeg')}}" 
+                            alt="{{ $coach->user?->name ?? 'Coach' }}" 
                             class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 group-hover:border-yellow-500 transition-colors duration-200"
                         >
                         @if($coach->hasBadge())
@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ url('/coaches/' . $coach->id) }}" class="w-full block text-center bg-[#1c1c1c] text-white text-xs font-bold py-2.5 rounded-lg border border-zinc-800 group-hover:bg-yellow-500 cursor-pointer group-hover:text-black group-hover:border-yellow-500 ">
+                    <a href="{{route('coaches.show', $coach->id) }}" class="w-full block text-center bg-[#1c1c1c] text-white text-xs font-bold py-2.5 rounded-lg border border-zinc-800 group-hover:bg-yellow-500 cursor-pointer group-hover:text-black group-hover:border-yellow-500 ">
                         View Profile
                     </a>
                 </div>
