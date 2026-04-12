@@ -28,7 +28,7 @@
                 <div class="bg-[#111111] border border-zinc-800/80 rounded-2xl p-5 lg:p-6 relative overflow-hidden">
                     <div class="relative inline-block mb-5">
                         <img src="{{ $avatarUrl }}" alt="Coach Avatar"
-                            class="h-24 w-24 rounded-2xl object-cover border border-zinc-700 shadow-sm">
+                            class="h-24 w-24 rounded-lg object-cover border border-zinc-700 shadow-sm">
                         @if($coach->hasBadge)
                             <div class="absolute -bottom-3 -right-3 bg-[#111111] rounded-full p-1.5">
                                 <div
@@ -45,7 +45,7 @@
                         {{ $coachUser->localisation ?: 'No localisation provided' }}
                     </p>
                     <div
-                        class="flex items-center justify-between bg-[#1c1c1c] rounded-xl p-3 border border-zinc-800/50 mb-5">
+                        class="flex items-center justify-between bg-[#1c1c1c] rounded-lg p-3 border border-zinc-800/50 mb-5">
                         <div class="flex items-center gap-2 text-[#FBBF24] text-base">
                             <i class="fa-solid fa-star"></i>
                             <span
@@ -126,11 +126,11 @@
             <div class="w-full lg:w-2/3 flex flex-col gap-6">
 
                 <div class="border-b border-zinc-800 pb-4">
-                    <h2 class="text-xl font-bold text-white">Client Reviews <span
+                    <h2 class="text-xl font-bold text-white">Trainees Reviews <span
                             class="text-zinc-500 text-base font-medium ml-2">({{ $coach->reviews_count }})</span></h2>
                 </div>
 
-                <div class="bg-[#111111] border border-zinc-800/80 rounded-xl p-4 shadow-sm">
+                <div class="bg-[#111111] border border-zinc-800/80 rounded-lg p-4 shadow-sm">
                     <form action="#" method="POST">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-3">
                             <h3 class="text-white font-semibold text-sm">Add a Review</h3>
@@ -151,14 +151,20 @@
                         <div class="mb-3">
                             <textarea name="content" rows="3"
                                 placeholder="Share your experience working with this coach..."
-                                class="w-full bg-[#1c1c1c] border border-zinc-700 rounded-xl p-3 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#FBBF24] focus:ring-1 focus:ring-[#FBBF24] transition-all resize-none"></textarea>
+                                class="w-full bg-[#1c1c1c] border border-zinc-700 rounded-sm p-3 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#FBBF24] focus:ring-1 focus:ring-[#FBBF24] transition-all resize-none"></textarea>
                         </div>
 
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                class="bg-[#d1fa48] hover:bg-[#b4d83d] text-black font-bold py-2 px-5 rounded-lg text-xs transition-colors flex items-center gap-2">
-                                <i class="fa-solid fa-paper-plane"></i> Post Review
-                            </button>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <p class="text-[11px] leading-relaxed text-zinc-500 max-w-md">
+                              <span class="text-white font-semibold">Note: </span>  Respectful reviews are welcome. Inappropriate or abusive content may be removed and may lead to account penalties.
+                            </p>
+
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="bg-[#d1fa48] hover:bg-[#b4d83d] text-black font-bold py-2 px-5 rounded-lg text-xs transition-colors flex items-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> Post Review
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -166,7 +172,7 @@
                 <div class="space-y-4">
                     @forelse($reviews as $review)
                         <div
-                            class="bg-[#111111] border border-zinc-800/60 rounded-xl p-4 hover:border-zinc-700 transition-colors">
+                            class="bg-[#111111] border border-zinc-800/60 rounded-lg p-4 hover:border-zinc-700 transition-colors">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <img src="{{ $review->author?->avatar ? asset('/storage/users/profiles/' . $review->author->avatar) : asset('assets/images/profile.jpeg') }}"
@@ -195,7 +201,7 @@
                             </p>
                         </div>
                     @empty
-                        <div class="bg-[#111111] border border-zinc-800/60 rounded-xl p-5 text-center">
+                        <div class="bg-[#111111] border border-zinc-800/60 rounded-lg p-5 text-center">
                             <p class="text-zinc-400 text-sm">No reviews yet for this coach.</p>
                         </div>
                     @endforelse
