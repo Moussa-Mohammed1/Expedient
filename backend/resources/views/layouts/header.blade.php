@@ -11,7 +11,7 @@
 
 <div>
     <header
-        class="relative flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-5 font-sans antialiased">
+        class="fixed top-0 left-0 right-0 lg:relative flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-5 font-sans antialiased z-50">
 
         <div class="z-10">
             <a href="{{ url('/home') }}" class="text-white font-bold text-xl tracking-wide">Expedient</a>
@@ -62,9 +62,11 @@
         </div>
     </header>
 
-    <div id="mobile-menu" class="hidden lg:hidden bg-[#1c1c1c] w-full absolute z-50 border-t border-white/10 shadow-lg">
+    <div class="h-26 lg:hidden"></div>
+
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#1c1c1c] fixed top-26 left-0 right-0 z-50 border-t border-white/10 shadow-lg max-h-[calc(100vh-6.5rem)] overflow-y-auto">
         <div class="px-6 py-4 flex flex-col gap-4">
-            <ul class="flex flex-col gap-4 text-white text-base">
+            <ul class="flex flex-col gap-4 text-white">
                 @foreach($navLinks as $link)
                     @php
                         $isActive = request()->is($link['path']) || request()->is($link['path'] . '/*');
@@ -73,6 +75,9 @@
                             class="{{ $isActive ? 'text-[#ff5520] font-bold' : '' }}">{{ $link['name'] }}</a>
                     </li>
                 @endforeach
+                <li><a href="{{ route('profile.show', auth()->id()) }}"
+                        class="{{ $isActive ? 'text-[#ff5520] font-bold' : '' }}">Profile</a>
+                </li>
                 @auth
                     @if(auth()->user()->role && auth()->user()->role->title === 'admin')
                         <li><a href="{{ url('/dashboard') }}"
@@ -83,9 +88,9 @@
 
             <div class="border-t border-white/10 pt-4 flex flex-col gap-4">
                 @auth
-                    <a href="{{ route('profile.show', auth()->id()) }}"
-                        class="w-full bg-yellow-500 text-white py-2 rounded-xl text-center">
-                        Profile
+                    <a href="{{ route('logout')}}"
+                        class="w-full bg-yellow-500 text-black font-semibold py-2 rounded-lg text-center">
+                        Logout
                     </a>
                 @else
                     <a href="{{ route('login') ?? url('/login') }}"
