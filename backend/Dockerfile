@@ -14,6 +14,8 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN composer dump-autoload -o
+
 RUN rm -rf node_modules package-lock.json && npm install
 
 RUN npm run build
