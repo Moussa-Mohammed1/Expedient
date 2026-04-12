@@ -14,7 +14,7 @@
     </style>
 </head>
 
-<body class="bg-black text-white font-sans pt-20">
+<body class="bg-black text-white">
     @include('layouts.header')
     @php
         $user = $profileUser ?? auth()->user();
