@@ -38,27 +38,28 @@
             </h2>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             @forelse($topCoaches->take(8) as $coach)
-                <div class="flex flex-col bg-[#111111] cursor-pointer border border-zinc-800 rounded-xl p-5  duration-300 group">
-                    <div class="flex justify-center mb-4 relative">
-                        <img 
-                            src="{{ $coach->user?->avatar ? asset('/storage/users/profiles/' . $coach->user->avatar) : asset('assets/images/profile.jpeg')}}" 
-                            alt="{{ $coach->user?->name ?? 'Coach' }}" 
-                            class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 group-hover:border-yellow-500 transition-colors duration-200"
+                <a href="{{ route('coaches.show', $coach->id) }}"
+                    class="flex items-center gap-4 bg-[#2a2929] border rounded-xl p-2 hover:bg-[#272525]  border-[#504a4a] transition-colors duration-300 group">
+                    <div class="relative ">
+                        <img
+                            src="{{ $coach->user?->avatar ? asset('/storage/users/profiles/' . $coach->user->avatar) : asset('assets/images/profile.jpeg')}}"
+                            alt="{{ $coach->user?->name ?? 'Coach' }}"
+                            class="w-16 h-16 rounded-full border-2 border-zinc-800"
                         >
                         @if($coach->hasBadge())
-                            <span class="absolute bottom-0 right-[35%] bg-yellow-500 text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#111111]">
+                            <span class="absolute -bottom-1 -right-1 bg-yellow-500 text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#111111]">
                                 <i class="fa-solid fa-check"></i>
                             </span>
                         @endif
                     </div>
-                    
-                    <div class="text-center flex-1">
+
+                    <div class="min-w-0 flex-col">
                         <h3 class="text-white font-bold text-sm truncate">{{ $coach->user->name }}</h3>
-                        <p class="text-zinc-500 text-xs mt-0.5 truncate">{{ $coach->specialty ?? 'General Fitness' }}</p>
-                        
-                        <div class="flex items-center justify-center gap-1 mt-2 mb-4">
+                        <p class="text-zinc-500 text-xs mt-0.5 truncate">{{ $coach->specialties?->pivot->first()?->title ?? 'General Fitness' }}</p>
+
+                        <div class="flex items-center gap-1 mt-2">
                             <div class="flex text-yellow-500 text-[10px]">
                                 <i class="fa-solid fa-star"></i>
                                 <i class="fa-solid fa-star"></i>
@@ -69,11 +70,7 @@
                             <span class="text-zinc-500 text-[10px] font-medium">({{ $coach->reviews_count ?? 0 }})</span>
                         </div>
                     </div>
-
-                    <a href="{{route('coaches.show', $coach->id) }}" class="w-full block text-center bg-[#1c1c1c] text-white text-xs font-bold py-2.5 rounded-lg border border-zinc-800 group-hover:bg-yellow-500 cursor-pointer group-hover:text-black group-hover:border-yellow-500 ">
-                        View Profile
-                    </a>
-                </div>
+                </a>
             @empty
                 
             @endforelse
