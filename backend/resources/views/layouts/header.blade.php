@@ -20,7 +20,7 @@
         </div>
 
         <nav
-            class="hidden lg:flex  w-auto min-w-[50%] hover:shadow-sm left-1/2 top-5  items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 cursor-pointer shadow-lime-500 shadow-xs ring-1 ring-white/5 transition">
+            class="hidden lg:flex  w-auto min-w-[50%] left-1/2 top-5  items-center justify-center rounded-full bg-[#373636] px-8 py-3 cursor-pointer ring-white/5 transition">
             <ul class="flex items-center justify-around gap-8 text-sm font-medium tracking-wide">
                 @foreach($navLinks as $link)
                     @php
