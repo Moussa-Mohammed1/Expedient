@@ -13,8 +13,16 @@ class SalleController extends Controller
 {
     public function index(): View
     {
-        return view('salles.index', [
-            'salles' => Salle::with(['coach', 'sport'])->latest()->get(),
+        $userLocation = auth()->user()?->localisation;
+
+        return view('trainee.salles.index', [
+            'salles' => Salle::with(['coach.user', 'sport', 'galleries'])
+                ->when(! empty($userLocation), function ($query) use ($userLocation) {
+                    $query->where('city', 'like', '%' . $userLocation . '%');
+                })
+                ->latest()
+                ->get(),
+            'userLocation' => $userLocation,
         ]);
     }
 
@@ -32,8 +40,16 @@ class SalleController extends Controller
 
     public function show(Salle $salle): View
     {
-        $salle->load(['coach', 'sport']);
-        return view('salles.show', compact('salle'));
+        $salle->load([
+            'coach.user',
+            'sport',
+            'galleries',
+            'horaires',
+            'services',
+            'equipments',
+        ]);
+
+        return view('trainee.salles.show', compact('salle'));
     }
 
     public function edit(Salle $salle): View
