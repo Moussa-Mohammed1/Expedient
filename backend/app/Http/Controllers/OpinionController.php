@@ -50,8 +50,7 @@ class OpinionController extends Controller
 
         return redirect()
             ->route('coaches.show', $opinion->coach_id)
-            ->with('success', 'Your review was updated.')
-            ->withFragment('review-' . $opinion->id);
+            ->with('success', 'Your review was updated.');
     }
 
     public function destroy(Opinion $opinion): RedirectResponse
