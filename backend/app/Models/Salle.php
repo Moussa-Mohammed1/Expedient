@@ -19,6 +19,7 @@ class Salle extends Model
         'description',
         'existenceYears',
         'city',
+        'logo',
         'coach_id',
         'sport_id',
     ];
