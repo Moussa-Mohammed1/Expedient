@@ -32,28 +32,21 @@
                     </div>
 
                     <div
-                        class="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 snap-x snap-mandatory">
+                        class="flex gap-3 overflow-x-auto md:overflow-visible md:flex-wrap pb-2 md:pb-0">
                         @forelse($sports as $sport)
                             <a href=""
-                                class="group relative min-w-[calc(50%-0.375rem)] md:min-w-0 flex flex-col items-center justify-center p-3 md:p-4 bg-[#322e2e] rounded-lg border border-zinc-800/80 hover:border-yellow-500/50 duration-300 overflow-hidden cursor-pointer snap-start">
+                                class="group relative min-w-[calc(50%-0.375rem)] max-w-[calc(50%-0.375rem)] md:min-w-45 md:max-w-55 h-14 flex items-center gap-3 px-4 bg-[#322e2e] rounded-full border border-zinc-800/80 hover:border-yellow-500/50 duration-300 overflow-hidden cursor-pointer snap-start">
 
                                 <div
-                                    class="absolute inset-0 bg-linar-to-b from-transparent to-zinc-900/50 opacity-0  transition-opacity duration-300">
-                                </div>
-
-                                <div
-                                    class="relative h-9 w-9 md:h-10 md:w-10 rounded-full bg-[#1c1c1c] border border-zinc-800 flex items-center justify-center group-hover:border-zinc-700 transition-all duration-300 shadow-sm">
+                                    class="relative h-8 w-8 rounded-full bg-[#1c1c1c] border border-zinc-800 flex items-center justify-center group-hover:border-zinc-700 transition-all duration-300 shadow-sm shrink-0">
                                     <i
                                         class="fa-solid {{ $sport['icon'] }} text-[10px] md:text-xs text-zinc-500  transition-colors duration-300"></i>
                                 </div>
-                                <div class="relative text-center w-full">
+                                <div class="relative text-left w-full">
                                     <h3
-                                        class="text-white font-bold text-sm md:text-base w-full max-w-24 md:max-w-36 mx-auto truncate">
+                                        class="text-white font-bold text-sm md:text-base w-full truncate">
                                         {{ $sport['title'] }}
                                     </h3>
-                                    <p class="mt-1 text-xs md:text-sm text-zinc-500 font-medium transition-colors">
-                                        {{ $sport['salles_count'] ?? 0 }} Salles
-                                    </p>
                                 </div>
                             </a>
                         @empty
@@ -199,7 +192,7 @@
                     <p class="text-zinc-500 text-sm mt-2 max-w-md">You haven't joined a training group yet. Explore local
                         communities to connect with other athletes.</p>
                     <a href="{{ url('/communities') }}"
-                        class="mt-6 inline-flex items-center justify-center h-10 px-6 font-bold text-xs rounded-lg bg-[#1c1c1c] text-white border border-zinc-700 transition-colors hover:border-yellow-500 hover:text-yellow-400">
+                        class="mt-6 inline-flex items-center justify-center h-10 px-6 font-bold text-xs rounded-full bg-yellow-500 text-black border border-zinc-700 transition-colors hover:bg-yellow-700">
                         Explore Communities
                     </a>
                 </div>
