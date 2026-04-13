@@ -9,20 +9,13 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    @include('layouts.assets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body class="bg-black min-h-screen">
     <section class="min-h-screen bg-black relative overflow-hidden">
-        <div class="absolute inset-0 opacity-40 pointer-events-none">
-            <div
-                class="w-full h-full bg-[linear-gradient(30deg,rgba(0,0,0,0.02)_12%,transparent_12.5%,transparent_87%,rgba(0,0,0,0.02)_87.5%,rgba(0,0,0,0.02)),linear-gradient(150deg,rgba(0,0,0,0.02)_12%,transparent_12.5%,transparent_87%,rgba(0,0,0,0.02)_87.5%,rgba(0,0,0,0.02)),linear-gradient(30deg,rgba(0,0,0,0.02)_12%,transparent_12.5%,transparent_87%,rgba(0,0,0,0.02)_87.5%,rgba(0,0,0,0.02)),linear-gradient(150deg,rgba(0,0,0,0.02)_12%,transparent_12.5%,transparent_87%,rgba(0,0,0,0.02)_87.5%,rgba(0,0,0,0.02)),linear-gradient(60deg,rgba(0,0,0,0.015)_25%,transparent_25.5%,transparent_75%,rgba(0,0,0,0.015)_75%,rgba(0,0,0,0.015)),linear-gradient(60deg,rgba(0,0,0,0.015)_25%,transparent_25.5%,transparent_75%,rgba(0,0,0,0.015)_75%,rgba(0,0,0,0.015))] bg-[length:80px_140px] bg-[position:0_0,0_0,40px_70px,40px_70px,0_0,40px_70px]">
-            </div>
-        </div>
+
         @include('layouts.guestNavbar')
         <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-10 pb-16">
             <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 min-h-[calc(100vh-120px)]">
@@ -57,7 +50,7 @@
 
                 <div class="flex items-center justify-center">
                     <div
-                        class="w-full max-w-[620px] h-[620px] overflow-hidden rounded-xl bgb-lack   border-yellow-400 flex items-center justify-center">
+                        class="w-full max-w-155 h-155 overflow-hidden rounded-xl bg-black   border-yellow-400 flex items-center justify-center">
                         <div class="text-center px-6">
                             <p class="mt-3 text-zinc-400 text-lg">
 
@@ -103,7 +96,7 @@
     </section>
     <section id="coaches" class="py-24 bg-black relative overflow-hidden border-b border-zinc-800">
         <div
-            class="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-yellow-500/5 blur-[120px] rounded-full pointer-events-none">
+            class="absolute top-1/2 left-0 -translate-y-1/2 w-125 h-125 bg-yellow-500/5 blur-[120px] rounded-full pointer-events-none">
         </div>
         <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -137,7 +130,7 @@
                 </div>
 
                 <div class="relative w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
-                    <div class="bg-[#111111] rounded-2xl border border-zinc-800/80 p-6 md:p-8 shadow-2xl relative z-10">
+                    <div class=" rounded-lg border border-zinc-800/80 p-6 md:p-8 shadow-2xl relative z-10">
                         <div class="flex items-center justify-between mb-8">
                             <h3 class="text-xl font-bold text-white">Featured Experts</h3>
                             <div class="flex gap-3 text-lg">
@@ -150,7 +143,7 @@
                         <div class="space-y-3">
                             @forelse($featuredCoaches as $coach)
                                 <div
-                                    class="flex items-center gap-4 p-3 rounded-xl bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all">
+                                    class="flex items-center gap-4 p-3 rounded-lg bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all">
                                     <div class="relative">
                                         <img src="{{ $coach['avatar'] }}" alt="Coach"
                                             class="w-14 h-14 rounded-full object-cover border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }} transition-transform duration-300">
