@@ -21,10 +21,10 @@
             <input 
                 type="text" 
                 placeholder="Search coaches, sports, or salles..." 
-                class="w-full bg-[#111111] border-2 border-zinc-800 text-white text-sm rounded-2xl pl-12 pr-6 py-4 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/20 transition-all shadow-lg placeholder:text-zinc-600"
+                class="w-full bg-[#111111] border-2 border-zinc-800 text-white text-xs md:text-sm rounded-full pl-12 pr-6 py-4 focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/20 transition-all shadow-lg placeholder:text-zinc-600"
             >
             <div class="absolute inset-y-0 right-2 flex items-center">
-                <button class="bg-[#1c1c1c] cursor-pointer hover:bg-yellow-500 hover:text-black text-white text-xs font-bold py-2 px-4 rounded-xl border border-zinc-700 transition-colors">
+                <button class="bg-[#1c1c1c] cursor-pointer hover:bg-yellow-500 hover:text-black text-white text-xs font-bold py-2 px-4 rounded-2xl border border-zinc-700 transition-colors">
                     Search
                 </button>
             </div>
