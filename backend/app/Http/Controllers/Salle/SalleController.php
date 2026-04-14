@@ -17,8 +17,19 @@ class SalleController extends Controller
 
         return view('trainee.salles.index', [
             'salles' => Salle::with(['coach.user', 'sport', 'galleries'])
-                ->when(! empty($userLocation), function ($query) use ($userLocation) {
-                    $query->where('city', 'like', '%' . $userLocation . '%');
+                ->when($userLocation, function ($query) use ($userLocation) {
+                    $userLocal = strtolower(trim($userLocation));
+
+                    $words = array_filter(explode(' ', $userLocal));
+
+                    $query->when($words, function ($query) use ($words) {
+                        $query->where(function ($q) use ($words) {
+                            foreach ($words as $word) {
+                                $q->orWhereRaw('LOWER(city) LIKE ?', ["%$word%"]);
+                            }
+                        }
+                        );
+                    });
                 })
                 ->latest()
                 ->get(),
