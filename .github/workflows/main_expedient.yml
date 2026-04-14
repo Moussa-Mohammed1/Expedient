@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: php-app
-          path: backend/.
+          path: backend
   
   deploy:
     runs-on: ubuntu-latest
