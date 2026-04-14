@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,5 +65,18 @@ class Salle extends Model
         return $this->belongsToMany(Equipment::class, 'salle_equipment')
             ->withPivot(['condition', 'description'])
             ->withTimestamps();
+    }
+
+    public function scopeSearchWords(Builder $query, array $words): Builder
+    {
+        $words = array_values(array_filter($words, fn($word) => $word !== ''));
+
+        return $query->when($words !== [], fn(Builder $q) => $q->where(
+            fn(Builder $group) => collect($words)->each(
+                fn(string $word) => $group
+                    ->orWhereRaw('LOWER(name) LIKE ?', ["%{$word}%"])
+                    ->orWhereRaw('LOWER(city) LIKE ?', ["%{$word}%"])
+            )
+        ));
     }
 }
