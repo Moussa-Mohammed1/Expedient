@@ -73,4 +73,4 @@ jobs:
         with:
           app-name: 'expedient'
           slot-name: 'Production'
-          package: .
+          package: backend
