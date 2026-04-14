@@ -55,14 +55,16 @@ class Coach extends Model
         return $this->hasMany(Opinion::class);
     }
 
+    public function salles(): HasMany
+    {
+        return $this->hasMany(Salle::class);
+    }
+
     public function hasBadge(): bool
     {
         return $this->hasBadge;
     }
 
-    /**
-     * Specialities linked to this coach.
-     */
     public function specialities(): BelongsToMany
     {
         return $this->belongsToMany(Speciality::class, 'coach_specialities')
