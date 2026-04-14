@@ -24,11 +24,19 @@ class HomeController extends Controller
                 ->get();
 
         $recentSalles = Salle::query()
-            ->when(
-                $user?->localisation,
-                fn($query) => $query->whereLike('city', $user->localisation),
-                fn($query) => $query->whereRaw('1 = 0')
-            )
+            ->when($user?->localisation, function ($query) use ($user) {
+                $userLocal = strtolower(trim($user->localisation));
+
+                $words = array_filter(explode(' ', $userLocal));
+
+                $query->when($words, function ($query) use ($words) {
+                    $query->where(function ($q) use ($words) {
+                        foreach ($words as $word) {
+                            $q->orWhereRaw('LOWER(city) LIKE ?', ["%$word%"]);
+                        }
+                    });
+                });
+            }, fn($query) => $query->whereRaw('1 = 0'))
             ->latest()
             ->take(3)
             ->get(['id', 'name', 'city', 'created_at']);
