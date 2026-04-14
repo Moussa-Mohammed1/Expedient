@@ -52,10 +52,6 @@ jobs:
         with:
           name: php-app
           path: backend
-          
-      - name: Make startup executable
-        working-directory: backend
-        run: chmod +x startup.sh
   
   deploy:
     runs-on: ubuntu-latest
