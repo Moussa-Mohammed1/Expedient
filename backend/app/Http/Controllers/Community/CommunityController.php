@@ -13,7 +13,7 @@ class CommunityController extends Controller
 {
     public function index(): View
     {
-        return view('communities.index', [
+        return view('trainee.communities.index', [
             'communities' => Community::latest()->paginate(10)
         ]);
     }
@@ -26,7 +26,7 @@ class CommunityController extends Controller
     public function store(StoreCommunityRequest $request): RedirectResponse
     {
         Community::create($request->validated());
-        return redirect()->route('communities.index')->with('success', 'Community created successfully.');
+        return redirect()->route('trainee.communities.index')->with('success', 'Community created successfully.');
     }
 
     public function show(Community $community): View
@@ -43,20 +43,20 @@ class CommunityController extends Controller
     public function update(UpdateCommunityRequest $request, Community $community): RedirectResponse
     {
         $community->update($request->validated());
-        return redirect()->route('communities.index')->with('success', 'Community updated successfully.');
+        return redirect()->route('trainee.communities.index')->with('success', 'Community updated successfully.');
     }
 
     public function destroy(Community $community): RedirectResponse
     {
         if ($community->memberships()->exists()) {
-            return redirect()->route('communities.index')->with('error', 'Community cannot be deleted because it has active memberships.');
+            return redirect()->route('trainee.communities.index')->with('error', 'Community cannot be deleted because it has active memberships.');
         }
 
         if ($community->posts()->exists()) {
-            return redirect()->route('communities.index')->with('error', 'Community cannot be deleted because it has posts.');
+            return redirect()->route('trainee.communities.index')->with('error', 'Community cannot be deleted because it has posts.');
         }
 
         $community->delete();
-        return redirect()->route('communities.index')->with('success', 'Community deleted successfully.');
+        return redirect()->route('trainee.communities.index')->with('success', 'Community deleted successfully.');
     }
 }
