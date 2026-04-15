@@ -204,21 +204,19 @@
                                 @endphp
                                 <div class="relative {{ $isOwner ? 'visible' : 'invisible' }}">
                                     <button type="button" data-menu-toggle="review-menu-{{ $review->id }}"
-                                        class="h-8 w-8 rounded-md border border-zinc-700 bg-[#1c1c1c] text-zinc-300 hover:text-white hover:border-zinc-600">
+                                        class="h-8 w-8 rounded-md border cursor-pointer border-zinc-700 bg-[#1c1c1c] text-zinc-300 hover:text-white hover:border-zinc-600">
                                         <i class="fa-solid fa-ellipsis"></i>
                                     </button>
 
                                     <div id="review-menu-{{ $review->id }}"
                                         class="hidden absolute right-0 mt-2 w-36 rounded-md border border-zinc-700 bg-[#171717] p-1 z-10">
-                                        <a href="{{ route('opinions.show', $review->id) }}"
-                                            class="block rounded px-3 py-2 text-xs text-zinc-200 hover:bg-zinc-800">Show</a>
                                         <button type="button" data-edit-toggle="review-edit-{{ $review->id }}"
                                             class="block w-full text-left rounded px-3 py-2 text-xs text-zinc-200 hover:bg-zinc-800">Update</button>
                                         <form action="{{ route('opinions.destroy', $review->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="block w-full text-left rounded px-3 py-2 text-xs text-red-300 hover:bg-zinc-800">Delete</button>
+                                                class="cursor-pointer block w-full text-left rounded px-3 py-2 text-xs text-red-300 hover:bg-zinc-800">Delete</button>
                                         </form>
                                     </div>
                                 </div>
@@ -369,10 +367,6 @@
             });
 
             document.addEventListener('click', (event) => {
-                if (!(event.target instanceof Element)) {
-                    return;
-                }
-
                 if (event.target.closest('[data-menu-toggle]') || event.target.closest('[id^="review-menu-"]')) {
                     return;
                 }
