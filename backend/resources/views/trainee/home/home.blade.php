@@ -85,19 +85,22 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6 bg-gray-900 p-4 rounded-lg ">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 h-60 overflow-y-scroll [scrollbar-width:none] gap-6 bg-gray-900 p-4 rounded-lg ">
                             @forelse($recentSalles as $salle)
+                                @php
+                                    $backgroundUrl = asset('/' . ($salle->background ?: 'assets/images/salle_default.jpeg'));
+                                @endphp
                                 <a href="{{ url('/salles/' . $salle['id']) }}"
                                     class="group relative h-30 flex flex-col justify-end rounded-2xl overflow-hidden border border-zinc-800 hover:border-yellow-500 transition-colors duration-200 cursor-pointer shadow-lg bg-[#111111]">
-                                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
+                                    <img src="{{ $backgroundUrl }}"
                                         class="absolute inset-0 w-full h-full object-cover" alt="{{ $salle['name'] }}">
 
                                     <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent">
                                     </div>
 
                                     <div class="relative p-6 w-full">
-                                        <div class="flex justify-between items-center mb-2">
-                                            <span class="text-xs text-zinc-400 font-medium">
+                                        <div class="flex justify-between items-center mb-2 bg-black rounded-full w-fit px-2 py-1.5">
+                                            <span class="text-xs text-yellow-500 font-medium">
                                                 {{ optional($salle->created_at)->diffForHumans() }}
                                             </span>
                                         </div>
