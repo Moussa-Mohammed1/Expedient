@@ -1,6 +1,6 @@
 @php
 	$navLinks = [
-		['name' => 'My salles', 'path' => 'salles'],
+		['name' => 'My salles', 'path' => 'coach/salles'],
 		['name' => 'Reviews', 'path' => 'coaches'],
 		['name' => 'Profile', 'path' => 'profile'],
 	];
@@ -8,7 +8,7 @@
 
 <div>
 	<header
-		class="fixed top-0 left-0 right-0 lg:relative flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-5 font-sans antialiased z-50">
+		class="fixed top-0 left-0 right-0 flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-5 font-sans antialiased z-50">
 		<button id="coach-mobile-menu-btn" class="text-white md:hidden hover:text-gray-300 focus:outline-none p-2">
 			<i class="fa-solid fa-bars"></i>
 		</button>
@@ -47,8 +47,7 @@
 		</div>
 	</header>
 
-	<div class="h-26 lg:hidden"></div>
-
+	<div class="h-26"></div>
 	<div id="coach-mobile-menu"
 		class="hidden lg:hidden bg-[#1c1c1c] fixed top-26 left-0 right-0 z-50 border-t border-white/10 shadow-lg max-h-[calc(100vh-6.5rem)] overflow-y-auto">
 		<div class="px-6 py-4 flex flex-col gap-4">
