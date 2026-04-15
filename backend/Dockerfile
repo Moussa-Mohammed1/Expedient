@@ -20,6 +20,8 @@ RUN rm -rf node_modules package-lock.json && npm install
 
 RUN npm run build
 
+RUN rm -f public/hot
+
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
 
 RUN chmod -R 775 storage bootstrap/cache
