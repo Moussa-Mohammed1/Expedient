@@ -114,7 +114,7 @@
                         professionals are ready to push your limits.
                     </p>
 
-                    <div class="mt-12 flex items-center gap-10 border-l-4 border-yellow-500 pl-6">
+                    <div class="mt-12 flex items-center gap-10     pl-6">
                         <div>
                             <p class="text-4xl md:text-5xl font-extrabold text-white">{{ $coaches }}</p>
                             <p class="text-sm text-zinc-500 font-semibold uppercase tracking-wider mt-2">Verified
@@ -142,28 +142,30 @@
 
                         <div class="space-y-3">
                             @forelse($featuredCoaches as $coach)
-                                <div
-                                    class="flex items-center gap-4 p-3 rounded-lg bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all">
-                                    <div class="relative">
-                                        <img src="{{ $coach['avatar'] }}" alt="Coach"
-                                            class="w-14 h-14 rounded-full object-cover border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }} transition-transform duration-300">
-                                        @if($coach['hasBadge'])
-                                            <span
-                                                class="absolute -bottom-1 -right-1 bg-yellow-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-md"><i
-                                                    class="fa-solid fa-check"></i></span>
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <p class="text-white font-bold text-base">{{ $coach['name'] }}</p>
-                                        <p class="text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
-                                    </div>
-                                    <div class="ml-auto text-yellow-400 text-[10px] flex gap-0.5">
-                                        @for($star = 1; $star <= 5; $star++)
-                                            <i
-                                                class="{{ $coach['rating'] >= $star ? 'fa-solid fa-star' : ($coach['rating'] >= ($star - 0.5) ? 'fa-solid fa-star-half-stroke' : 'fa-regular fa-star') }}"></i>
-                                        @endfor
-                                    </div>
-                                </div>
+                                                    <div
+                                                        class="flex items-center gap-4 p-3 rounded-lg bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all">
+                                                        <div class="relative">
+                                                            <img src="{{ $coach['avatar']
+                                ? asset('/storage/users/profiles/' . $coach['avatar'])
+                                : asset('assets/images/profile.jpeg') }} }}" alt="Coach"
+                                                                class="w-14 h-14 rounded-full object-cover border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }} transition-transform duration-300">
+                                                            @if($coach['hasBadge'])
+                                                                <span
+                                                                    class="absolute -bottom-1 -right-1 bg-yellow-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-md"><i
+                                                                        class="fa-solid fa-check"></i></span>
+                                                            @endif
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-white font-bold text-base">{{ $coach['name'] }}</p>
+                                                            <p class="text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
+                                                        </div>
+                                                        <div class="ml-auto text-yellow-400 text-[10px] flex gap-0.5">
+                                                            @for($star = 1; $star <= 5; $star++)
+                                                                <i
+                                                                    class="{{ $coach['rating'] >= $star ? 'fa-solid fa-star' : ($coach['rating'] >= ($star - 0.5) ? 'fa-solid fa-star-half-stroke' : 'fa-regular fa-star') }}"></i>
+                                                            @endfor
+                                                        </div>
+                                                    </div>
                             @empty
                                 <div class="rounded-xl bg-[#1c1c1c] p-4 text-sm text-zinc-400 border border-zinc-800">
                                     Coaches will appear here soon.
