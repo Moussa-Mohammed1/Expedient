@@ -13,7 +13,7 @@
             <x-app-logo/>
         </div>
 
-        <nav class="hidden lg:flex fixed w-auto min-w-[50%] hover:shadow-sm left-1/2 top-4 -translate-x-1/2 items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 shadow-lime-500 shadow-xs ring-1 ring-white/5 transition z-[70]">
+        <nav class="hidden lg:flex fixed w-auto min-w-[50%] hover:shadow-sm left-1/2 top-8 -translate-x-1/2 items-center justify-center rounded-full bg-[#1c1c1c] px-8 py-3 shadow-lime-500 shadow-xs ring-1 ring-white/5 transition z-[70]">
             <ul class="flex items-center justify-around gap-8 text-sm font-medium tracking-wide w-full">
                 @foreach($navLinks as $link)
                     <li class="relative">

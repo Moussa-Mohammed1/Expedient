@@ -138,11 +138,7 @@
                                                     @php
                                                         $avatar = $coach['avatar'] ?? null;
                                                         $coachAvatarUrl = $avatar
-                                                            ? ((str_starts_with($avatar, 'http://') || str_starts_with($avatar, 'https://'))
-                                                                ? $avatar
-                                                                : (str_starts_with($avatar, 'users/profiles/')
-                                                                    ? asset('/storage/' . $avatar)
-                                                                    : asset('/storage/users/profiles/' . ltrim($avatar, '/'))))
+                                                            ? asset('/storage/users/profiles/' . ltrim($avatar, '/'))
                                                             : asset('assets/images/profile.jpeg');
                                                     @endphp
                                                     <div
@@ -162,12 +158,6 @@
                                                         <div class="min-w-0 flex-1">
                                                             <p class="truncate text-white font-bold text-base">{{ $coach['name'] }}</p>
                                                             <p class="truncate text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
-                                                        </div>
-                                                        <div class="ml-auto shrink-0 text-yellow-400 text-[10px] flex gap-0.5">
-                                                            @for($star = 1; $star <= 5; $star++)
-                                                                <i
-                                                                    class="{{ $coach['rating'] >= $star ? 'fa-solid fa-star' : ($coach['rating'] >= ($star - 0.5) ? 'fa-solid fa-star-half-stroke' : 'fa-regular fa-star') }}"></i>
-                                                            @endfor
                                                         </div>
                                                     </div>
                             @empty

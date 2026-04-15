@@ -16,12 +16,12 @@
             <i class="fa-solid fa-bars"></i>
         </button>
         <div class="z-10">
-            <a href="{{ url('/home') }}" class="text-white font-bold text-xl tracking-wide">Expedient</a>
+            <a href="{{ url('/home') }}" class="text-white font-bold text-xl">Expedient</a>
         </div>
 
         <nav
-            class="hidden lg:flex  w-auto min-w-[50%] left-1/2 top-5  items-center justify-center rounded-full bg-[#373636] px-8 py-3 cursor-pointer ring-white/5 transition">
-            <ul class="flex items-center justify-around gap-8 text-sm font-medium tracking-wide">
+            class="hidden lg:flex  w-auto min-w-[50%] left-1/2 top-5 items-center justify-center rounded-full bg-[#373636] px-8 py-3 cursor-pointer ring-white/5 transition">
+            <ul class="flex items-center justify-around gap-8 text-sm font-medium ">
                 @foreach($navLinks as $link)
                     @php
                         $isActive = request()->is($link['path']) || request()->is($link['path'] . '/*');
