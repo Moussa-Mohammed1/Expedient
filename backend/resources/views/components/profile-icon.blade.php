@@ -10,11 +10,11 @@
         </button>
 
         <div
-            class="absolute right-0 mt-2 w-60 bg-[#1c1c1c] rounded-md shadow-xl border border-gray-700 opacity-0 invisible group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 z-50 overflow-hidden">
+            class="absolute right-0 mt-2 w-70 bg-[#1c1c1c] rounded-md shadow-xl border border-gray-700 opacity-0 invisible group-focus-within:visible group-focus-within:opacity-100 transition-all duration-200 z-50 overflow-hidden">
             <div class="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-400">Signed in as</p>
-                    <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
+                <div class="min-w-0 max-w-38">
+                    <p class="text-xs text-gray-400">Signed in as</p>
+                    <p class="block max-w-38 truncate text-xs font-semibold text-white">{{ auth()->user()->name }}</p>
                     <p class="text-xs text-gray-500 mt-0.5 capitalize">
                         {{ auth()->user()->role->title ?? 'User' }}
                     </p>
@@ -48,6 +48,12 @@
                     <a href="{{ url('/dashboard') }}"
                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
                         <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Admin
+                    </a>
+                @endif
+                @if (auth()->user()->role->title === "coach")
+                    <a href="{{ url('/coach/salles') }}"
+                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                        <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Coach
                     </a>
                 @endif
             
