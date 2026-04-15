@@ -20,9 +20,14 @@ class Salle extends Model
         'description',
         'existenceYears',
         'city',
+        'background',
         'logo',
         'coach_id',
         'sport_id',
+    ];
+
+    protected $attributes = [
+        'background' => 'assets/images/salle_default.jpeg',
     ];
 
     protected $casts = [
