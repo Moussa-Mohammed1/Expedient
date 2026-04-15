@@ -82,13 +82,6 @@
                 </div>
                 <div class="flex flex-col items-center space-y-2 w-full">
                     <h3 class="text-4xl lg:text-5xl font-extrabold text-white">{{ $averageRating }}</h3>
-                    <div class="flex items-center gap-1 text-yellow-400 mb-1">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star-half-stroke"></i>
-                    </div>
                     <p class="text-zinc-400 text-lg font-medium">Average Rating</p>
                 </div>
             </div>
@@ -142,24 +135,35 @@
 
                         <div class="space-y-3">
                             @forelse($featuredCoaches as $coach)
+                                                    @php
+                                                        $avatar = $coach['avatar'] ?? null;
+                                                        $coachAvatarUrl = $avatar
+                                                            ? ((str_starts_with($avatar, 'http://') || str_starts_with($avatar, 'https://'))
+                                                                ? $avatar
+                                                                : (str_starts_with($avatar, 'users/profiles/')
+                                                                    ? asset('/storage/' . $avatar)
+                                                                    : asset('/storage/users/profiles/' . ltrim($avatar, '/'))))
+                                                            : asset('assets/images/profile.jpeg');
+                                                    @endphp
                                                     <div
                                                         class="flex items-center gap-4 p-3 rounded-lg bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all">
                                                         <div class="relative">
-                                                            <img src="{{ $coach['avatar']
-                                ? asset('/storage/users/profiles/' . $coach['avatar'])
-                                : asset('assets/images/profile.jpeg') }} }}" alt="Coach"
-                                                                class="w-14 h-14 rounded-full object-cover border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }} transition-transform duration-300">
+                                                            <div
+                                                                class="w-14 h-14 rounded-full overflow-hidden border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }}">
+                                                                <img src="{{ $coachAvatarUrl }}" alt="Coach"
+                                                                    class="w-full h-full object-cover transition-transform duration-300">
+                                                            </div>
                                                             @if($coach['hasBadge'])
                                                                 <span
                                                                     class="absolute -bottom-1 -right-1 bg-yellow-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-md"><i
                                                                         class="fa-solid fa-check"></i></span>
                                                             @endif
                                                         </div>
-                                                        <div>
-                                                            <p class="text-white font-bold text-base">{{ $coach['name'] }}</p>
-                                                            <p class="text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
+                                                        <div class="min-w-0 flex-1">
+                                                            <p class="truncate text-white font-bold text-base">{{ $coach['name'] }}</p>
+                                                            <p class="truncate text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
                                                         </div>
-                                                        <div class="ml-auto text-yellow-400 text-[10px] flex gap-0.5">
+                                                        <div class="ml-auto shrink-0 text-yellow-400 text-[10px] flex gap-0.5">
                                                             @for($star = 1; $star <= 5; $star++)
                                                                 <i
                                                                     class="{{ $coach['rating'] >= $star ? 'fa-solid fa-star' : ($coach['rating'] >= ($star - 0.5) ? 'fa-solid fa-star-half-stroke' : 'fa-regular fa-star') }}"></i>
