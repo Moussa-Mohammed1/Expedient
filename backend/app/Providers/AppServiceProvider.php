@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Salle;
 use App\Models\User;
+use App\Policies\SallePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
