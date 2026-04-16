@@ -48,11 +48,16 @@
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
                 @forelse ($salles as $salle)
                     <a href="{{ route('salles.show', $salle->id) }}"
-                        class="bg-[#111111] border border-zinc-800/80 rounded-xl overflow-hidden hover:border-zinc-600 transition-colors group flex flex-col">
+                        class="bg-[#111111] border border-zinc-800/80 rounded-xl overflow-hidden hover:border-zinc-600 transition-colors flex flex-col">
                         <div class="relative h-28 sm:h-40 lg:h-48 overflow-hidden bg-[#1c1c1c]">
-                            <img src="{{ asset('/storage/salles/galleries/' . $salle->galleries->first()?->content) ?? asset('/assets/salle_default.jpeg') }}"
-                                alt="{{ $salle->name }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            @php
+                                $cover = $salle->galleries->first()?->content;
+                                $coverUrl = $cover
+                                    ? asset('/storage/salles/galleries/' . $cover)
+                                    : asset('/' . ($salle->background ?: 'assets/images/salle_default.jpeg'));
+                            @endphp
+                            <img src="{{ $coverUrl }}" alt="{{ $salle->name }}"
+                                class="w-full h-full object-cover transition-transform duration-500">
                             <div
                                 class="absolute top-2 left-2 bg-black/80 backdrop-blur-sm border border-zinc-700 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-md uppercase tracking-wider">
                                 {{ $salle->sessionType ?: 'Any Session' }}
@@ -89,11 +94,6 @@
                                         title="Established">Est. {{ $salle->existenceYears }}y</span>
                                 @endif
                             </div>
-
-                            <a href="{{ route('salles.show', $salle) }}"
-                                class="w-full text-center bg-[#1c1c1c] group-hover:bg-[#ff5520] border border-zinc-700 group-hover:border-[#ff5520] text-white text-[11px] sm:text-sm font-semibold py-2 sm:py-2.5 rounded-lg transition-colors">
-                                View Details
-                            </a>
                         </div>
                     </a>
                 @empty
