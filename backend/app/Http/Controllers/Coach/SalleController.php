@@ -4,10 +4,17 @@ namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Salle\StoreSalleRequest;
+use App\Http\Requests\Salle\UpdateSalleRequest;
+use App\Models\Equipment;
+use App\Models\Horaire;
+use App\Models\Gallery;
 use App\Models\Salle;
+use App\Models\Service;
 use App\Models\Sport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class SalleController extends Controller
@@ -65,24 +72,135 @@ class SalleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Salle $salle): View
     {
-        //
+
+        $salle->load(['coach', 'sport', 'services', 'horaires', 'equipments']);
+
+        return view('coach.salle.edit', [
+            'salle' => $salle,
+            'sports' => Sport::query()->orderBy('title')->get(['id', 'title']),
+            'services' => Service::query()->orderBy('title')->get(['id', 'title']),
+            'equipments' => Equipment::query()->orderBy('name')->get(['id', 'name', 'image']),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateSalleRequest $request, Salle $salle): RedirectResponse
     {
-        //
+        $coach = $request->user()?->coach;
+
+        if (!$coach || $salle->coach_id !== $coach->id) {
+            return redirect('/home');
+        }
+
+        $validated = $request->validated();
+
+        DB::transaction(function () use ($request, $salle, $validated) {
+            $salleData = [
+                'name' => $validated['name'],
+                'city' => $validated['city'],
+                'tagline' => $validated['tagline'] ?? null,
+                'description' => $validated['description'] ?? null,
+                'sessionType' => $validated['sessionType'] ?? null,
+                'sport_id' => $validated['sport_id'],
+                'existenceYears' => $validated['existenceYears'] ?? null,
+            ];
+
+            if ($request->hasFile('logo')) {
+                $salleData['logo'] = $request->file('logo')->store('salles/logos', 'public');
+            }
+
+            if ($request->hasFile('background')) {
+                $salleData['background'] = $request->file('background')->store('salles/backgrounds', 'public');
+            }
+
+            $salle->update($salleData);
+
+            $serviceIds = collect($validated['services'] ?? [])->map(fn($id) => (int) $id)->all();
+            $salle->services()->sync($serviceIds);
+
+            $equipmentPayload = collect($validated['equipment'] ?? [])
+                ->mapWithKeys(fn($item) => [
+                    (int) $item['equipment_id'] => [
+                        'condition' => $item['condition'],
+                    ],
+                ])
+                ->all();
+            $salle->equipments()->sync($equipmentPayload);
+
+            $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            $schedule = $validated['horaires'] ?? [];
+
+            foreach ($days as $day) {
+                $open = trim((string) ($schedule[$day]['open'] ?? ''));
+                $close = trim((string) ($schedule[$day]['close'] ?? ''));
+
+                Horaire::query()->updateOrCreate(
+                    ['salle_id' => $salle->id, 'day' => $day],
+                    [
+                        'openHour' => $open !== '' ? $open . ':00' : null,
+                        'closeHour' => $close !== '' ? $close . ':00' : null,
+                    ]
+                );
+            }
+
+            if ($request->hasFile('galleries')) {
+                $existingCount = $salle->galleries()->count();
+                $remainingSlots = max(0, 5 - $existingCount);
+
+                collect($request->file('galleries'))
+                    ->take($remainingSlots)
+                    ->each(function ($file) use ($salle) {
+                        $salle->galleries()->create([
+                            'content' => $file->store('salles/galleries', 'public'),
+                        ]);
+                    });
+            }
+        });
+
+        return redirect()
+            ->route('coach.salles')
+            ->with('success', 'Salle updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Salle $salle): RedirectResponse
     {
-        //
+        $coach = $request->user()?->coach;
+
+        if (!$coach || $salle->coach_id !== $coach->id) {
+            return redirect('/home');
+        }
+
+        DB::transaction(function () use ($salle) {
+            $galleryPaths = $salle->galleries()->pluck('content')->filter()->all();
+
+            if ($salle->logo) {
+                Storage::disk('public')->delete($salle->logo);
+            }
+
+            if ($salle->background) {
+                Storage::disk('public')->delete($salle->background);
+            }
+
+            if ($galleryPaths !== []) {
+                Storage::disk('public')->delete($galleryPaths);
+            }
+
+            $salle->galleries()->delete();
+            $salle->horaires()->delete();
+            $salle->services()->detach();
+            $salle->equipments()->detach();
+            $salle->delete();
+        });
+
+        return redirect()
+            ->route('coach.salles')
+            ->with('success', 'Salle deleted successfully.');
     }
 }
