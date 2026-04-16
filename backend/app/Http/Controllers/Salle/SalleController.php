@@ -7,6 +7,7 @@ use App\Http\Requests\Salle\StoreSalleRequest;
 use App\Http\Requests\Salle\UpdateSalleRequest;
 use App\Models\Salle;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class SalleController extends Controller
@@ -65,12 +66,16 @@ class SalleController extends Controller
 
     public function edit(Salle $salle): View
     {
+        Gate::authorize('update', $salle);
+
         $salle->load(['coach', 'sport']);
         return view('salles.edit', compact('salle'));
     }
 
     public function update(UpdateSalleRequest $request, Salle $salle): RedirectResponse
     {
+        Gate::authorize('update', $salle);
+
         $salle->update($request->validated());
 
         return redirect()->route('salles.index')->with('success', 'Salle updated successfully.');
@@ -78,6 +83,8 @@ class SalleController extends Controller
 
     public function destroy(Salle $salle): RedirectResponse
     {
+        Gate::authorize('delete', $salle);
+
         if ($salle->galleries()->exists()) {
             return redirect()->route('salles.index')->with('error', 'Salle cannot be deleted because it has galleries.');
         }
