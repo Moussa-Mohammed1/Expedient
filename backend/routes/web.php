@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Coach\CoachController;
 use App\Http\Controllers\Coach\CoachVerificationController;
+use App\Http\Controllers\Coach\SalleController as CoachSalleController;
 use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -18,6 +19,7 @@ use App\Models\Trainee;
 use App\Models\Coach;
 use App\Models\Salle;
 use App\Models\Opinion;
+use PhpParser\Node\Expr\FuncCall;
 
 Route::get('/', [WelcomeController::class, 'index'])->middleware(\App\Http\Middleware\isGuest::class)->name('welcome');
 
@@ -29,7 +31,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
-    
+
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
@@ -44,4 +46,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/opinions/{opinion}', [OpinionController::class, 'update'])->name('opinions.update');
     Route::delete('/opinions/{opinion}', [OpinionController::class, 'destroy'])->name('opinions.destroy');
     Route::resource('profile', ProfileController::class);
+
+
+    Route::middleware('coach')->group(function () {
+        Route::get('/coach/salles', [CoachSalleController::class, 'index'])->name('coach.salles');
+        Route::get('/coach/salles/create', [CoachSalleController::class, 'create'])->name('coach.salles.create');
+        Route::get('/coach/salles/{salle}/edit', [CoachSalleController::class, 'edit'])->name('coach.salles.edit');
+        Route::post('/coach/salles', [CoachSalleController::class, 'store'])->name('coach.salles.store');
+    });
 });
