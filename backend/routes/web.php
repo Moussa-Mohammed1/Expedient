@@ -14,6 +14,7 @@ use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\Sport\SportController;
 use App\Http\Controllers\Salle\SalleController;
 use App\Http\Controllers\OpinionController;
+use App\Http\Controllers\Coach\OpinionController as CoachOpinionController;
 
 use App\Models\Trainee;
 use App\Models\Coach;
@@ -52,6 +53,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/coach/salles', [CoachSalleController::class, 'index'])->name('coach.salles');
         Route::get('/coach/salles/create', [CoachSalleController::class, 'create'])->name('coach.salles.create');
         Route::get('/coach/salles/{salle}/edit', [CoachSalleController::class, 'edit'])->name('coach.salles.edit');
+        Route::put('/coach/salles/{salle}', [CoachSalleController::class, 'update'])->name('coach.salles.update');
+        Route::delete('/coach/salles/{salle}', [CoachSalleController::class, 'destroy'])->name('coach.salles.destroy');
         Route::post('/coach/salles', [CoachSalleController::class, 'store'])->name('coach.salles.store');
+        Route::get('/coach/opinions' , [CoachOpinionController::class, 'index'])->name('coach.opinions');
     });
 });
