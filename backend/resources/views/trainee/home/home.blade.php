@@ -88,7 +88,25 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 h-60 overflow-y-scroll [scrollbar-width:none] gap-6 bg-gray-900 p-4 rounded-lg ">
                             @forelse($recentSalles as $salle)
                                 @php
-                                    $backgroundUrl = asset('/' . ($salle->background ?: 'assets/images/salle_default.jpeg'));
+                                    $resolveImageUrl = function (?string $path, string $fallbackUrl): string {
+                                        if (!$path) {
+                                            return $fallbackUrl;
+                                        }
+
+                                        if (filter_var($path, FILTER_VALIDATE_URL)) {
+                                            return $path;
+                                        }
+
+                                        $normalizedPath = ltrim($path, '/');
+
+                                        if (str_starts_with($normalizedPath, 'assets/') || str_starts_with($normalizedPath, 'storage/')) {
+                                            return asset($normalizedPath);
+                                        }
+
+                                        return asset('storage/' . $normalizedPath);
+                                    };
+
+                                    $backgroundUrl = $resolveImageUrl($salle->background, asset('assets/images/salle_default.jpeg'));
                                 @endphp
                                 <a href="{{ url('/salles/' . $salle['id']) }}"
                                     class="group relative h-30 flex flex-col justify-end rounded-2xl overflow-hidden border border-zinc-800 hover:border-yellow-500 transition-colors duration-200 cursor-pointer shadow-lg bg-[#111111]">
