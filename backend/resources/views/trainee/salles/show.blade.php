@@ -10,19 +10,33 @@
 
 </head>
 
-<body class="bg-[#000] text-gray-300 min-h-screen">
+<body class="bg-black text-gray-300 min-h-screen">
     @include('layouts.header')
 
     @php
-        $primaryGallery = $salle->galleries->first();
+        $defaultBackgroundImage = asset('assets/images/salle_default.jpeg');
+        $defaultLogoImage = asset('assets/images/salle_logo_default.jpeg');
 
-        $coverImage = $primaryGallery?->content
-            ? asset('storage/salles/galleries/' . ltrim($primaryGallery->content, '/'))
-            : 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop';
+        $resolveImageUrl = function (?string $path, string $fallbackUrl): string {
+            if (!$path) {
+                return $fallbackUrl;
+            }
 
-        $logoImage = $salle->logo
-            ? asset('storage/' . ltrim($salle->logo, '/'))
-            : $coverImage;
+            if (filter_var($path, FILTER_VALIDATE_URL)) {
+                return $path;
+            }
+
+            $normalizedPath = ltrim($path, '/');
+
+            if (str_starts_with($normalizedPath, 'assets/') || str_starts_with($normalizedPath, 'storage/')) {
+                return asset($normalizedPath);
+            }
+
+            return asset('storage/' . $normalizedPath);
+        };
+
+        $coverImage = $resolveImageUrl($salle->background, $defaultBackgroundImage);
+        $logoImage = $resolveImageUrl($salle->logo, $defaultLogoImage);
 
         $coachName = $salle->coach?->user?->name ?: 'Assigned coach';
         $dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -31,32 +45,57 @@
 
     <div class="bg-[#111111] border-b border-zinc-800">
         <div class="h-64 sm:h-80 w-full bg-[#1c1c1c]">
-            <img src="{{ $coverImage }}" alt="{{ $salle->name }} cover" class="w-full h-full object-cover">
+            <img src="{{ $coverImage }}" alt="{{ $salle->name }} cover"
+                onerror="this.onerror=null;this.src='{{ $defaultBackgroundImage }}';"
+                class="w-full h-full object-cover">
         </div>
 
         <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-6 relative">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end -mt-16 sm:-mt-20 gap-4">
 
-                <div class="flex flex-col sm:flex-row items-start sm:items-end gap-4 sm:gap-6 w-full">
+                <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 w-full">
                     <div class="w-32 h-32 rounded-lg border-4 border-[#111111] bg-[#1c1c1c] overflow-hidden">
-                        <img src="{{ $logoImage }}" alt="{{ $salle->name }} logo" class="w-full h-full object-cover">
+                        <img src="{{ $logoImage }}" alt="{{ $salle->name }} logo"
+                            onerror="this.onerror=null;this.src='{{ $defaultLogoImage }}';"
+                            class="w-full h-full object-cover">
                     </div>
 
                     <div class="mb-1 w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <h1 class="text-3xl font-bold text-white">{{ $salle->name }}</h1>
-                            <p class="text-zinc-400 mt-1">"{{ $salle->tagline ?: 'Train smarter, train stronger.' }}"</p>
+                            <p class="text-zinc-400 mt-1">"{{ $salle->tagline ?: 'Train smarter, train stronger.' }}"
+                            </p>
                             <div class="flex items-center gap-4 mt-2 text-sm font-medium text-zinc-500">
                                 <span><i class="fa-solid fa-location-dot text-[#FBBF24]"></i> {{ $salle->city }}</span>
-                                <span><i class="fa-solid fa-users"></i> {{ $salle->sessionType ?: 'Open sessions' }}</span>
+                                <span><i class="fa-solid fa-users"></i>
+                                    {{ $salle->sessionType ?: 'Open sessions' }}</span>
                             </div>
                         </div>
 
                         <div class="flex gap-2">
+                            @can('update', $salle)
+                                <a href="{{ route('coach.salles.edit', $salle) }}"
+                                    class="bg-[#d1fa48] text-black font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-[#bde13f] transition-colors">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </a>
+                            @endcan
+
                             <a href="{{ route('salles.index') }}"
                                 class="bg-[#1c1c1c] border border-zinc-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2">
                                 <i class="fa-solid fa-arrow-left"></i> Back
                             </a>
+                            @can('update', $salle)
+                                <form action="{{ route('coach.salles.destroy', $salle) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                        class="inline-flex items-center justify-center gap-2  text-white text-sm font-bold py-3 px-6 rounded-md bg-black">
+                                        <i class="fa-solid fa-trash"></i>
+                                        Force Delete
+                                    </button>
+                                </form>
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -77,11 +116,13 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-calendar-check w-5 text-center"></i>
-                        <span>Established <strong class="text-white">{{ $salle->existenceYears ?? 0 }} Years</strong> ago</span>
+                        <span>Established <strong class="text-white">{{ $salle->existenceYears ?? 0 }} Years</strong>
+                            ago</span>
                     </div>
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-dumbbell w-5 text-center"></i>
-                        <span>Primary Sport: <strong class="text-white">{{ $salle->sport?->title ?: 'Not specified' }}</strong></span>
+                        <span>Primary Sport: <strong
+                                class="text-white">{{ $salle->sport?->title ?: 'Not specified' }}</strong></span>
                     </div>
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-user-tie w-5 text-center"></i>
@@ -119,7 +160,8 @@
                 @if ($salle->services->isNotEmpty())
                     <div class="flex flex-wrap gap-2">
                         @foreach ($salle->services as $service)
-                            <span class="bg-[#1c1c1c] border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{{ $service->title }}</span>
+                            <span
+                                class="bg-[#1c1c1c] border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{{ $service->title }}</span>
                         @endforeach
                     </div>
                 @else
@@ -133,11 +175,17 @@
                     <div class="space-y-4">
                         @foreach ($salle->equipments as $equipment)
                             <div class="flex gap-3">
-                                <img src="{{ asset('storage/' . ltrim($equipment->image, '/')) }}" alt="{{ $equipment->name }}"
+                                @php
+                                    $equipmentImage = $resolveImageUrl($equipment->image, $defaultBackgroundImage);
+                                @endphp
+                                <img src="{{ $equipmentImage }}" alt="{{ $equipment->name }}"
+                                    onerror="this.onerror=null;this.src='{{ $defaultBackgroundImage }}';"
                                     class="w-12 h-12 rounded-lg object-cover bg-[#1c1c1c]">
                                 <div>
                                     <h4 class="text-white text-sm font-semibold">{{ $equipment->name }}</h4>
-                                    <p class="text-xs text-zinc-500">Condition: {{ $equipment->pivot?->condition ?: 'Not specified' }}</p>
+                                    <p class="text-xs text-zinc-500">Condition:
+                                        {{ $equipment->pivot?->condition ?: 'Not specified' }}
+                                    </p>
                                     @if ($equipment->pivot?->description)
                                         <p class="text-xs text-zinc-400 mt-1">{{ $equipment->pivot->description }}</p>
                                     @endif
@@ -161,7 +209,11 @@
                 @if ($salle->galleries->isNotEmpty())
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         @foreach ($salle->galleries as $gallery)
-                            <img src="{{ asset('storage/salles/galleries/' . ltrim($gallery->content, '/')) }}" alt="{{ $salle->name }} gallery"
+                            @php
+                                $galleryImage = $resolveImageUrl($gallery->content, $defaultBackgroundImage);
+                            @endphp
+                            <img src="{{ $galleryImage }}" alt="{{ $salle->name }} gallery"
+                                onerror="this.onerror=null;this.src='{{ $defaultBackgroundImage }}';"
                                 class="w-full h-24 sm:h-32 object-cover rounded-lg border border-zinc-800">
                         @endforeach
                     </div>
@@ -173,8 +225,10 @@
             <div class="bg-[#111111] border border-zinc-800 rounded-lg p-5">
                 <h2 class="text-lg font-bold text-white mb-2">Quick Summary</h2>
                 <p class="text-sm text-zinc-400 leading-relaxed">
-                    {{ $salle->name }} is located in {{ $salle->city }} and offers {{ $salle->sessionType ?: 'open' }} sessions.
-                    {{ $salle->services->count() }} services and {{ $salle->equipments->count() }} equipment items are currently listed.
+                    {{ $salle->name }} is located in {{ $salle->city }} and offers {{ $salle->sessionType ?: 'open' }}
+                    sessions.
+                    {{ $salle->services->count() }} services and {{ $salle->equipments->count() }} equipment items are
+                    currently listed.
                 </p>
             </div>
 
@@ -182,4 +236,5 @@
     </div>
 
 </body>
+
 </html>
