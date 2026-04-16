@@ -1,14 +1,14 @@
 @php
 	$navLinks = [
 		['name' => 'My salles', 'path' => 'coach/salles'],
-		['name' => 'Reviews', 'path' => 'coaches'],
+		['name' => 'Reviews', 'path' => 'coach/opinions'],
 		['name' => 'Profile', 'path' => 'profile'],
 	];
 @endphp
 
 <div>
 	<header
-		class="fixed top-0 left-0 right-0 flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-5 font-sans antialiased z-50">
+		class="fixed top-0 left-0 right-0 flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-3 z-50">
 		<button id="coach-mobile-menu-btn" class="text-white md:hidden hover:text-gray-300 focus:outline-none p-2">
 			<i class="fa-solid fa-bars"></i>
 		</button>
