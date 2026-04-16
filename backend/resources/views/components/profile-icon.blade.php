@@ -5,8 +5,7 @@
 
             <img src="{{ auth()->user()->avatar
     ? asset('/storage/users/profiles/' . auth()->user()->avatar)
-    : asset('assets/images/profile.jpeg') }}" alt="User Avatar"
-                class="h-full w-full object-cover">
+    : asset('assets/images/profile.jpeg') }}" alt="User Avatar" class="h-full w-full object-cover">
         </button>
 
         <div
@@ -49,6 +48,10 @@
                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
                         <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Admin
                     </a>
+                    <a href="{{ url('/coach/salles') }}"
+                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                        <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Coach
+                    </a>
                 @endif
                 @if (auth()->user()->role->title === "coach")
                     <a href="{{ url('/coach/salles') }}"
@@ -56,8 +59,8 @@
                         <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Coach
                     </a>
                 @endif
-            
-               
+
+
 
             </div>
             <form action="{{ route('logout') ?? url('/logout') }}" method="GET" class="py-1">
