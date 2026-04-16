@@ -5,7 +5,7 @@
         ['name' => 'Coaches', 'path' => 'coaches'],
         ['name' => 'Salles', 'path' => 'salles'],
         ['name' => 'Communities', 'path' => 'communities'],
-        ['name' => 'Updates', 'path' => 'about']
+        ['name' => 'Favoris', 'path' => 'favoris']
     ];
 @endphp
 
