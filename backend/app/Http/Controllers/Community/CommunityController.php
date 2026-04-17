@@ -7,14 +7,35 @@ use App\Http\Requests\Community\StoreCommunityRequest;
 use App\Http\Requests\Community\UpdateCommunityRequest;
 use App\Models\Community;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CommunityController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $user = $request->user();
+
+        $joinedCommunityIds = $user
+            ? $user->memberships()
+                ->whereNull('left_at')
+                ->pluck('community_id')
+                ->all()
+            : [];
+
+        $joinedCommunities = Community::query()
+            ->whereIn('id', $joinedCommunityIds)
+            ->withCount(['memberships as active_members_count' => fn ($query) => $query->whereNull('left_at')])
+            ->latest()
+            ->get();
+
         return view('trainee.communities.index', [
-            'communities' => Community::latest()->paginate(10)
+            'communities' => Community::query()
+                ->withCount(['memberships as active_members_count' => fn ($query) => $query->whereNull('left_at')])
+                ->latest()
+                ->paginate(10),
+            'joinedCommunities' => $joinedCommunities,
+            'joinedCommunityIds' => $joinedCommunityIds,
         ]);
     }
 
@@ -26,13 +47,26 @@ class CommunityController extends Controller
     public function store(StoreCommunityRequest $request): RedirectResponse
     {
         Community::create($request->validated());
-        return redirect()->route('trainee.communities.index')->with('success', 'Community created successfully.');
+
+        return redirect()->route('communities.index')->with('success', 'Community created successfully.');
     }
 
     public function show(Community $community): View
     {
-        $community->load('posts', 'posts.comments', 'posts.likes', 'members');
-        return view('trainee.communities.show', compact('community'));
+        $community->load('users:id,name,avatar');
+
+        $posts = app(PostController::class)->getCommunityPosts($community);
+
+        $isMember = auth()->user()?->memberships()
+            ->where('community_id', $community->id)
+            ->whereNull('left_at')
+            ->exists() ?? false;
+
+        return view('trainee.communities.show', [
+            'community' => $community,
+            'posts' => $posts,
+            'isMember' => $isMember,
+        ]);
     }
 
     public function edit(Community $community): View
@@ -43,20 +77,22 @@ class CommunityController extends Controller
     public function update(UpdateCommunityRequest $request, Community $community): RedirectResponse
     {
         $community->update($request->validated());
-        return redirect()->route('trainee.communities.index')->with('success', 'Community updated successfully.');
+
+        return redirect()->route('communities.index')->with('success', 'Community updated successfully.');
     }
 
     public function destroy(Community $community): RedirectResponse
     {
         if ($community->memberships()->exists()) {
-            return redirect()->route('trainee.communities.index')->with('error', 'Community cannot be deleted because it has active memberships.');
+            return redirect()->route('communities.index')->with('error', 'Community cannot be deleted because it has active memberships.');
         }
 
         if ($community->posts()->exists()) {
-            return redirect()->route('trainee.communities.index')->with('error', 'Community cannot be deleted because it has posts.');
+            return redirect()->route('communities.index')->with('error', 'Community cannot be deleted because it has posts.');
         }
 
         $community->delete();
-        return redirect()->route('trainee.communities.index')->with('success', 'Community deleted successfully.');
+
+        return redirect()->route('communities.index')->with('success', 'Community deleted successfully.');
     }
 }
