@@ -72,7 +72,34 @@
                             </div>
                         </div>
 
+                        @php
+                            $isFavoris = $salle->isFavoris();
+                        @endphp
+
                         <div class="flex gap-2">
+                            @if ($isFavoris)
+                                <form action="{{ route('favorites.destroy', $salle) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="bg-[#1c1c1c] border border-red-500 text-red-500 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-red-500 hover:text-white transition-colors"
+                                        title="Remove from favorites" aria-label="Remove from favorites">
+                                        <i class="fa-solid fa-heart"></i>
+                                        Favoris
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('favorites.store', $salle) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="bg-[#1c1c1c] border border-red-500 text-red-500 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-red-500 hover:text-white transition-colors"
+                                        title="Add to favorites" aria-label="Add to favorites">
+                                        <i class="fa-regular fa-heart"></i>
+                                        Favoris
+                                    </button>
+                                </form>
+                            @endif
+
                             @can('update', $salle)
                                 <a href="{{ route('coach.salles.edit', $salle) }}"
                                     class="bg-[#d1fa48] text-black font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-[#bde13f] transition-colors">
