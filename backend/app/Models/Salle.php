@@ -84,4 +84,21 @@ class Salle extends Model
             )
         ));
     }
+
+    public function isFavoris(): bool
+    {
+        if (! auth()->check()) {
+            return false;
+        }
+
+        $user = auth()->user();
+
+        if ($user->relationLoaded('favoriteSalles')) {
+            return $user->favoriteSalles->contains($this->getKey());
+        }
+
+        return $user->favoriteSalles()
+            ->where('salles.id', $this->getKey())
+            ->exists();
+    }
 }

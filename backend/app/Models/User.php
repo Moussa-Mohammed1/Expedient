@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -73,6 +74,12 @@ class User extends Authenticatable
     public function trainee(): HasOne
     {
         return $this->hasOne(Trainee::class);
+    }
+
+    public function favoriteSalles(): BelongsToMany
+    {
+        return $this->belongsToMany(Salle::class, 'favoris', 'user_id', 'salle_id')
+            ->withTimestamps();
     }
 
     public function scopeFilterByLocalisation(Builder $query, ?string $localisation): Builder
