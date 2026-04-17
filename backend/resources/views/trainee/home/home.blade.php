@@ -85,7 +85,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 h-60 overflow-y-scroll [scrollbar-width:none] gap-6 bg-gray-900 p-4 rounded-lg ">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 h-60 overflow-y-scroll [scrollbar-width:none] gap-6 bg-[#2d2b2be3] p-4 rounded-lg ">
                             @forelse($recentSalles as $salle)
                                 @php
                                     $resolveImageUrl = function (?string $path, string $fallbackUrl): string {
