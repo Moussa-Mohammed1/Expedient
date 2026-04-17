@@ -41,7 +41,11 @@
 
                 <a href="{{ url('/communities') }}"
                     class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
-                    <i class="fa-brands fa-stack-exchange w-5 text-center mr-1"></i> Communities
+                    <i class="fa-regular fa-message w-5 text-center mr-1"></i> Communities
+                </a>
+                <a href="{{ url('/favorites') }}"
+                    class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    <i class="fa-regular fa-bookmark w-5 text-center mr-1"></i> Favorites
                 </a>
                 @if (auth()->user()->role->title === "admin")
                     <a href="{{ url('/dashboard') }}"
@@ -60,12 +64,14 @@
                     </a>
                 @endif
 
-
-
             </div>
+            <a href="{{ url('/reports') }}"
+                class="block px-4 py-2 mt-1 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                <i class="fa-solid fa-flag mr-1 text-center w-5"></i> Reports
+            </a>
             <form action="{{ route('logout') ?? url('/logout') }}" method="GET" class="py-1">
                 <button type="submit"
-                    class="w-full text-left px-4 cursor-pointer py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
+                    class="w-full text-left px-4 cursor-pointer py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white">
                     <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center mr-1"></i> Sign out
                 </button>
             </form>
