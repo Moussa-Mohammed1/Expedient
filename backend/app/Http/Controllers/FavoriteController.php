@@ -27,7 +27,7 @@ class FavoriteController extends Controller
                 'coach.user:id,name',
                 'galleries:id,salle_id,content',
             ])
-            ->latest('favoris.created_at')
+            ->latest('favorites.created_at')
             ->get();
 
         return view('favoris.index', [
