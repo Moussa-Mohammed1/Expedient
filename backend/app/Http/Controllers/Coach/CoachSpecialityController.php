@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Coach;
 
+use App\Http\Controllers\Controller;
 use App\Models\CoachSpeciality;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CoachSpecialityController extends Controller
@@ -61,5 +63,33 @@ class CoachSpecialityController extends Controller
     public function destroy(CoachSpeciality $coachSpeciality)
     {
         //
+    }
+
+    public function syncForCoach(User $user, array $specialityIds): void
+    {
+        if (!$user->coach) {
+            return;
+        }
+
+        $existingPivot = $user->coach->specialities
+            ->mapWithKeys(function ($speciality) {
+                return [
+                    $speciality->id => [
+                        'level' => $speciality->pivot->level,
+                        'experienceYears' => $speciality->pivot->experienceYears,
+                    ],
+                ];
+            })
+            ->all();
+
+        $syncPayload = [];
+        foreach ($specialityIds as $specialityId) {
+            $syncPayload[$specialityId] = $existingPivot[$specialityId] ?? [
+                'level' => 'beginner',
+                'experienceYears' => 1,
+            ];
+        }
+
+        $user->coach->specialities()->sync($syncPayload);
     }
 }
