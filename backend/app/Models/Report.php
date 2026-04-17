@@ -15,6 +15,7 @@ class Report extends Model
         'cause',
         'description',
         'proof',
+        'isCancelled',
     ];
 
     public function reporter(): BelongsTo
