@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Coach\CoachSpecialityController;
 use App\Http\Requests\Profile\UpdateProfileRequest;
 use App\Models\Speciality;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -44,7 +47,7 @@ class ProfileController extends Controller
         $user = User::with(['role', 'coach.specialities'])->findOrFail($id);
 
         if (auth()->id() !== $user->id && auth()->user()?->role?->title !== 'admin') {
-            abort(403);
+            return redirect('/home');
         }
 
         return view('profile.show', ['profileUser' => $user]);
@@ -58,7 +61,7 @@ class ProfileController extends Controller
         $user = User::with(['role', 'coach.specialities'])->findOrFail($id);
 
         if (auth()->id() !== $user->id && auth()->user()?->role?->title !== 'admin') {
-            abort(403);
+            return redirect('/home');
         }
 
         $allSpecialities = Speciality::query()->orderBy('title')->get(['id', 'title']);
@@ -94,7 +97,7 @@ class ProfileController extends Controller
 
         $user->update($validated);
 
-        $this->syncCoachSpecialities($user, $specialityIds);
+        app(CoachSpecialityController::class)->syncForCoach($user, $specialityIds);
 
         return redirect()
             ->route('profile.show', $user->id)
@@ -109,10 +112,10 @@ class ProfileController extends Controller
         //
     }
     
-    private function authorizeUser(User $user): void
+    private function authorizeUser(User $user)
     {
         if (auth()->id() !== $user->id && auth()->user()?->role?->title !== 'admin') {
-            abort(403);
+            return redirect('/home');
         }
     }
 
@@ -157,33 +160,5 @@ class ProfileController extends Controller
         }
 
         unset($validated['current_password']);
-    }
-
-    private function syncCoachSpecialities(User $user, array $specialityIds): void
-    {
-        if (!$user->coach) {
-            return;
-        }
-
-        $existingPivot = $user->coach->specialities
-            ->mapWithKeys(function ($speciality) {
-                return [
-                    $speciality->id => [
-                        'level' => $speciality->pivot->level,
-                        'experienceYears' => $speciality->pivot->experienceYears,
-                    ],
-                ];
-            })
-            ->all();
-
-        $syncPayload = [];
-        foreach ($specialityIds as $specialityId) {
-            $syncPayload[$specialityId] = $existingPivot[$specialityId] ?? [
-                'level' => 'beginner',
-                'experienceYears' => 1,
-            ];
-        }
-
-        $user->coach->specialities()->sync($syncPayload);
     }
 }
