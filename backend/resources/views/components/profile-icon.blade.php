@@ -1,5 +1,5 @@
 <div>
-    <div class="relative inline-block text-left group">
+    <div class="relative z-60 inline-block text-left group">
         <button
             class="flex items-center justify-center h-10 w-10 rounded-full overflow-hidden border  cursor-pointer focus:outline-none">
 
