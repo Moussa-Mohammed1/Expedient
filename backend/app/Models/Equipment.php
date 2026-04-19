@@ -15,6 +15,7 @@ class Equipment extends Model
 
     protected $fillable = [
         'name',
+        'category',
         'image',
     ];
 
