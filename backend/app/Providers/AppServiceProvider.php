@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(Salle::class, SallePolicy::class);
+
         Gate::define('admin-access', function (User $user): bool {
             return $user->role?->title === 'admin';
         });
