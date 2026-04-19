@@ -12,9 +12,19 @@ use Illuminate\View\View;
 
 class CommunityController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): View|RedirectResponse
     {
         $user = $request->user();
+
+        if (!$user) {
+            return redirect()->route('login.show');
+        }
+
+        if (blank($user->localisation)) {
+            return redirect()
+                ->route('profile.edit', $user->id)
+                ->with('error', 'Please add your localisation in your profile to discover communities near you.');
+        }
 
         $joinedCommunityIds = $user
             ? $user->memberships()
@@ -29,13 +39,21 @@ class CommunityController extends Controller
             ->latest()
             ->get();
 
+        $searchQuery = $request->query('search');
+        $communitiesQuery = Community::query()
+            ->where('baseLocalisation', $user->localisation)
+            ->withCount(['memberships as active_members_count' => fn ($query) => $query->whereNull('left_at')])
+            ->when($searchQuery, function ($query) use ($searchQuery) {
+                return $query->where('title', 'like', "%{$searchQuery}%")
+                    ->orWhere('description', 'like', "%{$searchQuery}%");
+            })
+            ->latest();
+
         return view('trainee.communities.index', [
-            'communities' => Community::query()
-                ->withCount(['memberships as active_members_count' => fn ($query) => $query->whereNull('left_at')])
-                ->latest()
-                ->paginate(10),
+            'communities' => $communitiesQuery->paginate(10),
             'joinedCommunities' => $joinedCommunities,
             'joinedCommunityIds' => $joinedCommunityIds,
+            'searchQuery' => $searchQuery,
         ]);
     }
 
