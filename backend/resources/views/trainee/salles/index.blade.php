@@ -32,17 +32,6 @@
                         Showing salles near <span class="text-white font-medium">{{ $userLocation ?: 'your area' }}</span>
                     </p>
                 </div>
-
-                <div class="flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
-                    <button
-                        class="bg-[#1c1c1c] border border-zinc-700 text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-zinc-800 transition-colors">
-                        <i class="fa-solid fa-sliders mr-1"></i> Filters
-                    </button>
-                    <button
-                        class="bg-[#ff5520]/10 border border-[#ff5520]/50 text-[#ff5520] text-xs font-medium px-4 py-2 rounded-full ">
-                        Open Now (Default)
-                    </button>
-                </div>
             </div>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
@@ -51,10 +40,28 @@
                         class="bg-[#111111] border border-zinc-800/80 rounded-xl overflow-hidden hover:border-zinc-600 transition-colors flex flex-col">
                         <div class="relative h-28 sm:h-40 lg:h-48 overflow-hidden bg-[#1c1c1c]">
                             @php
-                                $cover = $salle->galleries->first()?->content;
-                                $coverUrl = $cover
-                                    ? asset('/storage/salles/galleries/' . $cover)
-                                    : asset('/' . ($salle->background ?: 'assets/images/salle_default.jpeg'));
+                                $resolveImageUrl = function (?string $path, string $fallbackUrl): string {
+                                    if (!$path) {
+                                        return $fallbackUrl;
+                                    }
+
+                                    if (filter_var($path, FILTER_VALIDATE_URL)) {
+                                        return $path;
+                                    }
+
+                                    $normalizedPath = ltrim($path, '/');
+
+                                    if (str_starts_with($normalizedPath, 'assets/') || str_starts_with($normalizedPath, 'storage/')) {
+                                        return asset($normalizedPath);
+                                    }
+
+                                    return asset('storage/' . $normalizedPath);
+                                };
+
+                                $coverUrl = $resolveImageUrl(
+                                    $salle->background ?: $salle->galleries->first()?->content,
+                                    asset('assets/images/salle_default.jpeg')
+                                );
                             @endphp
                             <img src="{{ $coverUrl }}" alt="{{ $salle->name }}"
                                 class="w-full h-full object-cover transition-transform duration-500">
