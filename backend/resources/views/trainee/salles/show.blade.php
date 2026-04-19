@@ -53,7 +53,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-6 relative">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end -mt-16 sm:-mt-20 gap-4">
 
-                <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 w-full">
+                <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 w-full bg-black/55 backdrop-blur-sm border border-zinc-800/80 rounded-2xl px-4 sm:px-5 py-4 shadow-xl">
                     <div class="w-32 h-32 rounded-lg border-4 border-[#111111] bg-[#1c1c1c] overflow-hidden">
                         <img src="{{ $logoImage }}" alt="{{ $salle->name }} logo"
                             onerror="this.onerror=null;this.src='{{ $defaultLogoImage }}';"
@@ -63,45 +63,16 @@
                     <div class="mb-1 w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <h1 class="text-3xl font-bold text-white">{{ $salle->name }}</h1>
-                            <p class="text-zinc-400 mt-1">"{{ $salle->tagline ?: 'Train smarter, train stronger.' }}"
-                            </p>
+                            <p class="text-zinc-400 mt-1">"{{ $salle->tagline ?: 'Train smarter, train stronger.' }}"</p>
                             <div class="flex items-center gap-4 mt-2 text-sm font-medium text-zinc-500">
                                 <span><i class="fa-solid fa-location-dot text-[#FBBF24]"></i> {{ $salle->city }}</span>
-                                <span><i class="fa-solid fa-users"></i>
-                                    {{ $salle->sessionType ?: 'Open sessions' }}</span>
+                                <span><i class="fa-solid fa-users"></i> {{ $salle->sessionType ?: 'Open sessions' }}</span>
                             </div>
                         </div>
 
-                        @php
-                            $isFavoris = $salle->isFavoris();
-                        @endphp
-
                         <div class="flex gap-2">
-                            @if ($isFavoris)
-                                <form action="{{ route('favorites.destroy', $salle) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="bg-[#1c1c1c] border border-red-500 text-red-500 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-red-500 hover:text-white transition-colors"
-                                        title="Remove from favorites" aria-label="Remove from favorites">
-                                        <i class="fa-solid fa-heart"></i>
-                                        Favoris
-                                    </button>
-                                </form>
-                            @else
-                                <form action="{{ route('favorites.store', $salle) }}" method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="bg-[#1c1c1c] border border-red-500 text-red-500 font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-red-500 hover:text-white transition-colors"
-                                        title="Add to favorites" aria-label="Add to favorites">
-                                        <i class="fa-regular fa-heart"></i>
-                                        Favoris
-                                    </button>
-                                </form>
-                            @endif
-
                             @can('update', $salle)
-                                <a href="{{ route('coach.salles.edit', $salle) }}"
+                                <a href="{{ route('salles.edit', $salle) }}"
                                     class="bg-[#d1fa48] text-black font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-[#bde13f] transition-colors">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
@@ -111,18 +82,6 @@
                                 class="bg-[#1c1c1c] border border-zinc-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2">
                                 <i class="fa-solid fa-arrow-left"></i> Back
                             </a>
-                            @can('update', $salle)
-                                <form action="{{ route('coach.salles.destroy', $salle) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit"
-                                        class="inline-flex items-center justify-center gap-2  text-white text-sm font-bold py-3 px-6 rounded-md bg-black">
-                                        <i class="fa-solid fa-trash"></i>
-                                        Force Delete
-                                    </button>
-                                </form>
-                            @endcan
                         </div>
                     </div>
                 </div>
@@ -143,13 +102,11 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-calendar-check w-5 text-center"></i>
-                        <span>Established <strong class="text-white">{{ $salle->existenceYears ?? 0 }} Years</strong>
-                            ago</span>
+                        <span>Established <strong class="text-white">{{ $salle->existenceYears ?? 0 }} Years</strong> ago</span>
                     </div>
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-dumbbell w-5 text-center"></i>
-                        <span>Primary Sport: <strong
-                                class="text-white">{{ $salle->sport?->title ?: 'Not specified' }}</strong></span>
+                        <span>Primary Sport: <strong class="text-white">{{ $salle->sport?->title ?: 'Not specified' }}</strong></span>
                     </div>
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-user-tie w-5 text-center"></i>
@@ -187,8 +144,7 @@
                 @if ($salle->services->isNotEmpty())
                     <div class="flex flex-wrap gap-2">
                         @foreach ($salle->services as $service)
-                            <span
-                                class="bg-[#1c1c1c] border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{{ $service->title }}</span>
+                            <span class="bg-[#1c1c1c] border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{{ $service->title }}</span>
                         @endforeach
                     </div>
                 @else
@@ -210,9 +166,7 @@
                                     class="w-12 h-12 rounded-lg object-cover bg-[#1c1c1c]">
                                 <div>
                                     <h4 class="text-white text-sm font-semibold">{{ $equipment->name }}</h4>
-                                    <p class="text-xs text-zinc-500">Condition:
-                                        {{ $equipment->pivot?->condition ?: 'Not specified' }}
-                                    </p>
+                                    <p class="text-xs text-zinc-500">Condition: {{ $equipment->pivot?->condition ?: 'Not specified' }}</p>
                                     @if ($equipment->pivot?->description)
                                         <p class="text-xs text-zinc-400 mt-1">{{ $equipment->pivot->description }}</p>
                                     @endif
@@ -252,10 +206,8 @@
             <div class="bg-[#111111] border border-zinc-800 rounded-lg p-5">
                 <h2 class="text-lg font-bold text-white mb-2">Quick Summary</h2>
                 <p class="text-sm text-zinc-400 leading-relaxed">
-                    {{ $salle->name }} is located in {{ $salle->city }} and offers {{ $salle->sessionType ?: 'open' }}
-                    sessions.
-                    {{ $salle->services->count() }} services and {{ $salle->equipments->count() }} equipment items are
-                    currently listed.
+                    {{ $salle->name }} is located in {{ $salle->city }} and offers {{ $salle->sessionType ?: 'open' }} sessions.
+                    {{ $salle->services->count() }} services and {{ $salle->equipments->count() }} equipment items are currently listed.
                 </p>
             </div>
 
@@ -263,5 +215,4 @@
     </div>
 
 </body>
-
 </html>
