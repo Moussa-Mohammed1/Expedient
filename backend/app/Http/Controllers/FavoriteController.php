@@ -30,7 +30,7 @@ class FavoriteController extends Controller
             ->latest('favorites.created_at')
             ->get();
 
-        return view('favoris.index', [
+        return view('trainee.favoris.index', [
             'favoriteSalles' => $favoriteSalles,
             'favoriteCount' => $favoriteSalles->count(),
         ]);
