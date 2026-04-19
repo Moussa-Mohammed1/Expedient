@@ -25,17 +25,7 @@ class ExploreController extends Controller
 
         $localSalles = Salle::query()
             ->when($userLocal !== '', function ($query) use ($userLocal) {
-                $userLocal = strtolower(trim($userLocal));
-
-                $words = array_filter(explode(' ', $userLocal));
-
-                $query->when($words, function ($query) use ($words) {
-                    $query->where(function ($q) use ($words) {
-                        foreach ($words as $word) {
-                            $q->orWhereRaw('LOWER(city) LIKE ?', ["%$word%"]);
-                        }
-                    });
-                });
+                $query->where('city', 'ilike', '%' . trim($userLocal) . '%');
             })
             ->latest()
             ->get();
