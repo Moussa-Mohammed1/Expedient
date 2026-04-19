@@ -55,7 +55,7 @@ class User extends Authenticatable
         ];
     }
 
-   
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -114,9 +114,9 @@ class User extends Authenticatable
         return $query->when($words !== [], fn(Builder $q) => $q->where(
             fn(Builder $group) => collect($words)->each(
                 fn(string $word) => $group
-                    ->orWhereRaw('LOWER(name) LIKE ?', ["%{$word}%"])
-                    ->orWhereRaw('LOWER(localisation) LIKE ?', ["%{$word}%"])
-                    ->orWhereHas('coach.salles', fn(Builder $salleQuery) => $salleQuery->whereRaw('LOWER(name) LIKE ?', ["%{$word}%"]))
+                    ->orWhere('name', 'ilike', "%{$word}%")
+                    ->orWhere('localisation', 'ilike', "%{$word}%")
+                    ->orWhereHas('coach.salles', fn(Builder $salleQuery) => $salleQuery->where('name', 'ilike', "%{$word}%"))
             )
         ));
     }
@@ -136,7 +136,7 @@ class User extends Authenticatable
         return $this->hasMany(Membership::class);
     }
 
-    public function isAdmin() : bool
+    public function isAdmin(): bool
     {
         return $this->role->title === "admin";
     }
@@ -145,4 +145,10 @@ class User extends Authenticatable
     {
         return $this->coach;
     }
+
+    public function communityRole(Community $community)
+    {
+        return $this->memberships()->where('user_id', $this->id)->first()->role;
+    }
+
 }
