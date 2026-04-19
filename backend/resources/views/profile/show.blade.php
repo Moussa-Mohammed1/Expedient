@@ -12,7 +12,7 @@
 <body class="bg-black text-white font-sans ">
 
     @include('layouts.header')
-
+    <x-notification-popup/>
     <div class="max-w-4xl mx-auto pt-6 md:pt-10">
 
         @php
