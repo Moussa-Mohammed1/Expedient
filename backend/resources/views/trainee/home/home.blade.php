@@ -13,8 +13,6 @@
 <body>
     @include('layouts.header')
 
-    <!-- Available sports And recent added Salles in the user locatlisation  -->
-
     <section class="py-6 bg-black relative w-full border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -165,7 +163,7 @@
                     class="group relative flex flex-col md:flex-row w-full min-h-55 rounded-2xl overflow-hidden border border-zinc-800 hover:border-yellow-500 transition-colors duration-200 bg-[#111111]">
 
                     <div class="relative w-full md:w-5/12 h-48 md:h-auto overflow-hidden shrink-0">
-                        <img src="{{ $userCommunity->backgroundImage ? asset('storage/' . $userCommunity->backgroundImage) : 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=800&q=80' }}"
+                        <img src="{{ $userCommunity->backgroundImage ? asset('storage/' . $userCommunity->backgroundImage) : asset('assets/images/communities_default.jpeg') }}"
                             alt="{{ $userCommunity->title }}" class="absolute inset-0 w-full h-full object-cover">
                         <div
                             class="absolute inset-0 bg-linear-to-t md:bg-linearto-r from-transparent via-[#111111]/60 to-[#111111]">
@@ -175,33 +173,21 @@
                     <div
                         class="relative z-10 flex-1 p-6 md:p-8 flex flex-col justify-center bg-linear-to-t md:bg-linear-to-l from-[#111111] via-[#111111] to-transparent md:to-[#111111]">
 
-                        <div class="flex items-center gap-3 mb-3">
-                            <span
-                                class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Joined
-                            </span>
-                        </div>
-
                         <h3
                             class="text-white text-2xl md:text-3xl font-bold tracking-wide group-hover:text-yellow-400 transition-colors duration-200">
                             {{ $userCommunity->title }}
                         </h3>
 
-                        @if($userCommunity->description)
                             <p class="text-zinc-400 text-sm mt-2 line-clamp-2 leading-relaxed max-w-2xl">
-                                {{ $userCommunity->description }}
+                                {{ $userCommunity->description ?: 'No description yet'}}
                             </p>
-                        @endif
+                        
 
                         <div class="mt-6 flex flex-wrap gap-4 items-center">
                             <a href="{{ url('/communities/' . $userCommunity->id) }}"
                                 class="inline-flex items-center justify-center h-10 px-6 font-bold text-xs rounded-lg bg-yellow-500 text-black transition-colors hover:bg-yellow-600">
                                 Enter Hub <i class="fa-solid fa-arrow-right ml-2"></i>
                             </a>
-                            <button
-                                class="inline-flex items-center justify-center h-10 px-4 font-bold text-xs rounded-lg bg-[#1c1c1c] text-white border border-zinc-700 transition-colors hover:bg-zinc-800">
-                                Leave Group
-                            </button>
                         </div>
                     </div>
 
