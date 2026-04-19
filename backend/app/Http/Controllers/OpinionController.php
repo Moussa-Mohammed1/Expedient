@@ -65,10 +65,10 @@ class OpinionController extends Controller
             ->with('success', 'Your review was deleted.');
     }
 
-    private function authorizeOwner(Opinion $opinion): void
+    private function authorizeOwner(Opinion $opinion)
     {
         if ((int) $opinion->author_id !== (int) auth()->id()) {
-            abort(403);
+            return redirect('/home');
         }
     }
 }
