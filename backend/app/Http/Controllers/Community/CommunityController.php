@@ -41,11 +41,11 @@ class CommunityController extends Controller
 
         $searchQuery = $request->query('search');
         $communitiesQuery = Community::query()
-            ->where('baseLocalisation', $user->localisation)
+            ->where('localisation', 'ilike',  $user->localisation)
             ->withCount(['memberships as active_members_count' => fn ($query) => $query->whereNull('left_at')])
             ->when($searchQuery, function ($query) use ($searchQuery) {
-                return $query->where('title', 'like', "%{$searchQuery}%")
-                    ->orWhere('description', 'like', "%{$searchQuery}%");
+                return $query->where('title', 'ilike', "%{$searchQuery}%")
+                    ->orWhere('description', 'ilike', "%{$searchQuery}%");
             })
             ->latest();
 
