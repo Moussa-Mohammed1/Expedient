@@ -16,6 +16,7 @@
 
 <body class="bg-black text-white">
     @include('layouts.header')
+    <x-notification-popup/>
     @php
         $user = $profileUser ?? auth()->user();
         $avatarUrl = $user->avatar
@@ -107,23 +108,6 @@
                     </div>
                 </div>
 
-                <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 hover:bg-zinc-700/30 transition-colors">
-                    <div>
-                        <label for="current_password" class="block text-xs font-medium text-gray-300 mb-2">Current
-                            Password</label>
-                        <p class="text-xs text-gray-400">Required only when changing your password.</p>
-                    </div>
-                    <div class="lg:col-span-2">
-                        <input type="password" id="current_password" name="current_password"
-                            autocomplete="current-password"
-                            class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
-                            placeholder="Enter your current password">
-                        @error('current_password')
-                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
                 @if ($user->isCoach())
                     <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 hover:bg-zinc-700/30 transition-colors">
                         <div>
@@ -159,22 +143,36 @@
                     <div>
                         <label for="password" class="block text-xs font-medium text-gray-300 mb-2">Password
                             Modification</label>
-                        <p class="text-xs text-gray-400">Leave blank to keep your current password.</p>
+                        <p class="text-xs text-gray-400">Leave blank to keep your current password. Current password is required to make any changes.</p>
                     </div>
-                    <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="lg:col-span-2 grid grid-cols-1 gap-4">
                         <div>
-                            <input type="password" id="password" name="password" autocomplete="new-password"
+                            <label for="current_password" class="block text-xs font-medium text-gray-300 mb-2">Current Password</label>
+                            <input type="password" id="current_password" name="current_password"
+                                autocomplete="current-password"
                                 class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
-                                placeholder="New password">
-                            @error('password')
+                                placeholder="Enter your current password">
+                            @error('current_password')
                                 <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div>
-                            <input type="password" id="password_confirmation" name="password_confirmation"
-                                autocomplete="new-password"
-                                class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
-                                placeholder="Confirm new password">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="password" class="block text-xs font-medium text-gray-300 mb-2">New Password</label>
+                                <input type="password" id="password" name="password" autocomplete="new-password"
+                                    class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
+                                    placeholder="New password">
+                                @error('password')
+                                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="password_confirmation" class="block text-xs font-medium text-gray-300 mb-2">Confirm Password</label>
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    autocomplete="new-password"
+                                    class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
+                                    placeholder="Confirm new password">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -191,7 +189,7 @@
                 </div>
             </form>
         </div>
-
+        
     </div>
 
 </body>
