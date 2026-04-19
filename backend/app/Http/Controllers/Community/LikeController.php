@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Community;
 
+use App\Http\Controllers\Controller;
 use App\Models\Like;
+use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class LikeController extends Controller
@@ -26,9 +29,30 @@ class LikeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Post $post): RedirectResponse
     {
-        //
+        $isActiveMember = $request->user()->memberships()
+            ->where('community_id', $post->community_id)
+            ->whereNull('left_at')
+            ->exists();
+        
+        $existingLike = Like::query()
+            ->where('user_id', $request->user()->id)
+            ->where('post_id', $post->id)
+            ->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+
+            return back()->with('success', 'Like removed.');
+        }
+
+        Like::query()->create([
+            'user_id' => $request->user()->id,
+            'post_id' => $post->id,
+        ]);
+
+        return back()->with('success', 'Post liked.');
     }
 
     /**
