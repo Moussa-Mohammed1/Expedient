@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StorePostRequest;
 use App\Models\Community;
 use App\Models\Post;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    use AuthorizesRequests;
+
     public function getCommunityPosts(Community $community): LengthAwarePaginator
     {
         return Post::query()
@@ -125,15 +128,43 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        
+        $post->load([
+            'user:id,name,avatar',
+            'community:id,title',
+            'images:id,post_id,content',
+        ]);
+
+        return view('trainee.communities.posts.edit', [
+            'post' => $post,
+            'community' => $post->community,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $post): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'content' => ['required', 'string', 'max:1000'],
+            'images' => ['nullable', 'array', 'max:3'],
+            'images.*' => ['image', 'max:6144'],
+        ]);
+
+        $post->update([
+            'content' => $validated['content'],
+        ]);
+
+        foreach ($request->file('images', []) as $imageFile) {
+            $post->images()->create([
+                'content' => $imageFile->store('communities/posts', 'public'),
+            ]);
+        }
+
+        return redirect()
+            ->route('communities.show', $post->community)
+            ->with('success', 'Post updated successfully.');
     }
 
     /**
