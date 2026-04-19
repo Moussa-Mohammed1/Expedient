@@ -56,7 +56,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                     @forelse ($salles as $salle)
                         @php
-                            $cover = $salle->galleries->first()?->content;
+                            $cover = $salle->background ?: $salle->galleries->first()?->content;
                             $resolveImageUrl = function (?string $path, string $fallbackUrl): string {
                                 if (!$path) {
                                     return $fallbackUrl;
@@ -75,9 +75,7 @@
                                 return asset('storage/' . $normalizedPath);
                             };
 
-                            $coverUrl = $cover
-                                ? $resolveImageUrl($cover, asset('assets/images/salle_default.jpeg'))
-                                : $resolveImageUrl($salle->background, asset('assets/images/salle_default.jpeg'));
+                            $coverUrl = $resolveImageUrl($cover, asset('assets/images/salle_default.jpeg'));
                         @endphp
 
                         <div
@@ -86,7 +84,7 @@
                                 <div class="relative h-52 overflow-hidden bg-zinc-900">
                                     <img src="{{ $coverUrl }}" alt="{{ $salle->name }}"
                                         class="h-full w-full object-cover transition-transform duration-500 ">
-                                    <
+                                    
                                     <div
                                         class="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur">
                                         <i class="fa-solid fa-location-dot text-[#d1fa48]"></i>
