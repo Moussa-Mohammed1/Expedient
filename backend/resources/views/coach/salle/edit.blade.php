@@ -163,10 +163,10 @@
                 <div
                     class="xl:col-span-12 sticky bottom-0 z-20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 pb-3 bg-[#101113]/95 backdrop-blur-md border-t border-zinc-800/70">
                     
-                    <button type="button"
+                    <a href="{{ route('coach.salles') }}"
                         class="bg-transparent border border-zinc-700 text-zinc-300 text-sm font-bold py-3 px-6 rounded-full">
                         Cancel
-                    </button>
+</a>
                     <button type="submit"
                         class="bg-yellow-500 active:scale-95 duration-300 text-black text-sm font-bold py-3 px-8 rounded-full flex items-center justify-center gap-2">Save
                         All Changes
