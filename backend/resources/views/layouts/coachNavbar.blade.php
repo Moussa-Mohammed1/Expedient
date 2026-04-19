@@ -2,7 +2,7 @@
 	$navLinks = [
 		['name' => 'My salles', 'path' => 'coach/salles'],
 		['name' => 'Reviews', 'path' => 'coach/opinions'],
-		['name' => 'Profile', 'path' => 'profile'],
+		['name' => 'Specialities', 'path' => 'specialities'],
 	];
 @endphp
 
