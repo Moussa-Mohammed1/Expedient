@@ -11,16 +11,16 @@
 
 <div>
     <header
-        class="fixed top-0 left-0 right-0 flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-3 z-50">
+        class="fixed top-0 left-0 right-0 z-50 flex w-full items-center justify-between bg-[#111111] px-6 lg:px-8 py-3">
         <button id="mobile-menu-btn" class="text-white md:hidden hover:text-gray-300 focus:outline-none p-2">
             <i class="fa-solid fa-bars"></i>
         </button>
         <div class="z-10">
-            <a href="{{ url('/home') }}" class="text-white font-bold text-xl">Expedient</a>
+            <x-app-logo/>
         </div>
 
         <nav
-            class="hidden lg:flex  w-auto min-w-[50%] left-1/2 top-5 items-center justify-center rounded-full bg-[#373636] px-8 py-3 cursor-pointer ring-white/5 transition">
+            class="hidden lg:flex w-auto min-w-[50%] left-1/2 top-5 items-center justify-center rounded-full bg-[#373636] px-8 py-3 cursor-pointer ring-white/5 transition">
             <ul class="flex items-center justify-around gap-8 text-sm font-medium ">
                 @foreach($navLinks as $link)
                     @php
@@ -65,7 +65,7 @@
     <div class="h-26"></div>
 
     <div id="mobile-menu"
-        class="hidden lg:hidden bg-[#1c1c1c] fixed top-26 left-0 right-0 z-50 border-t border-white/10 shadow-lg max-h-[calc(100vh-6.5rem)] overflow-y-auto">
+        class="hidden lg:hidden bg-[#1c1c1c] fixed top-26 left-0 right-0 z-50 border-t border-white/10 shadow-lg overflow-y-auto">
         <div class="px-6 py-4 flex flex-col gap-4">
             <ul class="flex flex-col gap-4 text-white">
                 @foreach($navLinks as $link)
