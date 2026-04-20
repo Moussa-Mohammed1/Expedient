@@ -13,22 +13,22 @@
         [
             'label' => 'Users',
             'href' => url('/admin/users'),
-            'active' => request()->is('users'),
+            'active' => request()->is('/admin/users'),
         ],
         [
             'label' => 'Management',
             'href' => url('/admin/management'),
-            'active' => request()->is('management'),
+            'active' => request()->is('/admin/management'),
         ],
         [
             'label' => 'Reports',
             'href' => url('/admin/reports'),
-            'active' => request()->is('reports'),
+            'active' => request()->is('/admin/reports'),
         ],
         [
-            'label' => 'Verification',
+            'label' => 'Verifications',
             'href' => url('/admin/verifications'),
-            'active' => request()->is('verifications'),
+            'active' => request()->is('/admin/verifications'),
         ],
     ];
 @endphp
