@@ -48,13 +48,13 @@
                     <i class="fa-regular fa-bookmark w-5 text-center mr-1"></i> Favorites
                 </a>
                 @if (auth()->user()->role->title === "admin")
-                    <a href="{{ url('/dashboard') }}"
-                        class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
-                        <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Admin
+                    <a href="{{ url('/admin/dashboard') }}"
+                        class="block px-4 py-2 text-sm text-yellow-500 hover:bg-[#30363d] hover:text-white transition-colors">
+                        <i class="fa-solid fa-crown mr-1  text-center w-5"></i> Admin
                     </a>
                     <a href="{{ url('/coach/salles') }}"
                         class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#30363d] hover:text-white transition-colors">
-                        <i class="fa-solid fa-crown mr-1 text-center w-5"></i> Coach
+                        <i class="fa-solid fa-crown mr-1  text-center w-5"></i> Coach
                     </a>
                 @endif
                 @if (auth()->user()->role->title === "coach")
