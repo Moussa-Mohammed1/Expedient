@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ManagementController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Coach\CoachController;
@@ -24,6 +25,10 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Coach\OpinionController as CoachOpinionController;
+use App\Http\Controllers\Admin\SportController as AdminSportController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\SpecialityController as AdminSpecialityController;
+use App\Http\Controllers\Admin\EquipmentController as AdminEquipmentController;
 
 use App\Models\Trainee;
 use App\Models\Coach;
@@ -55,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/posts/create', [CommunityPostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [CommunityPostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}', [CommunityPostController::class, 'show'])->name('posts.show');
+    Route::get('/posts/{post}/edit', [CommunityPostController::class, 'edit'])->name('posts.edit');
+    Route::put('/posts/{post}', [CommunityPostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post}', [CommunityPostController::class, 'destroy'])->name('posts.destroy');
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::put('/posts/{post}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
@@ -70,9 +78,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::patch('/reports/{report}/cancel', [ReportController::class, 'cancel'])->name('reports.cancel');
-    
+
     //User with opinions
-    
+
     Route::get('/opinions/{opinion}', [OpinionController::class, 'show'])->name('opinions.show');
     Route::put('/opinions/{opinion}', [OpinionController::class, 'update'])->name('opinions.update');
     Route::delete('/opinions/{opinion}', [OpinionController::class, 'destroy'])->name('opinions.destroy');
@@ -89,11 +97,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/coach/salles/{salle}', [CoachSalleController::class, 'update'])->name('coach.salles.update');
         Route::delete('/coach/salles/{salle}', [CoachSalleController::class, 'destroy'])->name('coach.salles.destroy');
         Route::post('/coach/salles', [CoachSalleController::class, 'store'])->name('coach.salles.store');
-        
+
         //Coach with opinions
 
         Route::get('/coach/opinions', [CoachOpinionController::class, 'index'])->name('coach.opinions');
-        
+
         //Specialities
 
         Route::get('/specialities', [CoachSpecialityController::class, 'index'])->name('coach.specialities.index');
@@ -102,6 +110,32 @@ Route::middleware('auth')->group(function () {
         Route::delete('/specialities/{speciality}', [CoachSpecialityController::class, 'destroy'])->name('coach.specialities.destroy');
     });
 
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/users', [UserController::class, 'index']);
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assignRole');
+        Route::post('/users/{user}/unassign-role', [UserController::class, 'unassignRole'])->name('users.unassignRole');
+        Route::post('/users/{user}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
+        Route::get('/management', [ManagementController::class, 'index']);
+        Route::prefix('management')->group(function () {
+            Route::get('/sports', [AdminSportController::class, 'index'])->name('management.sports.index');
+            Route::post('/sports', [AdminSportController::class, 'store'])->name('management.sports.store');
+            Route::put('/sports/{sport}', [AdminSportController::class, 'update'])->name('management.sports.update');
+            Route::delete('/sports/{sport}', [AdminSportController::class, 'destroy'])->name('management.sports.destroy');
+            Route::get('/services', [AdminServiceController::class, 'index'])->name('management.services.index');
+            Route::post('/services', [AdminServiceController::class, 'store'])->name('management.services.store');
+            Route::put('/services/{service}', [AdminServiceController::class, 'update'])->name('management.services.update');
+            Route::delete('/services/{service}', [AdminServiceController::class, 'destroy'])->name('management.services.destroy');
+            Route::get('/specialities', [AdminSpecialityController::class, 'index'])->name('management.specialities.index');
+            Route::post('/specialities', [AdminSpecialityController::class, 'store'])->name('management.specialities.store');
+            Route::put('/specialities/{speciality}', [AdminSpecialityController::class, 'update'])->name('management.specialities.update');
+            Route::delete('/specialities/{speciality}', [AdminSpecialityController::class, 'destroy'])->name('management.specialities.destroy');
+            Route::get('/equipments', [AdminEquipmentController::class, 'index'])->name('management.equipments.index');
+            Route::post('/equipments', [AdminEquipmentController::class, 'store'])->name('management.equipments.store');
+            Route::put('/equipments/{equipment}', [AdminEquipmentController::class, 'update'])->name('management.equipments.update');
+            Route::delete('/equipments/{equipment}', [AdminEquipmentController::class, 'destroy'])->name('management.equipments.destroy');
+        });
+    });
+
+
 });
