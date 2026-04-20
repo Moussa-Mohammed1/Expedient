@@ -1,7 +1,7 @@
 <div id="suspendUserModal" class="hidden fixed inset-0 z-50 p-4 sm:p-6" aria-labelledby="modal-title" role="dialog"
     aria-modal="true" style="display: none; align-items: center; justify-content: center;">
 
-    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+    <div class="fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
 
     <div class="relative w-full max-w-md bg-[#111111] border border-zinc-800/80 rounded-lg shadow-2xl overflow-hidden transform transition-all">
 
@@ -147,7 +147,7 @@
                 return;
             }
 
-            form.action = `/users/${selectedUserId}/suspend`;
+            form.action = `/admin/users/${selectedUserId}/suspend`;
         });
 
         modal.addEventListener('click', (event) => {

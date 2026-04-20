@@ -124,7 +124,7 @@
                 return;
             }
 
-            form.action = `/users/${selectedUserId}/unassign-role`;
+            form.action = `/admin/users/${selectedUserId}/unassign-role`;
         });
 
         modal.addEventListener('click', (event) => {

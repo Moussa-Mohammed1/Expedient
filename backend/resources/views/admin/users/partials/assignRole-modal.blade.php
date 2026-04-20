@@ -123,7 +123,7 @@
                 return;
             }
 
-            form.action = `/users/${selectedUserId}/assign-role`;
+            form.action = `/admin/users/${selectedUserId}/assign-role`;
         });
 
         modal.addEventListener('click', (event) => {
