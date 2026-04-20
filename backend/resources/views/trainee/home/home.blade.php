@@ -12,7 +12,7 @@
 
 <body>
     @include('layouts.header')
-
+    <x-notification-popup/>
     <section class="py-6 bg-black relative w-full border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
