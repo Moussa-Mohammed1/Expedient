@@ -12,6 +12,7 @@
 
 <body class="bg-black text-gray-300 font-sans antialiased min-h-screen">
     @include('layouts.header')
+    <x-notification-popup />
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
 
         <div class="mb-10 border-b border-zinc-800 pb-6">
