@@ -43,6 +43,18 @@ class CoachVerificationController extends Controller
             return back()->with('error', 'You already have a pending verification request.');
         }
 
+        if (!$request->filled('description') || !$request->hasFile('proof_document')) {
+            return back()
+                ->withInput()
+                ->with('error', 'Verification request rejected. Please complete all required fields and attach a proof document.');
+        }
+
+        if (!$request->file('proof_document')->isValid()) {
+            return back()
+                ->withInput()
+                ->with('error', 'Verification request rejected due to an invalid proof upload. Please try again.');
+        }
+
         $validated = $request->validate([
             'proof_document' => ['required', 'file', 'mimes:pdf,png,jpg,jpeg', 'max:5120'],
             'description' => ['required', 'string', 'max:1000'],
