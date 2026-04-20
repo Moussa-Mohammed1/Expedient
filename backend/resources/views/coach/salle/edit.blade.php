@@ -16,6 +16,7 @@
 
 <body class="bg-black text-gray-300 min-h-screen">
     @include('layouts.coachNavbar')
+    <x-notification-popup />
 
     @php
         $defaultBackgroundImage = asset('assets/images/salle_default.jpeg');

@@ -15,6 +15,7 @@
 
 <body class="bg-[#0f0f10] text-gray-300 font-sans antialiased min-h-screen">
     @include('layouts.coachNavbar')
+    <x-notification-popup />
     <div class="relative overflow-hidden">
 
         <div class="relative max-w-350 mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">

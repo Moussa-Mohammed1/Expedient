@@ -15,6 +15,7 @@
 
 <body class="bg-[#18181b] text-gray-300 min-h-screen">
     @include('layouts.coachNavbar')
+    <x-notification-popup />
     <div class="w-full min-h-screen px-4 sm:px-6 lg:px-10 py-10 lg:py-16">
         <form action="{{ route('coach.salles.store') }}" method="POST"
             class="w-full min-h-screen bg-[#222222] border border-zinc-800 rounded-md p-6 sm:p-8">
