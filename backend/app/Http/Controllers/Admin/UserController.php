@@ -98,7 +98,7 @@ class UserController extends Controller
         if ($user->is_super_admin) {
             return redirect()->back()->with('error', 'Admin role not revokable from super admins.');
         }
-        $roleTitle = $validated['new_role'] === 'coach' ? 'coach' : 'user';
+        $roleTitle = $validated['new_role'] === 'coach' ? 'coach' : 'trainee';
         $newRoleId = Role::where('title', $roleTitle)->value('id');
 
         if (!$newRoleId) {
