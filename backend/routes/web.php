@@ -21,6 +21,7 @@ use App\Http\Controllers\Community\PostController as CommunityPostController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\Sport\SportController;
 use App\Http\Controllers\Salle\SalleController;
+use App\Http\Controllers\Salle\ReviewController as SalleReviewController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\ReportController;
@@ -29,6 +30,8 @@ use App\Http\Controllers\Admin\SportController as AdminSportController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\SpecialityController as AdminSpecialityController;
 use App\Http\Controllers\Admin\EquipmentController as AdminEquipmentController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\Admin\CoachVerificationController as AdminCoachVerificationController;
 
 use App\Models\Trainee;
 use App\Models\Coach;
@@ -70,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('sports', SportController::class);
     Route::resource('salles', SalleController::class);
+    Route::post('/salles/{salle}/reviews', [SalleReviewController::class, 'store'])->name('salles.reviews.store');
     Route::resource('coaches', CoachController::class);
     Route::post('/coaches/{coach}/opinions', [OpinionController::class, 'store'])->name('opinions.store');
 
@@ -135,6 +139,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/equipments/{equipment}', [AdminEquipmentController::class, 'update'])->name('management.equipments.update');
             Route::delete('/equipments/{equipment}', [AdminEquipmentController::class, 'destroy'])->name('management.equipments.destroy');
         });
+        Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports');
+        Route::patch('/reports/{report}/status', [AdminReportController::class, 'updateStatus'])->name('admin.reports.update-status');
+        Route::get('/verifications', [AdminCoachVerificationController::class, 'index'])->name('admin.verifications');
+        Route::patch('/verifications/{coachVerification}/status', [AdminCoachVerificationController::class, 'updateStatus'])->name('admin.verifications.update-status');
     });
 
 
