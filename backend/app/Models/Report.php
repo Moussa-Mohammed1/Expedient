@@ -16,6 +16,11 @@ class Report extends Model
         'description',
         'proof',
         'isCancelled',
+        'status',
+    ];
+
+    protected $casts = [
+        'isCancelled' => 'boolean',
     ];
 
     public function reporter(): BelongsTo
