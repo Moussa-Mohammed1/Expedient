@@ -12,6 +12,7 @@
 
 <body class="bg-black text-gray-300 min-h-screen">
     @include('layouts.header')
+    <x-notification-popup />
 
     @php
         $defaultBackgroundImage = asset('assets/images/salle_default.jpeg');
@@ -53,7 +54,8 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-6 relative">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end -mt-16 sm:-mt-20 gap-4">
 
-                <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 w-full bg-black/55 backdrop-blur-sm border border-zinc-800/80 rounded-2xl px-4 sm:px-5 py-4 shadow-xl">
+                <div
+                    class="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 w-full bg-black/55 backdrop-blur-sm border border-zinc-800/80 rounded-2xl px-4 sm:px-5 py-4 shadow-xl">
                     <div class="w-32 h-32 rounded-lg border-4 border-[#111111] bg-[#1c1c1c] overflow-hidden">
                         <img src="{{ $logoImage }}" alt="{{ $salle->name }} logo"
                             onerror="this.onerror=null;this.src='{{ $defaultLogoImage }}';"
@@ -63,10 +65,12 @@
                     <div class="mb-1 w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <h1 class="text-3xl font-bold text-white">{{ $salle->name }}</h1>
-                            <p class="text-zinc-400 mt-1">"{{ $salle->tagline ?: 'Train smarter, train stronger.' }}"</p>
+                            <p class="text-zinc-400 mt-1">"{{ $salle->tagline ?: 'Train smarter, train stronger.' }}"
+                            </p>
                             <div class="flex items-center gap-4 mt-2 text-sm font-medium text-zinc-500">
                                 <span><i class="fa-solid fa-location-dot text-[#FBBF24]"></i> {{ $salle->city }}</span>
-                                <span><i class="fa-solid fa-users"></i> {{ $salle->sessionType ?: 'Open sessions' }}</span>
+                                <span><i class="fa-solid fa-users"></i>
+                                    {{ $salle->sessionType ?: 'Open sessions' }}</span>
                             </div>
                         </div>
 
@@ -102,11 +106,13 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-calendar-check w-5 text-center"></i>
-                        <span>Established <strong class="text-white">{{ $salle->existenceYears ?? 0 }} Years</strong> ago</span>
+                        <span>Established <strong class="text-white">{{ $salle->existenceYears ?? 0 }} Years</strong>
+                            ago</span>
                     </div>
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-dumbbell w-5 text-center"></i>
-                        <span>Primary Sport: <strong class="text-white">{{ $salle->sport?->title ?: 'Not specified' }}</strong></span>
+                        <span>Primary Sport: <strong
+                                class="text-white">{{ $salle->sport?->title ?: 'Not specified' }}</strong></span>
                     </div>
                     <div class="flex items-center gap-3 text-zinc-400">
                         <i class="fa-solid fa-user-tie w-5 text-center"></i>
@@ -144,7 +150,8 @@
                 @if ($salle->services->isNotEmpty())
                     <div class="flex flex-wrap gap-2">
                         @foreach ($salle->services as $service)
-                            <span class="bg-[#1c1c1c] border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{{ $service->title }}</span>
+                            <span
+                                class="bg-[#1c1c1c] border border-zinc-700 text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{{ $service->title }}</span>
                         @endforeach
                     </div>
                 @else
@@ -166,7 +173,8 @@
                                     class="w-12 h-12 rounded-lg object-cover bg-[#1c1c1c]">
                                 <div>
                                     <h4 class="text-white text-sm font-semibold">{{ $equipment->name }}</h4>
-                                    <p class="text-xs text-zinc-500">Condition: {{ $equipment->pivot?->condition ?: 'Not specified' }}</p>
+                                    <p class="text-xs text-zinc-500">Condition:
+                                        {{ $equipment->pivot?->condition ?: 'Not specified' }}</p>
                                     @if ($equipment->pivot?->description)
                                         <p class="text-xs text-zinc-400 mt-1">{{ $equipment->pivot->description }}</p>
                                     @endif
@@ -206,13 +214,99 @@
             <div class="bg-[#111111] border border-zinc-800 rounded-lg p-5">
                 <h2 class="text-lg font-bold text-white mb-2">Quick Summary</h2>
                 <p class="text-sm text-zinc-400 leading-relaxed">
-                    {{ $salle->name }} is located in {{ $salle->city }} and offers {{ $salle->sessionType ?: 'open' }} sessions.
-                    {{ $salle->services->count() }} services and {{ $salle->equipments->count() }} equipment items are currently listed.
+                    {{ $salle->name }} is located in {{ $salle->city }} and offers {{ $salle->sessionType ?: 'open' }}
+                    sessions.
+                    {{ $salle->services->count() }} services and {{ $salle->equipments->count() }} equipment items are
+                    currently listed.
                 </p>
             </div>
+            <div class="bg-[#111111] border border-zinc-800/80 rounded-2xl p-6 sm:p-8 mt-8">
 
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <span class="text-yellow-500 "> {{ $salle->name }}</span> Reviews
+                        </h2>
+                        <p class="text-zinc-400 text-sm mt-1">Based on {{ $reviews->total() }} athlete experiences.</p>
+                    </div>
+
+                </div>
+
+                <form action="{{ route('salles.reviews.store', $salle) }}" method="POST"
+                    class="bg-[#1c1c1c] border border-zinc-700/80 rounded-xl p-5 mb-10 shadow-inner">
+                    @csrf
+                    <div class="flex gap-4">
+                        @php
+                            $currentUserAvatar = auth()->user()?->avatar
+                                ? asset('storage/users/profiles/' . ltrim(auth()->user()->avatar, '/'))
+                                : asset('assets/images/profile.jpeg');
+                        @endphp
+                        <img src="{{ $currentUserAvatar }}"
+                            alt="Your Avatar"
+                            class="w-10 h-10 rounded-full border border-zinc-600 object-cover shrink-0 hidden sm:block">
+
+                        <div class="flex-1 w-full">
+
+                            <textarea name="content" rows="3"
+                                placeholder="Share details of your experience at this facility..." required
+                                class="w-full bg-[#111111] border border-zinc-700 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] resize-none mb-3 placeholder-zinc-600">{{ old('content') }}</textarea>
+
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="bg-yellow-500  text-black text-sm font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2">
+                                    Post Review
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="space-y-6">
+                    @forelse ($reviews as $review)
+                        @php
+                            $reviewerAvatar = $review->user?->avatar
+                                ? asset('storage/users/profiles/' . ltrim($review->user->avatar, '/'))
+                                : asset('assets/images/profile.jpeg');
+                            $isCoachReviewer = strtolower((string) ($review->user?->role?->title ?? '')) === 'coach';
+                        @endphp
+                        <div class="border-b border-zinc-800/80 pb-6 last:border-0 last:pb-0">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ $reviewerAvatar }}"
+                                        alt="Reviewer" class="w-10 h-10 rounded-full border border-zinc-700 object-cover">
+                                    <div>
+                                        <h4 class="text-white font-bold text-sm flex items-center gap-2">
+                                            {{ $review->user?->name ?? 'Unknown user' }}
+                                            @if ($isCoachReviewer)
+                                                <span
+                                                    class="bg-[#1c1c1c] text-[#ff5520] border border-zinc-700 text-[9px] px-1.5 py-0.5 rounded uppercase tracking-wider">Coach</span>
+                                            @endif
+                                        </h4>
+                                        <span class="text-xs text-zinc-500">{{ optional($review->created_at)->diffForHumans() }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-zinc-300 text-sm leading-relaxed mb-1 whitespace-pre-line">
+                                {{ $review->content }}
+                            </p>
+                        </div>
+                    @empty
+                        <div class="bg-[#1c1c1c] border border-zinc-800/80 rounded-xl p-5 text-center">
+                            <p class="text-zinc-500 text-sm">No reviews yet for this salle.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="mt-8 text-center pt-6 border-t border-zinc-800/50">
+                    {{ $reviews->links() }}
+                </div>
+
+
+            </div>
         </div>
     </div>
 
 </body>
+
 </html>
