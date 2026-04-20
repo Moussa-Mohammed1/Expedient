@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <form action="{{ url('/users') }}" method="GET"
+        <form action="{{ url('/admin/users') }}" method="GET"
             class="bg-[#111111] border border-zinc-800/80 rounded-lg p-4 mb-6 flex flex-col md:flex-row gap-4">
 
             <div class="relative flex-1">
@@ -78,7 +78,7 @@
                             <th class="px-6 py-4 font-bold text-right ">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-800/50 text-sm">
+                    <tbody class="divide-y divide-zinc-800/50 text-sm h-fit">
                         @forelse ($users as $user)
                             @php
                                 $avatarUrl = $user->avatar
@@ -89,7 +89,7 @@
                                 $roleBadgeClass = match ($roleTitle) {
                                     'admin' => 'bg-[#d1fa48]/10 text-[#d1fa48] border border-[#d1fa48]/30',
                                     'coach' => 'bg-[#FBBF24]/10 text-[#FBBF24] border border-[#FBBF24]/30',
-                                    default => 'bg-zinc-800 text-zinc-300',
+                                    'trainee' => 'bg-zinc-800 text-zinc-300',
                                 };
                             @endphp
                             <tr class="hover:bg-[#1c1c1c]/50 transition-colors">
@@ -126,7 +126,7 @@
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
                                         </button>
                                         <div
-                                            class="absolute right-0 mt-2 w-40 bg-[#222222] border border-zinc-700 rounded-lg shadow-2xl invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-all z-50 overflow-hidden text-left origin-top-right">
+                                            class="absolute right-0 mt-2 w-40 bg-[#222222] border border-zinc-700 rounded-lg  invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-all z-50 overflow-hidden text-left origin-top-right">
                                             <ul class="py-1 text-xs font-medium">
                                                 <li><a href="{{ route('profile.show', $user->id) }}"
                                                         class="block px-4 py-2.5 text-zinc-300 hover:bg-zinc-700 hover:text-white transition-colors">View
