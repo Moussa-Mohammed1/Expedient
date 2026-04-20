@@ -8,27 +8,32 @@
         [
             'label' => 'Dashboard',
             'href' => url('/admin/dashboard'),
-            'active' => request()->is('dashboard'),
+            'active' => request()->is('admin/dashboard'),
         ],
         [
             'label' => 'Users',
             'href' => url('/admin/users'),
-            'active' => request()->is('/admin/users'),
+            'active' => request()->is('admin/users') || request()->is('admin/users/*'),
         ],
         [
             'label' => 'Management',
             'href' => url('/admin/management'),
-            'active' => request()->is('/admin/management'),
+            'active' => request()->is('admin/management') || request()->is('admin/management/*'),
         ],
         [
             'label' => 'Reports',
             'href' => url('/admin/reports'),
-            'active' => request()->is('/admin/reports'),
+            'active' => request()->is('admin/reports') || request()->is('admin/reports/*'),
         ],
         [
             'label' => 'Verifications',
             'href' => url('/admin/verifications'),
-            'active' => request()->is('/admin/verifications'),
+            'active' => request()->is('admin/verifications') || request()->is('admin/verifications/*'),
+        ],
+        [
+            'label' => 'Communities',
+            'href' => url('/admin/communities'),
+            'active' => request()->is('admin/communities') || request()->is('admin/communities/*'),
         ],
     ];
 @endphp
