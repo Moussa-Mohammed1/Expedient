@@ -21,7 +21,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 min-h-[calc(100vh-120px)]">
                 <div class="max-w-xl lg:pl-8">
                     <h1
-                        class="text-3xl md:text-3xl lg:text-5xl font-extrabold leading-[1.05] tracking-tight text-white">
+                        class="text-3xl md:text-3xl lg:text-5xl font-extrabold tracking-tight text-white">
                         Find your
                         <br />
                         sport, perfect gym
