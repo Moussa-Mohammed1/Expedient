@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -170,8 +171,27 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Post $post): RedirectResponse
     {
-        //
+       
+        $community = $post->community;
+
+        $imagePaths = $post->images()
+            ->pluck('content')
+            ->filter()
+            ->map(fn($path) => ltrim((string) $path, '/'))
+            ->values()
+            ->all();
+
+        if (!empty($imagePaths)) {
+            Storage::disk('public')->delete($imagePaths);
+        }
+
+        $post->images()->delete();
+        $post->delete();
+
+        return redirect()
+            ->route('communities.show', $community)
+            ->with('success', 'Post deleted successfully.');
     }
 }
