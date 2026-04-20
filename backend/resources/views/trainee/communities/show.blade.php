@@ -12,7 +12,7 @@
 
 <body class="bg-black text-gray-300 font-sans antialiased min-h-screen">
     @include('layouts.header')
-    <x-notification-popup/>
+    <x-notification-popup />
     @php
         $defaultCommunityImage = asset('assets/images/communities_default.jpeg');
         $coverImage = $community->backgroundImage
@@ -39,7 +39,8 @@
                         class="absolute bottom-0 left-0 w-full p-6 sm:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                         <div>
                             <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-2">
-                                {{ $community->title }}</h1>
+                                {{ $community->title }}
+                            </h1>
                             <p class="text-zinc-300 text-sm sm:text-base max-w-2xl">
                                 {{ $community->description }}
                             </p>
@@ -105,18 +106,24 @@
                     : asset('assets/images/profile.jpeg');
             @endphp
 
-            <a href="{{ route('posts.create', ['community' => $community->id]) }}"
-                class="block bg-[#111111] border border-zinc-800/80 rounded-2xl p-4 sm:p-5 hover:border-zinc-700 transition-colors">
-                <div class="flex items-center gap-3">
-                    <img src="{{ $currentUserAvatar }}" alt="Current user"
-                        class="w-10 h-10 rounded-full border border-zinc-700 object-cover">
-                    <div
-                        class="flex-1 rounded-full bg-[#1c1c1c] border border-zinc-700 px-4 py-2.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors">
-                        What do you think today?
+            @if ($isMember)
+                <a href="{{ route('posts.create', ['community' => $community->id]) }}"
+                    class="block bg-[#111111] border border-zinc-800/80 rounded-2xl p-4 sm:p-5 hover:border-zinc-700 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <img src="{{ $currentUserAvatar }}" alt="Current user"
+                            class="w-10 h-10 rounded-full border border-zinc-700 object-cover">
+                        <div
+                            class="flex-1 rounded-full bg-[#1c1c1c] border border-zinc-700 px-4 py-2.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors">
+                            What do you think today?
+                        </div>
+                        <i class="fa-solid fa-pen-to-square text-zinc-500"></i>
                     </div>
-                    <i class="fa-solid fa-pen-to-square text-zinc-500"></i>
+                </a>
+            @else
+                <div class="bg-[#111111] border border-zinc-800/80 rounded-2xl p-4 sm:p-5">
+                    <p class="text-sm text-zinc-400">Join this community to share your ideas.</p>
                 </div>
-            </a>
+            @endif
 
             @forelse ($posts as $post)
                 @php
@@ -146,8 +153,26 @@
                             <div
                                 class="absolute right-0 mt-1 w-32 bg-[#1c1c1c] border border-zinc-700 rounded-xl shadow-2xl invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 z-10 overflow-hidden">
                                 <ul class="py-1 text-sm text-zinc-300">
-                                    <li><button  class="open-report-modal block px-4 py-2 hover:bg-zinc-800 transition-colors">Report</button>
+                                    <li><button
+                                            class="open-report-modal block px-4 py-2 hover:bg-zinc-800 transition-colors">Report</button>
                                     </li>
+                                    @can('update', $post)
+                                        <li><a href="{{ route('posts.edit', ['post' => $post, 'community' => $community->id]) }}"
+                                                class="block px-4 py-2 hover:bg-zinc-800 transition-colors">Edit</a>
+                                        </li>
+                                    @endcan
+                                    @can('delete', $post)
+                                        <li>
+                                            <form action="{{ route('posts.destroy', $post) }}" method="POST"
+                                                class=" block px-4 text-red-500 py-2 hover:bg-zinc-800 transition-colors">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </div>
                         </div>
@@ -191,7 +216,7 @@
             </div>
         </div>
     </div>
-@include('coach.opinions.partials.report-modal')
+    @include('coach.opinions.partials.report-modal')
 </body>
 
 </html>
