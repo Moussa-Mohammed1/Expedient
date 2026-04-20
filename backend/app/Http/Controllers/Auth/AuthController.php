@@ -25,10 +25,19 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-
-        if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
+        $email = strtolower($validated['email']);
+        if (Auth::attempt(['email' => $email, 'password' => $validated['password']])) {
             $request->session()->regenerate();
+            $user = auth()->user();
+
+            if ($user->isAdmin()) {
+                Coach::firstOrCreate([
+                    'user_id' => $user->id
+                ]);
+            }
+
             return redirect()->route('home');
+
         }
 
         return back()->withErrors([
@@ -52,7 +61,7 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $validated['name'],
-            'email' => $validated['email'],
+            'email' => strtolower($validated['email']),
             'phone' => $validated['phone'] ?? null,
             'role_id' => $roleId,
             'localisation' => $validated['localisation'] ?? null,
