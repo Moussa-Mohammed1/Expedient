@@ -121,13 +121,11 @@
 
                             <div class="flex items-center gap-1 mt-2">
                                 <div class="flex text-yellow-500 text-[10px]">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                    @for ($i = 0; $i<= $coach->reputation_score; $i++)
+                                        <i class="fa-solid fa-star"></i>
+                                    @endfor
                                 </div>
-                                <span class="text-zinc-500 text-[10px] font-medium">({{ $coach->reviews_count ?? 0 }})</span>
+                                <span class="text-zinc-500 text-[10px] font-medium">({{ $coach->reviews_count ?? 0 }} Reviews)</span>
                             </div>
                         </div>
                     </a>
