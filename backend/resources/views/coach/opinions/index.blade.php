@@ -15,6 +15,7 @@
 
 <body class="bg-[#18181b] text-gray-300">
     @include('layouts.coachNavbar')
+    <x-notification-popup />
 
     @php
         $formattedAverage = number_format((float) $averageRating, 1);
