@@ -26,8 +26,18 @@ class ReportController extends Controller
 
     public function store(StoreReportRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
+        if (!$request->filled('reason') || !$request->filled('note') || !$request->hasFile('proof')) {
+            return back()
+                ->withInput()
+                ->with('error', 'Report rejected. Please complete all required fields and attach proof.');
+        }
 
+        if (!$request->file('proof')->isValid()) {
+            return back()
+                ->with('error', 'Report rejected due to an invalid proof upload. Please try again.');
+        }
+
+        $validated = $request->validated();
         $storedProofPath = $request->file('proof')->store('reports/proofs', 'public');
 
         Report::create([
