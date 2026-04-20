@@ -58,7 +58,14 @@ class SalleController extends Controller
             'equipments',
         ]);
 
-        return view('trainee.salles.show', compact('salle'));
+        $reviews = $salle->reviews()
+            ->where('isApproved', true)
+            ->with(['user:id,name,avatar,role_id', 'user.role:id,title'])
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
+
+        return view('trainee.salles.show', compact('salle', 'reviews'));
     }
 
     public function update(UpdateSalleRequest $request, Salle $salle): RedirectResponse
