@@ -18,9 +18,9 @@
 				<label for="report-reason" class="block text-xs font-bold text-zinc-400 uppercase  mb-2">Reason</label>
 				<select id="report-reason" name="reason"
 					class="w-full bg-[#111214] border border-zinc-700 rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:border-[#FBBF24]">
-					<option value="abusive">Abusive Language</option>
-					<option value="spam">Spam / Promotional</option>
-					<option value="false">False Information</option>
+					<option value="Abusive Language">Abusive Language</option>
+					<option value="Spam / Promotional">Spam / Promotional</option>
+					<option value="False Information">False Information</option>
 					<option value="other">Other</option>
 				</select>
 			</div>
