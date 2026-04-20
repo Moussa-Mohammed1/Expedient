@@ -137,10 +137,14 @@
                     class="bg-[#111111] border border-zinc-800/80 rounded-2xl p-5 sm:p-6 hover:border-zinc-700 transition-colors">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
+                            <a href="{{ route('profile.show', $post->user) }}" class="">
                             <img src="{{ $authorAvatar }}" alt="{{ $post->user?->name ?? 'Author' }}"
-                                class="w-10 h-10 rounded-full border border-zinc-700 object-cover">
+                                class="w-10 h-10 hover:border border-yellow-500 rounded-full transition-colors  object-cover"></a>
                             <div>
-                                <h4 class="text-white font-bold text-sm">{{ $post->user?->name ?? 'Unknown' }}</h4>
+                                <h4>
+                                    <a href="{{ route('profile.show', $post->user) }}"
+                                        class="text-white font-bold text-sm">{{ $post->user?->name ?? 'Unknown' }}</a>
+                                </h4>
                                 <span
                                     class="text-xs text-zinc-500">{{ optional($post->created_at)->diffForHumans() }}</span>
                             </div>
@@ -154,7 +158,7 @@
                                 class="absolute right-0 mt-1 w-32 bg-[#1c1c1c] border border-zinc-700 rounded-xl shadow-2xl invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 z-10 overflow-hidden">
                                 <ul class="py-1 text-sm text-zinc-300">
                                     <li><button
-                                            class="open-report-modal block px-4 py-2 hover:bg-zinc-800 transition-colors">Report</button>
+                                            class="open-report-modal block px-4 py-2 w-full text-left hover:bg-zinc-800 transition-colors">Report</button>
                                     </li>
                                     @can('update', $post)
                                         <li><a href="{{ route('posts.edit', ['post' => $post, 'community' => $community->id]) }}"
