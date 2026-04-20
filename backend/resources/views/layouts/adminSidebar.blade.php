@@ -7,23 +7,28 @@
     $navItems = [
         [
             'label' => 'Dashboard',
-            'href' => url('/dashboard'),
+            'href' => url('/admin/dashboard'),
             'active' => request()->is('dashboard'),
         ],
         [
             'label' => 'Users',
-            'href' => url('/users'),
+            'href' => url('/admin/users'),
             'active' => request()->is('users'),
         ],
         [
-            'label' => 'Content',
-            'href' => url('/content'),
-            'active' => request()->is('content'),
+            'label' => 'Management',
+            'href' => url('/admin/management'),
+            'active' => request()->is('management'),
         ],
         [
             'label' => 'Reports',
-            'href' => url('/reports'),
+            'href' => url('/admin/reports'),
             'active' => request()->is('reports'),
+        ],
+        [
+            'label' => 'Verification',
+            'href' => url('/admin/verifications'),
+            'active' => request()->is('verifications'),
         ],
     ];
 @endphp
