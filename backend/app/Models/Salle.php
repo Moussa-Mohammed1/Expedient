@@ -54,6 +54,11 @@ class Salle extends Model
         return $this->hasMany(Horaire::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function salleEquipments(): HasMany
     {
         return $this->hasMany(SalleEquipment::class);
