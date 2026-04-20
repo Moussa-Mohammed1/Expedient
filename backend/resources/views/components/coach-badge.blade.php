@@ -10,7 +10,7 @@
 <div class="relative z-50 text-left  coach-badge-container">
     <button title="Badge" type="button" onclick="document.getElementById('{{ $dropdownId }}').classList.toggle('hidden')"
         class=" text-white text-sm font-medium flex justify-center items-center rounded-sm p-2 mr-2 bg-[#2f2e2e] cursor-pointer transition focus:outline-none">
-        <i class="fa-solid fa-id-card text-white text-xl"></i>
+        <i class="fa-solid fa-id-card text-yellow-500 text-xl"></i>
     </button>
 
     <div id="{{ $dropdownId }}"
