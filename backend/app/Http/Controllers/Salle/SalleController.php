@@ -38,10 +38,7 @@ class SalleController extends Controller
         ]);
     }
 
-    public function create(): View
-    {
-        return view('salles.create');
-    }
+    
 
     public function store(StoreSalleRequest $request): RedirectResponse
     {
@@ -62,12 +59,6 @@ class SalleController extends Controller
         ]);
 
         return view('trainee.salles.show', compact('salle'));
-    }
-
-    public function edit(Salle $salle): View
-    {
-        $salle->load(['coach', 'sport']);
-        return view('salles.edit', compact('salle'));
     }
 
     public function update(UpdateSalleRequest $request, Salle $salle): RedirectResponse

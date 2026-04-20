@@ -72,7 +72,7 @@
 
                         <div class="flex gap-2">
                             @can('update', $salle)
-                                <a href="{{ route('salles.edit', $salle) }}"
+                                <a href="{{ route('coach.salles.edit', $salle) }}"
                                     class="bg-[#d1fa48] text-black font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-[#bde13f] transition-colors">
                                     <i class="fa-solid fa-pen"></i> Edit
                                 </a>
