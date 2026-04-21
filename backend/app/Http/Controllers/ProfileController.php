@@ -46,10 +46,6 @@ class ProfileController extends Controller
     {
         $user = User::with(['role', 'coach.specialities'])->findOrFail($id);
 
-        if (auth()->id() !== $user->id && auth()->user()?->role?->title !== 'admin') {
-            return redirect('/home');
-        }
-
         return view('profile.show', ['profileUser' => $user]);
     }
 
@@ -59,10 +55,7 @@ class ProfileController extends Controller
     public function edit(string $id)
     {
         $user = User::with(['role', 'coach.specialities'])->findOrFail($id);
-
-        if (auth()->id() !== $user->id && auth()->user()?->role?->title !== 'admin') {
-            return redirect('/home');
-        }
+        $this->authorizeOwner($user);
 
         $allSpecialities = Speciality::query()->orderBy('title')->get(['id', 'title']);
 
@@ -78,8 +71,7 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request, string $id)
     {
         $user = User::with('coach.specialities')->findOrFail($id);
-
-        $this->authorizeUser($user);
+        $this->authorizeOwner($user);
 
         $validated = $request->validated();
 
@@ -112,9 +104,9 @@ class ProfileController extends Controller
         //
     }
     
-    private function authorizeUser(User $user)
+    private function authorizeOwner(User $user)
     {
-        if (auth()->id() !== $user->id && auth()->user()?->role?->title !== 'admin') {
+        if (auth()->id() !== $user->id) {
             return redirect('/home');
         }
     }

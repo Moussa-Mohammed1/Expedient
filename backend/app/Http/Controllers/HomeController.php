@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Salle;
 use App\Models\Sport;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        if (!Auth::check()) {
+            return redirect()->route('welcome');
+        }
+
         $user = auth()->user();
 
         $userCommunity = auth()->user()?->memberships()
