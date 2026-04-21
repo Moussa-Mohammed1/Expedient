@@ -76,7 +76,6 @@
                 </div>
             @empty
                 <div class="bg-[#111111] border border-zinc-800/80 rounded-xl p-8 text-center">
-                    <i class="fa-solid fa-flag text-3xl text-zinc-600 mb-3"></i>
                     <h3 class="text-white font-semibold text-lg mb-2">No reports yet</h3>
                     <p class="text-zinc-500 text-sm">Submitted reports will appear here with their age and downloadable evidence.</p>
                 </div>
