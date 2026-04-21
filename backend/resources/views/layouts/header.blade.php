@@ -81,7 +81,7 @@
                 </li>
                 @auth
                     @if(auth()->user()->role && auth()->user()->role->title === 'admin')
-                        <li><a href="{{ url('/dashboard') }}"
+                        <li><a href="{{ url('/admin/dashboard') }}"
                                 class="{{ request()->is('dashboard') ? 'text-[#ff5520] font-bold' : '' }}">Admin</a></li>
                     @endif
                 @endauth
