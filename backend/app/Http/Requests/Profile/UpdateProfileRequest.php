@@ -12,7 +12,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return (int) $this->route('profile') === (int) $this->user()?->id;
     }
 
     /**
