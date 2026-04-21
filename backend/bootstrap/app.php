@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\isAdmin;
 use App\Http\Middleware\isGuest;
 use App\Http\Middleware\CoachMiddleware;
 use Illuminate\Auth\AuthenticationException;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'coach' => CoachMiddleware::class,
+            'admin' => isAdmin::class,
         ]);
 
         $middleware->append(isGuest::class);
