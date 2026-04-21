@@ -164,7 +164,7 @@
 
                         <div class="bg-[#d1fa48]/10 border-b border-[#d1fa48]/20 p-5 flex items-center justify-between">
                             <h3 class="text-[#d1fa48] font-bold text-lg flex items-center gap-2">
-                                <i class="fa-solid fa-pen-to-square"></i> {{ $panelTitle }}
+                                {{ $panelTitle }}
                             </h3>
                             @if ($isEditing)
                                 <a href="{{ route('management.services.index') }}"

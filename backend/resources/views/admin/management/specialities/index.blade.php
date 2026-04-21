@@ -155,7 +155,7 @@
 
                         <div class="bg-zinc-800/50 border-b border-zinc-700/50 p-5 flex items-center justify-between">
                             <h3 class="text-white font-bold text-lg flex items-center gap-2">
-                                <i class="fa-solid fa-pen-to-square"></i> {{ $panelTitle }}
+                                {{ $panelTitle }}
                             </h3>
                             @if ($isEditing)
                                 <a href="{{ route('management.specialities.index') }}"

@@ -167,7 +167,7 @@
 
                         <div class="bg-[#FBBF24]/10 border-b border-[#FBBF24]/20 p-5 flex items-center justify-between">
                             <h3 class="text-[#FBBF24] font-bold text-lg flex items-center gap-2">
-                                <i class="fa-solid fa-pen-to-square"></i> {{ $panelTitle }}
+                                {{ $panelTitle }}
                             </h3>
                             @if ($isEditing)
                                 <a href="{{ route('management.sports.index') }}"
