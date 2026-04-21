@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class isAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->role !== 'admin') {
+        if (auth()->user()->role_id !== Role::where('title', 'admin')->value('id')) {
             return redirect('/home');
         }
         return $next($request);
