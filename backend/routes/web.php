@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManagementController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Middleware\isGuest;
 use App\Http\Controllers\Coach\CoachController;
 use App\Http\Controllers\Coach\CoachVerificationController;
 use App\Http\Controllers\Coach\SalleController as CoachSalleController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Coach\SpecialityController as CoachSpecialityController;
 use App\Http\Controllers\WelcomeController;
+use Doctrine\DBAL\Logging\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Community\CommunityController;
 use App\Http\Controllers\Community\CommentController;
@@ -36,7 +38,7 @@ use App\Http\Controllers\Admin\CommunityController as AdminCommunityController;
 
 
 
-Route::get('/', [WelcomeController::class, 'index'])->middleware(\App\Http\Middleware\isGuest::class)->name('welcome');
+Route::get('/', [WelcomeController::class, 'index'])->middleware(isGuest::class)->name('welcome');
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
@@ -111,7 +113,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/specialities/{speciality}', [CoachSpecialityController::class, 'destroy'])->name('coach.specialities.destroy');
     });
 
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
         Route::get('/users', [UserController::class, 'index']);
         Route::post('/users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assignRole');
