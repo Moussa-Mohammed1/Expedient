@@ -20,6 +20,7 @@ class Community extends Model
         'title',
         'description',
         'backgroundImage',
+        'localisation',
     ];
 
     /**
