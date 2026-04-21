@@ -21,22 +21,24 @@
                 ? asset('/storage/users/profiles/' . $user->avatar)
                 : asset('assets/images/profile.jpeg');
         @endphp
-
+        
         <div class="md:flex md:items-center md:justify-between mb-8">
             <div class="min-w-0 flex-1">
                 <h1 class="text-2xl md:text-3xl font-bold text-white">Profile Overview</h1>
                 <p class="text-sm text-zinc-400 mt-2">View your personal details, system role, and account status.</p>
             </div>
-            <div class="mt-4 flex md:ml-4 md:mt-0">
-                <a href="{{ route('profile.edit', $user->id) }}"
-                    class="inline-flex items-center rounded-md bg-[#ff5520] px-3 py-1.5 text-xs font-semibold text-white shadow-sm border border-[#ff5520] hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff5520] transition-colors">
-                    <svg class="-ml-0.5 mr-1.5 h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path
-                            d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
-                    </svg>
-                    Update Profile
-                </a>
-            </div>
+            @if (auth()->id() === $user->id)
+                <div class="mt-4 flex md:ml-4 md:mt-0">
+                    <a href="{{ route('profile.edit', $user->id) }}"
+                        class="inline-flex items-center rounded-md bg-[#ff5520] px-3 py-1.5 text-xs font-semibold text-white shadow-sm border border-[#ff5520] hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff5520] transition-colors">
+                        <svg class="-ml-0.5 mr-1.5 h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+                        </svg>
+                        Update Profile
+                    </a>
+                </div>
+            @endif
         </div>
 
         <div class="overflow-hidden bg-[#111111] shadow-sm ring-1 ring-white/5 sm:rounded-xl border border-zinc-800">

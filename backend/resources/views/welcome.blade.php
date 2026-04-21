@@ -14,14 +14,13 @@
 </head>
 
 <body class="bg-black min-h-screen">
-    <section class="min-h-screen bg-black relative overflow-hidden">
+    <section id="top" class="min-h-screen bg-black relative overflow-hidden">
 
         @include('layouts.guestNavbar')
         <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-10 pb-16">
             <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 min-h-[calc(100vh-120px)]">
                 <div class="max-w-xl lg:pl-8">
-                    <h1
-                        class="text-3xl md:text-3xl lg:text-5xl font-extrabold tracking-tight text-white">
+                    <h1 class="text-3xl md:text-3xl lg:text-5xl font-extrabold tracking-tight text-white">
                         Find your
                         <br />
                         sport, perfect gym
@@ -61,7 +60,7 @@
             </div>
         </div>
     </section>
-    <section class="py-12 bg-black border-y border-zinc-800 relative z-10 w-full mt-10">
+    <section id="stats" class="py-12 bg-black border-y border-zinc-800 relative z-10 w-full mt-10">
         <div class="max-w-7xl mx-auto px-6 lg:px-10">
             <div class="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-4 text-center">
 
@@ -135,31 +134,31 @@
 
                         <div class="space-y-3">
                             @forelse($featuredCoaches as $coach)
-                                                    @php
-                                                        $avatar = $coach['avatar'] ?? null;
-                                                        $coachAvatarUrl = $avatar
-                                                            ? asset('/storage/users/profiles/' . ltrim($avatar, '/'))
-                                                            : asset('assets/images/profile.jpeg');
-                                                    @endphp
-                                                    <div
-                                                        class="flex items-center gap-4 p-3 rounded-lg bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all">
-                                                        <div class="relative">
-                                                            <div
-                                                                class="w-14 h-14 rounded-full overflow-hidden border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }}">
-                                                                <img src="{{ $coachAvatarUrl }}" alt="Coach"
-                                                                    class="w-full h-full object-cover transition-transform duration-300">
-                                                            </div>
-                                                            @if($coach['hasBadge'])
-                                                                <span
-                                                                    class="absolute -bottom-1 -right-1 bg-yellow-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-md"><i
-                                                                        class="fa-solid fa-check"></i></span>
-                                                            @endif
-                                                        </div>
-                                                        <div class="min-w-0 flex-1">
-                                                            <p class="truncate text-white font-bold text-base">{{ $coach['name'] }}</p>
-                                                            <p class="truncate text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
-                                                        </div>
-                                                    </div>
+                                @php
+                                    $avatar = $coach['avatar'] ?? null;
+                                    $coachAvatarUrl = $avatar
+                                        ? asset('/storage/users/profiles/' . ltrim($avatar, '/'))
+                                        : asset('assets/images/profile.jpeg');
+                                @endphp
+                                <div
+                                    class="flex items-center gap-4 p-3 rounded-lg bg-[#1c1c1c] border border-transparent hover:border-yellow-500/50 cursor-pointer group transition-all relative">
+                                    <div class="relative">
+                                        <div
+                                            class="w-14 h-14 rounded-full overflow-hidden border-2 {{ $coach['hasBadge'] ? 'border-yellow-500' : 'border-zinc-600' }}">
+                                            <img src="{{ $coachAvatarUrl }}" alt="Coach"
+                                                class="w-full h-full object-cover transition-transform duration-300">
+                                        </div>
+                                    </div>
+                                    @if($coach['hasBadge'])
+                                        <span
+                                            class="absolute top-2 right-2 bg-black ring text-yellow-500 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
+                                            Verified</span>
+                                    @endif
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-white font-bold text-base">{{ $coach['name'] }}</p>
+                                        <p class="truncate text-zinc-400 text-sm">{{ $coach['speciality'] }}</p>
+                                    </div>
+                                </div>
                             @empty
                                 <div class="rounded-xl bg-[#1c1c1c] p-4 text-sm text-zinc-400 border border-zinc-800">
                                     Coaches will appear here soon.
