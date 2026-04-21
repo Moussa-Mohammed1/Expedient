@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Coach;
 
 use App\Http\Controllers\Controller;
 use App\Models\CoachVerification;
+use App\Support\CloudinaryStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CoachVerificationController extends Controller
 {
@@ -60,12 +60,16 @@ class CoachVerificationController extends Controller
             'description' => ['required', 'string', 'max:1000'],
         ]);
 
-        $storedPath = $request->file('proof_document')->store('coach-verifications', 'public');
+        $storedPath = CloudinaryStorage::upload(
+            $request->file('proof_document'),
+            'coach-verifications',
+            'auto'
+        );
 
         CoachVerification::create([
             'coach_id' => $coach->id,
             'status' => 'pending',
-            'proof_document' => Storage::url($storedPath),
+            'proof_document' => $storedPath,
             'document_description' => $validated['description'],
         ]);
 

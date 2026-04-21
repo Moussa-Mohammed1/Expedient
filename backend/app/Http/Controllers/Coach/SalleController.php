@@ -11,10 +11,10 @@ use App\Models\Gallery;
 use App\Models\Salle;
 use App\Models\Service;
 use App\Models\Sport;
+use App\Support\CloudinaryStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class SalleController extends Controller
@@ -110,11 +110,11 @@ class SalleController extends Controller
             ];
 
             if ($request->hasFile('logo')) {
-                $salleData['logo'] = $request->file('logo')->store('salles/logos', 'public');
+                $salleData['logo'] = CloudinaryStorage::upload($request->file('logo'), 'salles/logos');
             }
 
             if ($request->hasFile('background')) {
-                $salleData['background'] = $request->file('background')->store('salles/backgrounds', 'public');
+                $salleData['background'] = CloudinaryStorage::upload($request->file('background'), 'salles/backgrounds');
             }
 
             $salle->update($salleData);
@@ -155,7 +155,7 @@ class SalleController extends Controller
                     ->take($remainingSlots)
                     ->each(function ($file) use ($salle) {
                         $salle->galleries()->create([
-                            'content' => $file->store('salles/galleries', 'public'),
+                            'content' => CloudinaryStorage::upload($file, 'salles/galleries'),
                         ]);
                     });
             }
@@ -180,16 +180,14 @@ class SalleController extends Controller
         DB::transaction(function () use ($salle) {
             $galleryPaths = $salle->galleries()->pluck('content')->filter()->all();
 
-            if ($salle->logo) {
-                Storage::disk('public')->delete($salle->logo);
-            }
+            CloudinaryStorage::delete($salle->logo);
 
-            if ($salle->background) {
-                Storage::disk('public')->delete($salle->background);
-            }
+            CloudinaryStorage::delete($salle->background);
 
             if ($galleryPaths !== []) {
-                Storage::disk('public')->delete($galleryPaths);
+                foreach ($galleryPaths as $galleryPath) {
+                    CloudinaryStorage::delete((string) $galleryPath);
+                }
             }
 
             $salle->galleries()->delete();
