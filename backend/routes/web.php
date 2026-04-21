@@ -32,12 +32,9 @@ use App\Http\Controllers\Admin\SpecialityController as AdminSpecialityController
 use App\Http\Controllers\Admin\EquipmentController as AdminEquipmentController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\CoachVerificationController as AdminCoachVerificationController;
+use App\Http\Controllers\Admin\CommunityController as AdminCommunityController;
 
-use App\Models\Trainee;
-use App\Models\Coach;
-use App\Models\Salle;
-use App\Models\Opinion;
-use PhpParser\Node\Expr\FuncCall;
+
 
 Route::get('/', [WelcomeController::class, 'index'])->middleware(\App\Http\Middleware\isGuest::class)->name('welcome');
 
@@ -143,6 +140,10 @@ Route::middleware('auth')->group(function () {
         Route::patch('/reports/{report}/status', [AdminReportController::class, 'updateStatus'])->name('admin.reports.update-status');
         Route::get('/verifications', [AdminCoachVerificationController::class, 'index'])->name('admin.verifications');
         Route::patch('/verifications/{coachVerification}/status', [AdminCoachVerificationController::class, 'updateStatus'])->name('admin.verifications.update-status');
+        Route::get('/communities', [AdminCommunityController::class, 'index'])->name('admin.communities');
+        Route::post('/communities', [AdminCommunityController::class, 'store'])->name('admin.communities.store');
+        Route::put('/communities/{community}', [AdminCommunityController::class, 'update'])->name('admin.communities.update');
+        Route::delete('/communities/{community}', [AdminCommunityController::class, 'destroy'])->name('admin.communities.destroy');
     });
 
 
