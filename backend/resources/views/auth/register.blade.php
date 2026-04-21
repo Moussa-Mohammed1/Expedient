@@ -14,7 +14,7 @@
         <div class="w-full max-w-sm sm:max-w-md">
             <x-app-logo />
             <div
-                class="w-full bg-white p-4 sm:p-5 rounded-lg shadow-yellow-400 shadow-2xl flex items-center justify-center">
+                class="w-full bg-white p-4 sm:p-5 rounded-lg  flex items-center justify-center">
                 <div class="w-full">
                     <div class="text-black font-bold text-center">Create account</div>
                     <div class="mt-4 flex flex-col items-center">
@@ -30,7 +30,7 @@
                                         placeholder="" />
                                     @error('name')
                                         <p class="text-xs text-red-600 font-semibold">{{ $message }}</p>
-                                    @enderror
+                                    @enderror 
                                 </div>
 
                                 <div class="mt-3 space-y-1">

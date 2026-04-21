@@ -16,7 +16,7 @@
             </a>
             <x-notification-popup/>
             <div
-                class="w-full bg-white p-5 sm:p-8 rounded-lg shadow-yellow-400 shadow-2xl flex items-center justify-center">
+                class="w-full bg-white p-5 sm:p-8 rounded-lg mt-10 sm:mt-8 flex items-center justify-center">
                 <div class="w-full">
                     <div class="text-black font-bold text-center">
                         Login 
@@ -68,6 +68,20 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password');
+            const showPasswordCheckbox = document.getElementById('show-password');
+
+            if (!passwordInput || !showPasswordCheckbox) {
+                return;
+            }
+
+            showPasswordCheckbox.addEventListener('change', function() {
+                passwordInput.type = this.checked ? 'text' : 'password';
+            });
+        });
+    </script>
 </body>
 
 </html>
