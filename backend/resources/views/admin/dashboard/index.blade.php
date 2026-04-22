@@ -16,9 +16,7 @@
 <body
     class="bg-black text-gray-300 min-h-screen overflow-x-hidden">
     @include('layouts.adminSidebar') 
-    <div class="fixed top-5 right-15  w-3 h-3 z-50">
-        <x-profile-icon/>
-    </div>
+   
     <main class="flex-1 p-6 pt-24 lg:p-10 lg:ml-64">
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
