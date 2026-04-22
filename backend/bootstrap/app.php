@@ -3,6 +3,7 @@
 use App\Http\Middleware\isAdmin;
 use App\Http\Middleware\isGuest;
 use App\Http\Middleware\CoachMiddleware;
+use App\Http\Middleware\notSuspended;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'coach' => CoachMiddleware::class,
             'admin' => isAdmin::class,
+            'active' => notSuspended::class,
         ]);
 
         $middleware->append(isGuest::class);
