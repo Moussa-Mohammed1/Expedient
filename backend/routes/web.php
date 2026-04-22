@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManagementController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\SuspendedUserController;
 use App\Http\Middleware\isGuest;
 use App\Http\Controllers\Coach\CoachController;
 use App\Http\Controllers\Coach\CoachVerificationController;
@@ -39,7 +40,7 @@ use App\Http\Controllers\Admin\CommunityController as AdminCommunityController;
 
 
 Route::get('/', [WelcomeController::class, 'index'])->middleware(isGuest::class)->name('welcome');
-
+Route::get('/suspended/{user}', [SuspendedUserController::class, 'show'])->name('suspended.show');
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -49,7 +50,7 @@ Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
     Route::get('/explore', [ExploreController::class, 'index'])->name('explore');
     Route::post('/coach-verifications', [CoachVerificationController::class, 'store'])->name('coach-verifications.store');
