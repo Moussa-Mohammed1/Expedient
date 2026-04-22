@@ -17,7 +17,7 @@
     <section class="py-4 font-sans">
         <div class="max-w-md w-full p-8 rounded-2xl shadow-2xl text-center">
 
-            <x-app-logo/>
+            <x-app-logo />
             <h2 class="text-xl font-semibold text-gray-200">Account Suspended</h2>
             <p class="mt-2 text-sm text-gray-400">Your access has been restricted by the Expedient Admin team.</p>
 
@@ -63,10 +63,12 @@
             </div>
 
             <div class="mt-8">
-                <button
-                    class="w-full py-3 px-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors duration-200">
-                    Log Out
-                </button>
+                <form action="{{ route('logout') }}" method="POST">
+                    <button type="submit"
+                        class="w-full py-3 px-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors duration-200">
+                        Log Out
+                    </button>
+                </form>
             </div>
         </div>
     </section>

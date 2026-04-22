@@ -15,10 +15,17 @@
     <x-notification-popup />
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
 
-        <div class="mb-10 border-b border-zinc-800 pb-6">
-            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">My Reports</h1>
-            <p class="text-zinc-400 text-sm">Track the status of the issues, profiles, or facilities you have reported
-                to the Expedient admin team.</p>
+        <div class="mb-10 border-b border-zinc-800 pb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-white tracking-tight mb-2">My Reports</h1>
+                <p class="text-zinc-400 text-sm">Track the status of the issues, profiles, or facilities you have reported
+                    to the Expedient admin team.</p>
+            </div>
+            <button type="button"
+                class="open-report-modal inline-flex items-center justify-center gap-2 rounded-full border border-[#ff5520]/40 bg-[#ff5520]/10 px-4 py-2 text-sm font-semibold text-[#ff7a00] hover:bg-[#ff5520]/20 hover:border-[#ff5520]/60 transition-colors">
+                <i class="fa-solid fa-flag"></i>
+                Add New Report
+            </button>
         </div>
 
         <div class="space-y-6">
@@ -82,6 +89,8 @@
             @endforelse
         </div>
     </div>
+
+    @include('coach.opinions.partials.report-modal')
 
 </body>
 
