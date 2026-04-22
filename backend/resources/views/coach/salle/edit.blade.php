@@ -70,7 +70,7 @@
                             <div>
                                 <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wide mb-2">Salle
                                     Name</label>
-                                <input type="text" name="name" value="Atlas Power Gym"
+                                <input type="text" name="name" value="{{ $salle->name }}"
                                     class="w-full bg-[#1c1c1c] border border-zinc-700 rounded-md px-4 py-3 text-white text-sm focus:outline-none focus:border-[#FBBF24]">
                             </div>
                             <div>
