@@ -99,9 +99,19 @@ class ProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        //
+        $user = User::findOrFail($id);
+        $this->authorizeOwner($user);
+
+        // Delete avatar if exists
+        if ($user->avatar && Storage::disk('public')->exists('users/profiles/' . $user->avatar)) {
+            Storage::disk('public')->delete('users/profiles/' . $user->avatar);
+        }
+
+        $user->delete();
+
+        return redirect()->route('welcome')->with('success', 'Your account has been permanently deleted.');
     }
     
     private function authorizeOwner(User $user)

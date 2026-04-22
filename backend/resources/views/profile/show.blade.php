@@ -12,7 +12,7 @@
 <body class="bg-black text-white font-sans ">
 
     @include('layouts.header')
-    <x-notification-popup/>
+    <x-notification-popup />
     <div class="max-w-4xl mx-auto pt-6 md:pt-10">
 
         @php
@@ -21,7 +21,7 @@
                 ? asset('/storage/users/profiles/' . $user->avatar)
                 : asset('assets/images/profile.jpeg');
         @endphp
-        
+
         <div class="md:flex md:items-center md:justify-between mb-8">
             <div class="min-w-0 flex-1">
                 <h1 class="text-2xl md:text-3xl font-bold text-white">Profile Overview</h1>
@@ -106,7 +106,8 @@
                     </div>
 
                     <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-[#1c1c1c] transition-colors">
-                        <dt class="text-xs md:text-sm font-medium text-zinc-400 flex items-center">Coach Specialities</dt>
+                        <dt class="text-xs md:text-sm font-medium text-zinc-400 flex items-center">Coach Specialities
+                        </dt>
                         <dd class="mt-1 text-xs md:text-sm text-white sm:col-span-2 sm:mt-0">
                             @if ($user->coach && $user->coach->specialities->isNotEmpty())
                                 <div class="flex flex-wrap gap-2">
@@ -124,16 +125,16 @@
                             @endif
                         </dd>
                     </div>
-
-                    <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-[#1c1c1c] transition-colors">
-                        <dt class="text-xs md:text-sm font-medium text-zinc-400 flex items-center">Password</dt>
-                        <p
-                            class="mt-1 text-xs md:text-sm text-white sm:col-span-2 sm:mt-0 flex items-center justify-between">
-                            <span>••••••••••••</span>
-                            <span class="text-[11px] text-zinc-500 italic">Hidden for security</span>
-                        </p>
-                    </div>
-
+                    @if ($user->id == auth()->id())
+                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-[#1c1c1c] transition-colors">
+                            <dt class="text-xs md:text-sm font-medium text-zinc-400 flex items-center">Password</dt>
+                            <p
+                                class="mt-1 text-xs md:text-sm text-white sm:col-span-2 sm:mt-0 flex items-center justify-between">
+                                <span>••••••••••••</span>
+                                <span class="text-[11px] text-zinc-500 italic">Hidden for security</span>
+                            </p>
+                        </div>
+                    @endif
                 </dl>
             </div>
         </div>

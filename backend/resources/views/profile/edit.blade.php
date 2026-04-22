@@ -16,7 +16,7 @@
 
 <body class="bg-black text-white">
     @include('layouts.header')
-    <x-notification-popup/>
+    <x-notification-popup />
     @php
         $user = $profileUser ?? auth()->user();
         $avatarUrl = $user->avatar
@@ -112,7 +112,8 @@
                     <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 hover:bg-zinc-700/30 transition-colors">
                         <div>
                             <label class="block text-xs font-medium text-gray-300 mb-2">Coach Specialities</label>
-                            <p class="text-xs text-gray-400">Select one or more specialities. Unchecked items are removed when you save.</p>
+                            <p class="text-xs text-gray-400">Select one or more specialities. Unchecked items are removed
+                                when you save.</p>
                         </div>
                         <div class="lg:col-span-2">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -143,11 +144,13 @@
                     <div>
                         <label for="password" class="block text-xs font-medium text-gray-300 mb-2">Password
                             Modification</label>
-                        <p class="text-xs text-gray-400">Leave blank to keep your current password. Current password is required to make any changes.</p>
+                        <p class="text-xs text-gray-400">Leave blank to keep your current password. Current password is
+                            required to make any changes.</p>
                     </div>
                     <div class="lg:col-span-2 grid grid-cols-1 gap-4">
                         <div>
-                            <label for="current_password" class="block text-xs font-medium text-gray-300 mb-2">Current Password</label>
+                            <label for="current_password" class="block text-xs font-medium text-gray-300 mb-2">Current
+                                Password</label>
                             <input type="password" id="current_password" name="current_password"
                                 autocomplete="current-password"
                                 class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
@@ -158,7 +161,8 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label for="password" class="block text-xs font-medium text-gray-300 mb-2">New Password</label>
+                                <label for="password" class="block text-xs font-medium text-gray-300 mb-2">New
+                                    Password</label>
                                 <input type="password" id="password" name="password" autocomplete="new-password"
                                     class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
                                     placeholder="New password">
@@ -167,7 +171,8 @@
                                 @enderror
                             </div>
                             <div>
-                                <label for="password_confirmation" class="block text-xs font-medium text-gray-300 mb-2">Confirm Password</label>
+                                <label for="password_confirmation"
+                                    class="block text-xs font-medium text-gray-300 mb-2">Confirm Password</label>
                                 <input type="password" id="password_confirmation" name="password_confirmation"
                                     autocomplete="new-password"
                                     class="w-full rounded-md border-zinc-700 border py-2 px-3 text-sm text-white bg-zinc-800 shadow-sm focus:border-[#ff5520] focus:ring-1 focus:ring-[#ff5520] placeholder-gray-500"
@@ -188,8 +193,24 @@
                     </button>
                 </div>
             </form>
+            <div class="mt-10 pt-6 border-t border-gray-800">
+                <div class="flex flex-col gap-2">
+                    <h3 class="text-sm font-semibold text-white">Danger Zone</h3>
+                    <p class="text-xs text-gray-500 mb-2">Once you delete your account, there is no going back. Please
+                        be certain.</p>
+
+                    <form action="{{ route('profile.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you absolutely sure? This action cannot be undone.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="group relative flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-2.5 bg-transparent border border-red-900/50 text-red-500 text-sm font-medium rounded-lg hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-200">
+                            Delete Account
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        
+
     </div>
 
 </body>
