@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
-use App\Support\CloudinaryStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class EquipmentController extends Controller
@@ -45,7 +45,7 @@ class EquipmentController extends Controller
     {
         $validated = $this->validateEquipment($request);
 
-        $validated['image'] = CloudinaryStorage::upload($request->file('image'), 'equipments');
+        $validated['image'] = $request->file('image')->store('equipments', 'public');
 
         Equipment::create($validated);
 
@@ -58,9 +58,11 @@ class EquipmentController extends Controller
         $validated = $this->validateEquipment($request, $equipment->id);
 
         if ($request->hasFile('image')) {
-            CloudinaryStorage::delete($equipment->image);
+            if ($equipment->image) {
+                Storage::disk('public')->delete($equipment->image);
+            }
 
-            $validated['image'] = CloudinaryStorage::upload($request->file('image'), 'equipments');
+            $validated['image'] = $request->file('image')->store('equipments', 'public');
         } else {
             unset($validated['image']);
         }
@@ -79,7 +81,7 @@ class EquipmentController extends Controller
         }
 
         if ($equipment->image) {
-            CloudinaryStorage::delete($equipment->image);
+            Storage::disk('public')->delete($equipment->image);
         }
 
         $equipment->delete();

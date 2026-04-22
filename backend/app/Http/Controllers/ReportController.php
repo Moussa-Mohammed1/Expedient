@@ -6,7 +6,6 @@ use App\Http\Requests\Report\StoreReportController;
 use App\Http\Requests\Report\StoreReportRequest;
 use App\Http\Requests\Sport\StoreSportRequest;
 use App\Models\Report;
-use App\Support\CloudinaryStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -39,11 +38,7 @@ class ReportController extends Controller
         }
 
         $validated = $request->validated();
-        $storedProofPath = CloudinaryStorage::upload(
-            $request->file('proof'),
-            'reports/proofs',
-            'auto'
-        );
+        $storedProofPath = $request->file('proof')->store('reports/proofs', 'public');
 
         Report::create([
             'reporter_id' => $request->user()->id,

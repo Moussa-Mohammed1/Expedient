@@ -6,11 +6,12 @@ use App\Http\Controllers\Coach\CoachSpecialityController;
 use App\Http\Requests\Profile\UpdateProfileRequest;
 use App\Models\Speciality;
 use App\Models\User;
-use App\Support\CloudinaryStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -116,13 +117,14 @@ class ProfileController extends Controller
             return;
         }
 
-        CloudinaryStorage::delete($user->avatar, 'users/profiles');
+        if ($user->avatar && Storage::disk('public')->exists('users/profiles/' . $user->avatar)) {
+            Storage::disk('public')->delete('users/profiles/' . $user->avatar);
+        }
 
         $avatarFile = $request->file('avatar');
-        $validated['avatar'] = CloudinaryStorage::upload(
-            $avatarFile,
-            'users/profiles',
-        );
+        $avatarName = Str::uuid() . '.' . $avatarFile->getClientOriginalExtension();
+        $avatarFile->storeAs('users/profiles', $avatarName, 'public');
+        $validated['avatar'] = $avatarName;
     }
 
     private function isChangingPassword(array $validated): bool

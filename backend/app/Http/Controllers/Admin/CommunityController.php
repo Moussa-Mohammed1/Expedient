@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Community;
-use App\Support\CloudinaryStorage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -66,10 +66,7 @@ class CommunityController extends Controller
         $validated = $this->validateCommunity($request);
 
         if ($request->hasFile('backgroundImage')) {
-            $validated['backgroundImage'] = CloudinaryStorage::upload(
-                $request->file('backgroundImage'),
-                'communities'
-            );
+            $validated['backgroundImage'] = $request->file('backgroundImage')->store('communities', 'public');
         }
 
         Community::create($validated);
@@ -84,14 +81,15 @@ class CommunityController extends Controller
         $validated = $this->validateCommunity($request, $community->id);
 
         if ($request->hasFile('backgroundImage')) {
-            CloudinaryStorage::delete($community->backgroundImage);
+            if ($community->backgroundImage) {
+                Storage::disk('public')->delete($community->backgroundImage);
+            }
 
-            $validated['backgroundImage'] = CloudinaryStorage::upload(
-                $request->file('backgroundImage'),
-                'communities'
-            );
+            $validated['backgroundImage'] = $request->file('backgroundImage')->store('communities', 'public');
         } elseif ($request->boolean('remove_background')) {
-            CloudinaryStorage::delete($community->backgroundImage);
+            if ($community->backgroundImage) {
+                Storage::disk('public')->delete($community->backgroundImage);
+            }
 
             $validated['backgroundImage'] = null;
         }
@@ -118,7 +116,7 @@ class CommunityController extends Controller
         }
 
         if ($community->backgroundImage) {
-            CloudinaryStorage::delete($community->backgroundImage);
+            Storage::disk('public')->delete($community->backgroundImage);
         }
 
         $community->delete();

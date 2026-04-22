@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\StorePostRequest;
 use App\Models\Community;
 use App\Models\Post;
-use App\Support\CloudinaryStorage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -92,7 +92,7 @@ class PostController extends Controller
 
         foreach ($request->file('images', []) as $imageFile) {
             $post->images()->create([
-                'content' => CloudinaryStorage::upload($imageFile, 'communities/posts'),
+                'content' => $imageFile->store('communities/posts', 'public'),
             ]);
         }
 
@@ -159,7 +159,7 @@ class PostController extends Controller
 
         foreach ($request->file('images', []) as $imageFile) {
             $post->images()->create([
-                'content' => CloudinaryStorage::upload($imageFile, 'communities/posts'),
+                'content' => $imageFile->store('communities/posts', 'public'),
             ]);
         }
 
@@ -179,13 +179,12 @@ class PostController extends Controller
         $imagePaths = $post->images()
             ->pluck('content')
             ->filter()
+            ->map(fn($path) => ltrim((string) $path, '/'))
             ->values()
             ->all();
 
         if (!empty($imagePaths)) {
-            foreach ($imagePaths as $imagePath) {
-                CloudinaryStorage::delete((string) $imagePath);
-            }
+            Storage::disk('public')->delete($imagePaths);
         }
 
         $post->images()->delete();
