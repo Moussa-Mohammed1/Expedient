@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $email = strtolower($validated['email']);
+        $email = trim(strtolower($validated['email']));
         if (Auth::attempt(['email' => $email, 'password' => $validated['password']])) {
             $request->session()->regenerate();
             $user = auth()->user();
