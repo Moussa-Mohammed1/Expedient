@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('coaches', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('hasBadge')->default(false);
             $table->decimal('reputation_rate')->default(0);
             $table->timestamps();

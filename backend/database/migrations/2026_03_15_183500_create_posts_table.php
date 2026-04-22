@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('content');
             $table->softDeletes();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('community_id')->constrained('communities');
             $table->timestamps();
         });

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->integer('existenceYears')->nullable();
             $table->string('city');
-            $table->foreignId('coach_id')->constrained('coaches');
+            $table->foreignId('coach_id')->constrained('coaches')->cascadeOnDelete();
             $table->foreignId('sport_id')->constrained('sports');
             $table->timestamps();
         });

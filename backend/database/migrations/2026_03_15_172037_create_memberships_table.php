@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
             $table->string('role')->default('member');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('community_id')->constrained('communities');
             $table->timestamp('left_at')->nullable();
             $table->timestamps();

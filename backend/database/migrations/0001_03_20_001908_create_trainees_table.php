@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('trainees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('goal')->nullable();
             $table->integer('age')->nullable();
             $table->decimal('weight')->nullable();

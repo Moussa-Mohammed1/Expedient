@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('suspended_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('suspended_by')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('suspended_by')->constrained('users')->cascadeOnDelete();
             $table->string('reason');
             $table->enum('status', ['active', 'expired']);
             $table->dateTime('expires_at');

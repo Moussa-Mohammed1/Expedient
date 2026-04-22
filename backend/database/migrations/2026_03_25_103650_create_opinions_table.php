@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('opinions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->constrained('users');
-            $table->foreignId('coach_id')->constrained('coaches');
+            $table->foreignId('author_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('coach_id')->constrained('coaches')->cascadeOnDelete();
             $table->decimal('rate')->default(0);
             $table->string('content')->nullable();
             $table->boolean('isApproved')->default(true);
