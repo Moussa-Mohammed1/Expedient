@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\SuspendedUser;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class SuspendedUserController extends Controller
 {
     public function show(User $user)
     {
-        return view('suspended', compact('user'));
+        $suspension = SuspendedUser::query()
+            ->active()
+            ->where('user_id', $user->id)
+            ->latest('expires_at')
+            ->first();
+
+        return view('suspended', compact('user', 'suspension'));
     }
 }
