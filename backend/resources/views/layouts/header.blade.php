@@ -42,7 +42,13 @@
 
         <div class="hidden lg:flex items-center  px-3 justify-center rounded-full gap-3 box-border z-10">
             @auth
-                @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
+                @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && auth()->user()->coach->hasBadge())
+                    <span
+                        class="inline-flex items-center gap-1 rounded-full border border-yellow-500/50 bg-yellow-500/15 px-2.5 py-1 text-xs font-semibold text-yellow-400">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Verified
+                    </span>
+                @elseif (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach)
                     <x-coach-badge :coach="auth()->user()->coach" />
                 @endif
             @endauth
@@ -53,7 +59,13 @@
 
         <div class="flex lg:hidden z-10">
             @auth
-                @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && !auth()->user()->coach->hasBadge())
+                @if (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach && auth()->user()->coach->hasBadge())
+                    <span
+                        class="inline-flex items-center gap-1 rounded-full border border-yellow-500/50 bg-yellow-500/15 px-2 py-1 text-[10px] font-semibold text-yellow-400 mr-2">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Verified
+                    </span>
+                @elseif (auth()->user()->role && auth()->user()->role->title === 'coach' && auth()->user()->coach)
                     <x-coach-badge :coach="auth()->user()->coach" />
                 @endif
             @endauth

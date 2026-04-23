@@ -13,8 +13,6 @@ class CoachVerificationController extends Controller
 {
     public function index(Request $request): View
     {
-        $hasRejectionCauseColumn = Schema::hasColumn('coach_verifications', 'rejection_cause');
-
         $filters = [
             'q' => trim((string) $request->string('q')),
             'status' => (string) $request->string('status', 'pending'),
@@ -27,15 +25,13 @@ class CoachVerificationController extends Controller
         if ($filters['q'] !== '') {
             $numericQuery = preg_replace('/\D+/', '', $filters['q']);
 
-            $verificationsQuery->where(function ($query) use ($filters, $numericQuery, $hasRejectionCauseColumn) {
+            $verificationsQuery->where(function ($query) use ($filters, $numericQuery) {
                 $query->where('document_description', 'ilike', '%' . $filters['q'] . '%')
                     ->orWhereHas('coach.user', function ($userQuery) use ($filters) {
                         $userQuery->where('name', 'ilike', '%' . $filters['q'] . '%');
                     });
 
-                if ($hasRejectionCauseColumn) {
                     $query->orWhere('rejection_cause', 'ilike', '%' . $filters['q'] . '%');
-                }
 
                 if ($numericQuery !== '') {
                     $query
@@ -65,8 +61,6 @@ class CoachVerificationController extends Controller
 
     public function updateStatus(Request $request, CoachVerification $coachVerification): RedirectResponse
     {
-        $hasRejectionCauseColumn = Schema::hasColumn('coach_verifications', 'rejection_cause');
-
         $validated = $request->validate([
             'status' => ['required', 'in:pending,approved,rejected'],
             'rejection_cause' => ['nullable', 'string', 'max:1000'],
@@ -85,21 +79,17 @@ class CoachVerificationController extends Controller
 
         if ($status === 'approved') {
             $updates['reviewed_at'] = now();
-            if ($hasRejectionCauseColumn) {
-                $updates['rejection_cause'] = null;
-            }
+
+            $updates['rejection_cause'] = null;
+
             $coachVerification->coach?->update(['hasBadge' => true]);
         } elseif ($status === 'rejected') {
             $updates['reviewed_at'] = now();
-            if ($hasRejectionCauseColumn) {
-                $updates['rejection_cause'] = $rejectionCause;
-            }
+            $updates['rejection_cause'] = $rejectionCause;
             $coachVerification->coach?->update(['hasBadge' => false]);
         } else {
             $updates['reviewed_at'] = null;
-            if ($hasRejectionCauseColumn) {
-                $updates['rejection_cause'] = null;
-            }
+            $updates['rejection_cause'] = null;
             $coachVerification->coach?->update(['hasBadge' => false]);
         }
 

@@ -137,7 +137,7 @@
                                     <h4 class="text-sm font-bold text-white mb-1 line-clamp-1">{{ $report->description }}</h4>
                                     <p class="text-xs text-zinc-400">Reporter: {{ $report->reporter?->name ?? 'Unknown' }} (User ID: {{ $report->reporter_id }})</p>
                                 </div>
-                                <a href="{{ route('reports.index') }}"
+                                <a href="{{ route('admin.reports') }}"
                                     class="{{ $isPending ? 'bg-yellow-500 text-black' : 'bg-[#222222] text-white border border-zinc-700 hover:bg-zinc-800' }}  text-xs font-bold px-4 py-2 rounded-lg transition-colors shrink-0">
                                     Review Case
                                 </a>
