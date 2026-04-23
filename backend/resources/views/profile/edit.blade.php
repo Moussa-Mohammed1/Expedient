@@ -193,7 +193,7 @@
                     </button>
                 </div>
             </form>
-            <div class="mt-10 pt-6 border-t border-gray-800">
+            <div class="mt-10 px-6  py-6 border-t border-gray-800">
                 <div class="flex flex-col gap-2">
                     <h3 class="text-sm font-semibold text-white">Danger Zone</h3>
                     <p class="text-xs text-gray-500 mb-2">Once you delete your account, there is no going back. Please
