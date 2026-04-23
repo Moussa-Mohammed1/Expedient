@@ -199,7 +199,7 @@
                     <p class="text-xs text-gray-500 mb-2">Once you delete your account, there is no going back. Please
                         be certain.</p>
 
-                    <form action="{{ route('profile.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you absolutely sure? This action cannot be undone.');">
+                    <form action="{{ route('profile.destroy', $user->id) }}" method="POST" >
                         @csrf
                         @method('DELETE')
                         <button type="submit"
