@@ -152,8 +152,7 @@
                                                     title="Edit">
                                                     <i class="fa-solid fa-pen text-xs"></i>
                                                 </a>
-                                                <form action="{{ route('admin.communities.destroy', $community) }}" method="POST"
-                                                    onsubmit="return confirm('Delete this community? This cannot be undone.');">
+                                                <form action="{{ route('admin.communities.destroy', $community) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

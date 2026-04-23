@@ -137,7 +137,7 @@
                                                     <li>
                                                         <form
                                                             action="{{ route('comments.destroy', ['post' => $post, 'comment' => $comment]) }}"
-                                                            method="POST" onsubmit="return confirm('Delete this comment?');">
+                                                            method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
