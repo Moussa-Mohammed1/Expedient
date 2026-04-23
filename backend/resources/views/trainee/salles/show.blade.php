@@ -75,6 +75,25 @@
                         </div>
 
                         <div class="flex gap-2">
+                            @if ($salle->isFavoris())
+                                <form action="{{ route('favorites.destroy', $salle) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="bg-[#1c1c1c] border border-zinc-700 text-[#ff5520] font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-[#ff5520] hover:text-white hover:border-[#ff5520] transition-colors">
+                                        <i class="fa-solid fa-heart"></i> Retirer des favoris
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('favorites.store', $salle) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="bg-[#1c1c1c] border border-zinc-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-zinc-800 transition-colors">
+                                        <i class="fa-regular fa-heart"></i> Add favoris
+                                    </button>
+                                </form>
+                            @endif
+
                             @can('update', $salle)
                                 <a href="{{ route('coach.salles.edit', $salle) }}"
                                     class="bg-[#d1fa48] text-black font-semibold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-[#bde13f] transition-colors">
