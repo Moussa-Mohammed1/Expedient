@@ -23,7 +23,7 @@ class StoreReportRequest extends FormRequest
     {
         return [
             'opinion_id' => ['nullable', 'integer', 'exists:opinions,id'],
-            'reason' => ['required', 'string', 'in:abusive,spam,false,other'],
+            'reason' => ['required', 'string'],
             'note' => ['required', 'string', 'max:5000'],
             'proof' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ];
