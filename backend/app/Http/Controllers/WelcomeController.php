@@ -41,7 +41,7 @@ class WelcomeController extends Controller
 
                 return [
                     'name' => $coach->user?->name ?? 'Coach',
-                    'avatar' => $coach->user?->avatar ?: 'https://randomuser.me/api/portraits/lego/1.jpg',
+                    'avatar' => $coach->user?->avatar,
                     'speciality' => $speciality !== '' ? $speciality : 'General Coaching',
                     'rating' => max(0, min(5, round($computedRating, 1))),
                     'hasBadge' => (bool) $coach->hasBadge,

@@ -137,7 +137,7 @@
                                 @php
                                     $avatar = $coach['avatar'] ?? null;
                                     $coachAvatarUrl = $avatar
-                                        ? asset('/storage/users/profiles/' . ltrim($avatar, '/'))
+                                        ? asset('storage/users/profiles/' . ltrim($avatar, '/'))
                                         : asset('assets/images/profile.jpeg');
                                 @endphp
                                 <div
