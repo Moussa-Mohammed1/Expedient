@@ -18,7 +18,7 @@ class CoachController extends Controller
 
         $coaches = User::query()
             ->whereNotNull('localisation')
-            ->where('localisation', 'like', '%' . $userLocal . '%')
+            ->where('localisation', 'ilike', '%' . $userLocal . '%')
             ->whereHas('coach')
             ->with([
                 'coach' => function ($query) {
